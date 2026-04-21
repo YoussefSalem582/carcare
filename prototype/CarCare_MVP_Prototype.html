@@ -66,8 +66,10 @@
   .btn-accent { background: var(--accent); color: #fff; font-weight: 600; border-radius: 14px; padding: 14px 16px; }
   .btn-ghost { background: #F1F5F9; color: var(--ink); font-weight: 600; border-radius: 14px; padding: 14px 16px; }
   .sheet { position: absolute; left: 0; right: 0; bottom: 0; background: #fff; border-radius: 24px 24px 0 0; box-shadow: 0 -8px 24px rgba(15,23,42,.12); }
-  .tab-bar { height: 78px; border-top: 1px solid #E2E8F0; background: #fff; display: grid; grid-template-columns: repeat(4, 1fr); padding-bottom: 14px; }
-  .tab { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 2px; color: #64748B; font-size: 11px; font-weight: 500; }
+  .tab-bar { height: 78px; border-top: 1px solid #E2E8F0; background: #fff; display: grid; grid-template-columns: repeat(5, 1fr); padding-bottom: 14px; }
+  .tab { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 1px; color: #64748B; font-size: 10px; font-weight: 500; }
+  .b2b-tab-bar { height: 72px; border-top: 1px solid #E2E8F0; background: #fff; display: grid; grid-template-columns: repeat(4, 1fr); padding-bottom: 12px; }
+  .b2b-tab-bar .tab { font-size: 10px; }
   .tab.on { color: var(--brand); }
   .tab .ic { width: 22px; height: 22px; }
   .label { font-size: 11px; letter-spacing: .04em; text-transform: uppercase; color: #64748B; font-weight: 600; }
@@ -128,7 +130,7 @@
     <!-- MIDDLE: Device canvas -->
     <main class="flex items-start justify-center pt-4 pb-10" style="min-height: 900px;">
       <div id="b2cStage" class="phone-frame"></div>
-      <div id="b2bStage" class="tablet-frame hidden"></div>
+      <div id="b2bStage" class="phone-frame hidden"></div>
     </main>
 
     <!-- RIGHT: Dev handoff notes -->
@@ -159,6 +161,7 @@ const SCREENS = {
     { id:'b2c-otp',        name:'Verify OTP',             phase:1, purpose:'Confirm 6-digit code from SMS.', states:['default','error','resend cooldown'], notes:'60s resend timer. 3 tries then block 15m.' },
     { id:'b2c-addcar',     name:'Add first car',          phase:1, purpose:'Onboard user with their vehicle so the map & tracker are useful.', states:['empty','saving','VIN lookup success/fail'], notes:'Skippable — user can browse map without a car, but can\'t book.' },
     { id:'b2c-map',        name:'Map — Home (CORE)',      phase:1, purpose:'Discover nearby verified service centers in <60s.', states:['loading pins','no results','location denied','emergency mode'], notes:'PostGIS query <within radius>. Bottom sheet shows top 3 pins. One-tap call on pin.' },
+    { id:'b2c-marketplace', name:'Parts marketplace',   phase:1, purpose:'Browse filters, oil, batteries, and accessories; compare sellers; cart placeholder.', states:['browse','search','empty cart','seller detail'], notes:'B2C parts layer — feed from catalog or partner API; checkout Phase 1 optional.' },
     { id:'b2c-filters',    name:'Filters sheet',          phase:1, purpose:'Narrow results by service, price, rating, open-now, distance, verified.', states:['default','applied','reset'], notes:'Filter chips on map header persist selection.' },
     { id:'b2c-search',     name:'Search results (list)',  phase:1, purpose:'Alt view to map — sortable list.', states:['default','empty','sorting'], notes:'Toggle between map/list.' },
     { id:'b2c-shop',       name:'Service center profile', phase:1, purpose:'Decide whether to book here.', states:['default','closed now','no photos','unverified'], notes:'Verified badge is load-bearing for trust.' },
@@ -177,19 +180,32 @@ const SCREENS = {
   ],
   b2b: [
     { id:'b2b-signup',     name:'Sign up (business)',     phase:1, purpose:'Create service-center account.', states:['default','email in use','weak password'], notes:'Separate app binary; Supabase role = "shop_owner".' },
-    { id:'b2b-onboard-1',  name:'Onboarding — Business',  phase:1, purpose:'Collect legal business info.', states:['default','invalid tax id'], notes:'Step 1 of 4.' },
-    { id:'b2b-onboard-2',  name:'Onboarding — Documents', phase:1, purpose:'Upload verification docs.', states:['default','uploading','rejected'], notes:'Supabase Storage bucket "verification_docs" (private).' },
+    { id:'b2b-onboard-1',  name:'Onboarding — Business',  phase:1, purpose:'Collect legal business info.', states:['default','invalid tax id'], notes:'Step 1 of 2.' },
     { id:'b2b-onboard-3',  name:'Onboarding — Catalog',   phase:1, purpose:'Set services + pricing.', states:['default','bulk-add'], notes:'Prepopulate common services (oil, tires, brakes, AC).' },
-    { id:'b2b-onboard-4',  name:'Onboarding — Hours',     phase:1, purpose:'Set hours + capacity per slot.', states:['default','closed day'], notes:'Capacity per 30-min slot drives availability on B2C.' },
     { id:'b2b-pending',    name:'Verification pending',   phase:1, purpose:'Hold screen while admin reviews.', states:['pending','changes requested','approved'], notes:'Blocks map listing until approved.' },
     { id:'b2b-dashboard',  name:'Dashboard (today)',      phase:1, purpose:'Live ops: today\'s bookings + KPIs.', states:['empty day','busy day','realtime new'], notes:'Toast + sound on new booking via Realtime.' },
     { id:'b2b-bookings',   name:'Bookings — calendar',    phase:1, purpose:'Weekly view with assign/update.', states:['week','day','filter by mechanic'], notes:'Drag-drop reschedule in Phase 2.' },
     { id:'b2b-booking',    name:'Booking detail',         phase:1, purpose:'Accept/reject/assign/update status + invoice.', states:['received','accepted','in progress','completed','rejected'], notes:'Status changes push to B2C in realtime.' },
     { id:'b2b-catalog',    name:'Catalog & pricing',      phase:1, purpose:'Edit services, prices, promos.', states:['default','add service','quote-only'], notes:'Price types: fixed, range, quote.' },
     { id:'b2b-reviews',    name:'Reviews',                phase:1, purpose:'Read + respond to reviews.', states:['default','flagged','responded'], notes:'Response is public, one per review.' },
+    { id:'b2b-more',       name:'More (B2B hub)',         phase:1, purpose:'Reach reviews, payouts, and settings from bottom tab overflow.', states:['default'], notes:'Fourth tab; keeps primary nav uncluttered on phone.' },
     { id:'b2b-payouts',    name:'Payouts (Phase 2)',      phase:2, purpose:'See earnings, commissions, payout schedule.', states:['pending','paid','on hold'], notes:'Commission % tied to tier (Free 15% / Pro 10% / Authorized 8%).' },
   ],
 };
+
+function b2cTabBar(active){
+  const items = [
+    ['b2c-map','Map','map','map'],
+    ['b2c-bookings','Bookings','calendar-check','bookings'],
+    ['b2c-marketplace','Shop','store','market'],
+    ['b2c-garage','Garage','car','garage'],
+    ['b2c-dashboard','Home','gauge','home'],
+  ];
+  return '<div class="tab-bar">' + items.map(([id, label, icon, key]) => {
+    const isOn = active === key;
+    return `<div class="tab${isOn ? ' on' : ' tap'}"${!isOn ? ` onclick="show('${id}')"` : ''}><i data-lucide="${icon}" class="ic"></i>${label}</div>`;
+  }).join('') + '</div>';
+}
 
 /* =========================================================
    SCREEN HTML — B2C
@@ -294,6 +310,7 @@ const B2C_HTML = {
       <span class="chip"><i data-lucide="star" class="w-3.5 h-3.5"></i>4★+</span>
       <span class="chip"><i data-lucide="map-pin" class="w-3.5 h-3.5"></i>&lt;5 km</span>
       <span class="chip bg-orange-500 text-white border-orange-500"><i data-lucide="zap" class="w-3.5 h-3.5"></i>Emergency</span>
+      <span class="chip"><i data-lucide="truck" class="w-3.5 h-3.5"></i>Tow truck</span>
     </div>
   </div>
 
@@ -317,6 +334,8 @@ const B2C_HTML = {
     <div class="absolute" style="left:64%; top:66%;"><div class="pin" style="background:#0F766E"><i data-lucide="badge-check" class="w-4 h-4 text-white"></i></div></div>
     <div class="absolute" style="left:22%; top:70%;"><div class="pin" style="background:#64748B"><i data-lucide="wrench" class="w-4 h-4 text-white"></i></div></div>
     <div class="absolute" style="left:78%; top:18%;"><div class="pin" style="background:#0F766E"><i data-lucide="badge-check" class="w-4 h-4 text-white"></i></div></div>
+    <div class="absolute tap" style="left:46%; top:68%;" onclick="show('b2c-search')"><div class="pin" style="background:#1D4ED8"><i data-lucide="truck" class="w-4 h-4 text-white"></i></div></div>
+    <div class="absolute" style="left:12%; top:38%;"><div class="pin" style="background:#1E40AF"><i data-lucide="truck" class="w-4 h-4 text-white"></i></div></div>
 
     <!-- FAB -->
     <button class="absolute right-3 bottom-[310px] w-11 h-11 rounded-full bg-white border border-slate-200 shadow flex items-center justify-center tap"><i data-lucide="locate-fixed" class="w-4 h-4 text-teal-700"></i></button>
@@ -353,12 +372,64 @@ const B2C_HTML = {
   </div>
 
   <!-- Bottom nav -->
-  <div class="tab-bar">
-    <div class="tab on"><i data-lucide="map" class="ic"></i>Map</div>
-    <div class="tab tap" onclick="show('b2c-bookings')"><i data-lucide="calendar-check" class="ic"></i>Bookings</div>
-    <div class="tab tap" onclick="show('b2c-garage')"><i data-lucide="car" class="ic"></i>Garage</div>
-    <div class="tab tap" onclick="show('b2c-dashboard')"><i data-lucide="gauge" class="ic"></i>Home</div>
+  ${b2cTabBar('map')}
+  <div class="home-indicator"></div>
+</div>`,
+
+/* --- MARKETPLACE ---------------------------------------- */
+'b2c-marketplace': `
+<div class="screen" data-screen="b2c-marketplace">
+  <div class="status-bar"><span>9:41</span><span></span></div>
+  <div class="px-4 pt-2 pb-2 bg-white border-b border-slate-100">
+    <div class="font-bold text-lg">Shop</div>
+    <div class="text-xs text-slate-500">Parts &amp; accessories from verified sellers</div>
+    <div class="flex items-center gap-2 mt-3">
+      <div class="flex-1 rounded-2xl border border-slate-200 bg-slate-50 px-3 py-2.5 flex items-center gap-2">
+        <i data-lucide="search" class="w-4 h-4 text-slate-400"></i>
+        <input class="flex-1 bg-transparent text-sm outline-none" placeholder="Search parts, oil, VIN…">
+      </div>
+      <div class="relative w-10 h-10 rounded-2xl bg-slate-100 flex items-center justify-center tap">
+        <i data-lucide="shopping-bag" class="w-5 h-5 text-slate-600"></i>
+        <span class="absolute -top-0.5 -right-0.5 w-4 h-4 rounded-full bg-orange-500 text-white text-[9px] font-bold flex items-center justify-center">2</span>
+      </div>
+    </div>
+    <div class="flex gap-2 mt-3 overflow-x-auto no-scrollbar">
+      <span class="chip on">For your car</span>
+      <span class="chip">Filters</span>
+      <span class="chip">Oil &amp; fluids</span>
+      <span class="chip">Batteries</span>
+      <span class="chip">Tires</span>
+      <span class="chip">Brakes</span>
+    </div>
   </div>
+  <div class="flex-1 overflow-y-auto px-4 py-3 bg-slate-50">
+    <div class="p-3 rounded-2xl bg-gradient-to-r from-amber-500 to-orange-500 text-white mb-4">
+      <div class="text-xs font-semibold opacity-90">Weekend deal</div>
+      <div class="font-bold mt-0.5">Bosch oil filter + 4L 5W-30</div>
+      <div class="flex items-end justify-between mt-2">
+        <div>
+          <span class="text-lg font-bold">EGP 620</span>
+          <span class="text-xs line-through opacity-80 ml-2">EGP 780</span>
+        </div>
+        <button class="px-3 py-1.5 rounded-xl bg-white/20 text-xs font-semibold">Add</button>
+      </div>
+    </div>
+    <div class="label mb-2">Popular this week</div>
+    <div class="grid grid-cols-2 gap-3">
+      ${[['Bosch cabin filter','EGP 185','4.7','1.2k sold','Cairo Parts'],
+         ['Michelin 205/55 R16','EGP 2,890','4.8','In stock','Elite Tires'],
+         ['AGM battery 60Ah','EGP 3,200','4.6','2–3d ship','AutoBatt'],
+         ['Castrol 5W-30 (4L)','EGP 450','4.8','EGP 50 delivery','Lubrico']].map(([t,p,r,sell,seller])=>`
+        <div class="tap p-3 rounded-2xl bg-white border border-slate-200">
+          <div class="h-20 rounded-xl bg-slate-100 flex items-center justify-center mb-2"><i data-lucide="package" class="w-8 h-8 text-slate-400"></i></div>
+          <div class="text-xs font-semibold leading-tight line-clamp-2">${t}</div>
+          <div class="mt-1 flex items-center gap-0.5 text-[10px] text-slate-500"><i data-lucide="star" class="w-2.5 h-2.5 text-amber-500 fill-amber-500"></i>${r} · ${sell}</div>
+          <div class="mt-2 font-bold text-sm">${p}</div>
+          <div class="text-[10px] text-slate-500">${seller}</div>
+        </div>`).join('')}
+    </div>
+  </div>
+  ${b2cTabBar('market')}
   <div class="home-indicator"></div>
 </div>`,
 
@@ -423,7 +494,7 @@ const B2C_HTML = {
       </div>
     </div>
     <div class="flex justify-between items-center mt-2">
-      <div class="text-xs text-slate-500">17 centers · sorted by distance</div>
+      <div class="text-xs text-slate-500">18 results · sorted by distance</div>
       <div class="text-xs font-semibold text-teal-700 flex items-center gap-1"><i data-lucide="arrow-up-down" class="w-3.5 h-3.5"></i>Sort</div>
     </div>
   </div>
@@ -431,15 +502,16 @@ const B2C_HTML = {
     ${[
       ['AutoPro Heliopolis','0.8 km','4.8','312','EGP 350–900',true,'11:30','Open'],
       ['QuickFix Nasr City','1.6 km','4.6','188','EGP 250–1200',true,'12:15','Open'],
+      ['City Tow 24/7 – Heliopolis','1.1 km','4.7','201','from EGP 400',true,'~15 min','Tow'],
       ['Toyota Authorized – El Nozha','2.4 km','4.9','421','EGP 450–1800',true,'14:00','Open'],
       ['Cairo Motors Workshop','3.1 km','4.3','94','EGP 200–700',false,'Tomorrow 09:00','Closes 6pm'],
       ['Mobile Mechanic — Khaled',' on-demand','4.7','66','EGP 300–600',false,'Now','Mobile'],
     ].map(([n,d,r,c,p,v,next,state])=>`
       <div class="tap p-3 rounded-2xl border border-slate-200 bg-white" onclick="show('b2c-shop')">
         <div class="flex gap-3">
-          <div class="w-16 h-16 rounded-xl bg-slate-200"></div>
+          <div class="w-16 h-16 rounded-xl bg-slate-200 ${state==='Tow'?'flex items-center justify-center':''}">${state==='Tow'?'<i data-lucide="truck" class="w-7 h-7 text-blue-700"></i>':''}</div>
           <div class="flex-1 min-w-0">
-            <div class="flex items-center gap-1.5"><div class="font-semibold truncate">${n}</div>${v?'<i data-lucide="badge-check" class="w-4 h-4 text-teal-700"></i>':''}</div>
+            <div class="flex items-center gap-1.5"><div class="font-semibold truncate">${n}</div>${v?'<i data-lucide="badge-check" class="w-4 h-4 text-teal-700"></i>':''}${state==='Tow'?'<span class="badge b-blue">Tow</span>':''}</div>
             <div class="text-xs text-slate-500 mt-0.5">${d} · ${state}</div>
             <div class="flex items-center gap-2 mt-1 text-xs"><span class="flex items-center gap-0.5 font-semibold"><i data-lucide="star" class="w-3 h-3 text-amber-500 fill-amber-500"></i>${r}</span><span class="text-slate-400">(${c})</span><span class="text-slate-300">·</span><span class="text-slate-500">${p}</span></div>
             <div class="mt-2 flex items-center justify-between">
@@ -721,12 +793,7 @@ const B2C_HTML = {
       </div>
     </div>
   </div>
-  <div class="tab-bar">
-    <div class="tab tap" onclick="show('b2c-map')"><i data-lucide="map" class="ic"></i>Map</div>
-    <div class="tab on"><i data-lucide="calendar-check" class="ic"></i>Bookings</div>
-    <div class="tab tap" onclick="show('b2c-garage')"><i data-lucide="car" class="ic"></i>Garage</div>
-    <div class="tab tap" onclick="show('b2c-dashboard')"><i data-lucide="gauge" class="ic"></i>Home</div>
-  </div>
+  ${b2cTabBar('bookings')}
   <div class="home-indicator"></div>
 </div>`,
 
@@ -852,12 +919,7 @@ const B2C_HTML = {
 
     <button class="tap w-full p-4 rounded-2xl border-2 border-dashed border-slate-300 text-slate-500 text-sm font-semibold flex items-center justify-center gap-2"><i data-lucide="plus" class="w-4 h-4"></i>Add another car</button>
   </div>
-  <div class="tab-bar">
-    <div class="tab tap" onclick="show('b2c-map')"><i data-lucide="map" class="ic"></i>Map</div>
-    <div class="tab tap" onclick="show('b2c-bookings')"><i data-lucide="calendar-check" class="ic"></i>Bookings</div>
-    <div class="tab on"><i data-lucide="car" class="ic"></i>Garage</div>
-    <div class="tab tap" onclick="show('b2c-dashboard')"><i data-lucide="gauge" class="ic"></i>Home</div>
-  </div>
+  ${b2cTabBar('garage')}
   <div class="home-indicator"></div>
 </div>`,
 
@@ -951,12 +1013,7 @@ const B2C_HTML = {
     </div>
     <div class="h-2"></div>
   </div>
-  <div class="tab-bar">
-    <div class="tab tap" onclick="show('b2c-map')"><i data-lucide="map" class="ic"></i>Map</div>
-    <div class="tab tap" onclick="show('b2c-bookings')"><i data-lucide="calendar-check" class="ic"></i>Bookings</div>
-    <div class="tab tap" onclick="show('b2c-garage')"><i data-lucide="car" class="ic"></i>Garage</div>
-    <div class="tab on"><i data-lucide="gauge" class="ic"></i>Home</div>
-  </div>
+  ${b2cTabBar('home')}
   <div class="home-indicator"></div>
 </div>`,
 
@@ -1021,605 +1078,458 @@ const B2C_HTML = {
 </div>`,
 };
 
+function b2bTopbarMobile(title){
+  return `<div class="bg-white border-b border-slate-200 h-12 flex items-center px-4 justify-between flex-shrink-0">
+    <div class="font-semibold text-sm truncate max-w-[200px]">${title}</div>
+    <div class="flex items-center gap-1">
+      <button class="w-9 h-9 rounded-xl border border-slate-200 flex items-center justify-center tap"><i data-lucide="search" class="w-4 h-4 text-slate-500"></i></button>
+      <div class="relative w-9 h-9 flex items-center justify-center tap"><i data-lucide="bell" class="w-5 h-5 text-slate-500"></i><span class="absolute top-0.5 right-0.5 w-3.5 h-3.5 rounded-full bg-red-500 text-white text-[8px] font-bold flex items-center justify-center">3</span></div>
+    </div>
+  </div>`;
+}
+function b2bTabBar(active){
+  const items = [
+    ['b2b-dashboard','Today','layout-dashboard','dashboard'],
+    ['b2b-bookings','Bookings','calendar','bookings'],
+    ['b2b-catalog','Catalog','tag','catalog'],
+    ['b2b-more','More','menu','more'],
+  ];
+  return '<div class="b2b-tab-bar">' + items.map(([id, label, icon, key]) => {
+    const isOn = active === key;
+    return `<div class="tab${isOn ? ' on' : ' tap'}"${!isOn ? ` onclick="show('${id}')"` : ''}><i data-lucide="${icon}" class="ic"></i>${label}</div>`;
+  }).join('') + '</div>';
+}
+
 /* =========================================================
-   SCREEN HTML — B2B (tablet)
+   SCREEN HTML — B2B (phone)
    ========================================================= */
 const B2B_HTML = {
 /* --- SIGNUP --------------------------------------------- */
 'b2b-signup': `
-<div class="screen active" data-screen="b2b-signup">
-  <div class="flex-1 grid grid-cols-2">
-    <div class="p-12 text-white flex flex-col" style="background:linear-gradient(135deg,#0F766E,#0B4F4A);">
-      <div class="flex items-center gap-2 mb-auto">
+<div class="screen" data-screen="b2b-signup">
+  <div class="status-bar"><span>9:41</span><span></span></div>
+  <div class="flex-1 overflow-y-auto">
+    <div class="p-5 text-white" style="background:linear-gradient(160deg,#0F766E,#0B4F4A);">
+      <div class="flex items-center gap-2 mb-4">
         <div class="w-9 h-9 rounded-xl bg-white/15 flex items-center justify-center"><i data-lucide="wrench" class="w-5 h-5"></i></div>
-        <div class="font-bold text-lg">CarCare for Business</div>
+        <div class="font-bold">CarCare for Business</div>
       </div>
-      <div class="mb-auto">
-        <div class="text-4xl font-bold leading-tight">Fill your schedule.<br/>Grow your shop.</div>
-        <div class="mt-5 text-white/80 leading-relaxed">Get verified customers booking directly on your calendar. Keep every service record per car. Compete on quality, not word of mouth.</div>
-        <div class="mt-8 space-y-3">
-          ${[['Real-time bookings from verified drivers','calendar-check'],['Automated service records per car','clipboard-list'],['Transparent commission & weekly payouts','coins']].map(([t,ic])=>`
-            <div class="flex items-center gap-3"><div class="w-8 h-8 rounded-full bg-white/15 flex items-center justify-center"><i data-lucide="${ic}" class="w-4 h-4"></i></div><div class="text-sm">${t}</div></div>`).join('')}
-        </div>
+      <div class="text-2xl font-bold leading-tight">Fill your schedule. Grow your shop.</div>
+      <div class="mt-3 text-sm text-white/85 leading-relaxed">Verified drivers book on your calendar. Service records per car. Compete on quality.</div>
+      <div class="mt-4 space-y-2">
+        ${[['Real-time bookings','calendar-check'],['Service records / car','clipboard-list'],['Payouts &amp; commission','coins']].map(([t,ic])=>`
+        <div class="flex items-center gap-2 text-sm"><div class="w-7 h-7 rounded-full bg-white/15 flex items-center justify-center flex-shrink-0"><i data-lucide="${ic}" class="w-3.5 h-3.5"></i></div>${t}</div>`).join('')}
       </div>
-      <div class="text-xs text-white/60">Already serving 50+ centers in Cairo.</div>
     </div>
-    <div class="p-12 flex flex-col justify-center">
-      <div class="max-w-md">
-        <div class="text-2xl font-bold">Create your business account</div>
-        <div class="text-sm text-slate-500 mt-1.5">Free to join. Pay 8–15% commission only when you get booked.</div>
-        <div class="mt-6 space-y-3">
-          <div><div class="label mb-1.5">Business name</div><input class="w-full rounded-xl border border-slate-200 px-3.5 py-3 text-sm" value="AutoPro Heliopolis"/></div>
-          <div class="grid grid-cols-2 gap-3">
-            <div><div class="label mb-1.5">Owner name</div><input class="w-full rounded-xl border border-slate-200 px-3.5 py-3 text-sm" value="Omar Saleh"/></div>
-            <div><div class="label mb-1.5">Phone</div><input class="w-full rounded-xl border border-slate-200 px-3.5 py-3 text-sm" value="+20 100 555 0142"/></div>
-          </div>
-          <div><div class="label mb-1.5">Work email</div><input class="w-full rounded-xl border border-slate-200 px-3.5 py-3 text-sm" value="omar@autopro.eg"/></div>
-          <div><div class="label mb-1.5">Password</div><input type="password" class="w-full rounded-xl border border-slate-200 px-3.5 py-3 text-sm" value="••••••••••"/></div>
-        </div>
-        <button class="btn-primary w-full mt-5 tap" onclick="show('b2b-onboard-1')">Create account & continue</button>
-        <div class="text-xs text-slate-500 text-center mt-3">Already have an account? <span class="text-teal-700 font-semibold">Sign in</span></div>
-      </div>
+    <div class="p-4 space-y-3">
+      <div class="text-lg font-bold">Create your business account</div>
+      <div class="text-xs text-slate-500">Free to join. 8–15% commission on bookings only.</div>
+      <div><div class="label mb-1.5">Business name</div><input class="w-full rounded-xl border border-slate-200 px-3.5 py-2.5 text-sm" value="AutoPro Heliopolis"/></div>
+      <div><div class="label mb-1.5">Owner name</div><input class="w-full rounded-xl border border-slate-200 px-3.5 py-2.5 text-sm" value="Omar Saleh"/></div>
+      <div><div class="label mb-1.5">Phone</div><input class="w-full rounded-xl border border-slate-200 px-3.5 py-2.5 text-sm" value="+20 100 555 0142"/></div>
+      <div><div class="label mb-1.5">Work email</div><input class="w-full rounded-xl border border-slate-200 px-3.5 py-2.5 text-sm" value="omar@autopro.eg"/></div>
+      <div><div class="label mb-1.5">Password</div><input type="password" class="w-full rounded-xl border border-slate-200 px-3.5 py-2.5 text-sm" value="••••••••••"/></div>
+      <button class="btn-primary w-full mt-2 tap" onclick="show('b2b-onboard-1')">Create account & continue</button>
+      <div class="text-xs text-slate-500 text-center">Already have an account? <span class="text-teal-700 font-semibold">Sign in</span></div>
     </div>
   </div>
+  <div class="home-indicator"></div>
 </div>`,
 
 /* --- ONBOARD 1: BUSINESS -------------------------------- */
 'b2b-onboard-1': `
 <div class="screen" data-screen="b2b-onboard-1">
-  <div class="flex-1 flex">
-    ${b2bSideNav('onboard')}
-    <div class="flex-1 bg-slate-50 overflow-y-auto">
-      ${b2bTopbar('Welcome, Omar')}
-      <div class="p-8">
-        ${onboardStepper(0)}
-        <div class="bg-white rounded-2xl border border-slate-200 p-8 max-w-3xl">
-          <div class="text-xl font-bold">Business information</div>
-          <div class="text-sm text-slate-500 mt-1">Used for verification and on your public listing.</div>
-          <div class="mt-6 grid grid-cols-2 gap-4">
-            <div><div class="label mb-1.5">Legal name</div><input class="w-full rounded-xl border border-slate-200 px-3.5 py-3 text-sm" value="AutoPro Automotive Services LLC"/></div>
-            <div><div class="label mb-1.5">Trade name (shown to users)</div><input class="w-full rounded-xl border border-slate-200 px-3.5 py-3 text-sm" value="AutoPro Heliopolis"/></div>
-            <div><div class="label mb-1.5">Tax ID</div><input class="w-full rounded-xl border border-slate-200 px-3.5 py-3 text-sm" value="415-228-9910"/></div>
-            <div><div class="label mb-1.5">Commercial registration #</div><input class="w-full rounded-xl border border-slate-200 px-3.5 py-3 text-sm" value="CR-88421"/></div>
-            <div class="col-span-2"><div class="label mb-1.5">Address</div><input class="w-full rounded-xl border border-slate-200 px-3.5 py-3 text-sm" value="12 Baghdad St, Heliopolis, Cairo"/></div>
-            <div><div class="label mb-1.5">City</div><input class="w-full rounded-xl border border-slate-200 px-3.5 py-3 text-sm" value="Cairo"/></div>
-            <div><div class="label mb-1.5">Pin on map</div><div class="rounded-xl border border-slate-200 px-3.5 py-3 text-sm flex justify-between items-center"><span>30.0980°N · 31.3411°E</span><span class="text-teal-700 font-semibold">Adjust</span></div></div>
-            <div><div class="label mb-1.5">Business type</div><div class="rounded-xl border border-slate-200 px-3.5 py-3 text-sm flex justify-between items-center">Independent workshop <i data-lucide="chevron-down" class="w-4 h-4 text-slate-400"></i></div></div>
-            <div><div class="label mb-1.5">Year founded</div><input class="w-full rounded-xl border border-slate-200 px-3.5 py-3 text-sm" value="2014"/></div>
-          </div>
-          <div class="mt-8 flex justify-between">
-            <button class="btn-ghost tap">Save draft</button>
-            <button class="btn-primary tap" onclick="show('b2b-onboard-2')">Continue <i data-lucide="arrow-right" class="w-4 h-4"></i></button>
-          </div>
+  <div class="status-bar"><span>9:41</span><span></span></div>
+  <div class="flex-1 flex flex-col min-h-0 bg-slate-50">
+    ${b2bTopbarMobile('Welcome, Omar')}
+    <div class="flex-1 overflow-y-auto p-4">
+      ${onboardStepper(0)}
+      <div class="bg-white rounded-2xl border border-slate-200 p-4">
+        <div class="text-lg font-bold">Business information</div>
+        <div class="text-sm text-slate-500 mt-0.5">Used for verification and on your public listing.</div>
+        <div class="mt-4 space-y-3">
+            <div><div class="label mb-1.5">Legal name</div><input class="w-full rounded-xl border border-slate-200 px-3.5 py-2.5 text-sm" value="AutoPro Automotive Services LLC"/></div>
+            <div><div class="label mb-1.5">Trade name (shown to users)</div><input class="w-full rounded-xl border border-slate-200 px-3.5 py-2.5 text-sm" value="AutoPro Heliopolis"/></div>
+            <div><div class="label mb-1.5">Tax ID</div><input class="w-full rounded-xl border border-slate-200 px-3.5 py-2.5 text-sm" value="415-228-9910"/></div>
+            <div><div class="label mb-1.5">Commercial registration #</div><input class="w-full rounded-xl border border-slate-200 px-3.5 py-2.5 text-sm" value="CR-88421"/></div>
+            <div><div class="label mb-1.5">Address</div><input class="w-full rounded-xl border border-slate-200 px-3.5 py-2.5 text-sm" value="12 Baghdad St, Heliopolis, Cairo"/></div>
+            <div><div class="label mb-1.5">City</div><input class="w-full rounded-xl border border-slate-200 px-3.5 py-2.5 text-sm" value="Cairo"/></div>
+            <div><div class="label mb-1.5">Pin on map</div><div class="rounded-xl border border-slate-200 px-3.5 py-2.5 text-sm flex justify-between items-center"><span>30.0980°N · 31.3411°E</span><span class="text-teal-700 font-semibold">Adjust</span></div></div>
+            <div><div class="label mb-1.5">Business type</div><div class="rounded-xl border border-slate-200 px-3.5 py-2.5 text-sm flex justify-between items-center">Independent workshop <i data-lucide="chevron-down" class="w-4 h-4 text-slate-400"></i></div></div>
+            <div><div class="label mb-1.5">Year founded</div><input class="w-full rounded-xl border border-slate-200 px-3.5 py-2.5 text-sm" value="2014"/></div>
+        </div>
+        <div class="mt-6 flex flex-col gap-2">
+          <button class="btn-ghost tap w-full">Save draft</button>
+          <button class="btn-primary tap" onclick="show('b2b-onboard-3')">Continue <i data-lucide="arrow-right" class="w-4 h-4"></i></button>
         </div>
       </div>
     </div>
   </div>
-</div>`,
-
-/* --- ONBOARD 2: DOCS ------------------------------------ */
-'b2b-onboard-2': `
-<div class="screen" data-screen="b2b-onboard-2">
-  <div class="flex-1 flex">
-    ${b2bSideNav('onboard')}
-    <div class="flex-1 bg-slate-50 overflow-y-auto">
-      ${b2bTopbar('Welcome, Omar')}
-      <div class="p-8">
-        ${onboardStepper(1)}
-        <div class="bg-white rounded-2xl border border-slate-200 p-8 max-w-3xl">
-          <div class="text-xl font-bold">Verification documents</div>
-          <div class="text-sm text-slate-500 mt-1">Uploads are private. Reviewed by our team within 24–48h.</div>
-          <div class="mt-6 grid grid-cols-2 gap-4">
-            ${[['Commercial registration','PDF / JPG','uploaded'],['Tax card','PDF / JPG','uploaded'],['Owner national ID','PDF / JPG','uploading'],['Shop photos (min 3)','JPG','missing'],['Insurance certificate (optional)','PDF','missing']].map(([t,hint,state])=>`
-              <div class="rounded-xl border-2 border-dashed ${state==='uploaded'?'border-teal-300 bg-teal-50':state==='uploading'?'border-amber-300 bg-amber-50':'border-slate-200'} p-4">
-                <div class="flex justify-between items-start">
-                  <div>
-                    <div class="font-semibold text-sm">${t}</div>
-                    <div class="text-xs text-slate-500 mt-0.5">${hint}</div>
-                  </div>
-                  ${state==='uploaded'?'<span class="badge b-green"><i data-lucide="check" class="w-3 h-3"></i>Done</span>':state==='uploading'?'<span class="badge b-amber"><i data-lucide="loader" class="w-3 h-3"></i>63%</span>':''}
-                </div>
-                ${state==='missing'?'<button class="mt-3 text-xs font-semibold text-teal-700 flex items-center gap-1"><i data-lucide="upload" class="w-3.5 h-3.5"></i>Upload</button>':'<div class="mt-3 text-xs text-slate-500">commercial_reg_2024.pdf · 2.4 MB</div>'}
-              </div>`).join('')}
-          </div>
-          <div class="mt-8 flex justify-between">
-            <button class="btn-ghost tap" onclick="show('b2b-onboard-1')"><i data-lucide="arrow-left" class="w-4 h-4"></i> Back</button>
-            <button class="btn-primary tap" onclick="show('b2b-onboard-3')">Continue <i data-lucide="arrow-right" class="w-4 h-4"></i></button>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
+  <div class="home-indicator"></div>
 </div>`,
 
 /* --- ONBOARD 3: CATALOG --------------------------------- */
 'b2b-onboard-3': `
 <div class="screen" data-screen="b2b-onboard-3">
-  <div class="flex-1 flex">
-    ${b2bSideNav('onboard')}
-    <div class="flex-1 bg-slate-50 overflow-y-auto">
-      ${b2bTopbar('Welcome, Omar')}
-      <div class="p-8">
-        ${onboardStepper(2)}
-        <div class="bg-white rounded-2xl border border-slate-200 p-8 max-w-4xl">
-          <div class="flex items-start justify-between">
-            <div><div class="text-xl font-bold">Your service catalog</div><div class="text-sm text-slate-500 mt-1">Start with presets — you can edit any time.</div></div>
-            <button class="btn-ghost py-2 px-3 text-xs flex items-center gap-1"><i data-lucide="wand-2" class="w-3.5 h-3.5"></i>Add 12 common services</button>
-          </div>
-          <table class="w-full mt-6 table">
-            <thead><tr><th>Service</th><th>Duration</th><th>Price type</th><th>Price (EGP)</th><th></th></tr></thead>
-            <tbody>
+  <div class="status-bar"><span>9:41</span><span></span></div>
+  <div class="flex-1 flex flex-col min-h-0 bg-slate-50">
+    ${b2bTopbarMobile('Welcome, Omar')}
+    <div class="flex-1 overflow-y-auto p-4">
+        ${onboardStepper(1)}
+        <div class="bg-white rounded-2xl border border-slate-200 p-4">
+          <div class="text-lg font-bold">Your service catalog</div>
+          <div class="text-sm text-slate-500 mt-0.5">Start with presets — you can edit any time.</div>
+          <button class="btn-ghost py-2 px-3 text-xs w-full mt-3 flex items-center justify-center gap-1"><i data-lucide="wand-2" class="w-3.5 h-3.5"></i>Add 12 common services</button>
+          <div class="mt-4 space-y-2">
               ${[['Oil change (standard)','45 min','Fixed','350'],
-                 ['Oil change (premium)','45 min','Fixed','620'],
                  ['Brake pads — front','1.5 h','Fixed','650'],
-                 ['Brake inspection','15 min','Fixed','0 (free)'],
-                 ['AC recharge','1 h','Fixed','450'],
-                 ['Engine diagnostic','30 min','Range','200–500'],
-                 ['Full body paint','—','Quote on request','—']].map(([s,d,t,p])=>`
-                <tr><td class="font-semibold">${s}</td><td class="text-slate-500">${d}</td><td><span class="badge b-slate">${t}</span></td><td>${p}</td><td class="text-right"><i data-lucide="pencil" class="w-4 h-4 text-slate-400 tap inline-block"></i></td></tr>`).join('')}
-            </tbody>
-          </table>
-          <button class="mt-4 text-sm text-teal-700 font-semibold flex items-center gap-1"><i data-lucide="plus" class="w-4 h-4"></i>Add custom service</button>
-          <div class="mt-8 flex justify-between">
-            <button class="btn-ghost tap" onclick="show('b2b-onboard-2')"><i data-lucide="arrow-left" class="w-4 h-4"></i> Back</button>
-            <button class="btn-primary tap" onclick="show('b2b-onboard-4')">Continue <i data-lucide="arrow-right" class="w-4 h-4"></i></button>
+                 ['AC recharge','1 h','Fixed','450']].map(([s,d,t,p])=>`
+                <div class="p-3 rounded-xl border border-slate-200 flex justify-between items-center gap-2">
+                  <div class="min-w-0">
+                    <div class="font-semibold text-sm">${s}</div>
+                    <div class="text-xs text-slate-500">${d} · <span class="badge b-slate">${t}</span></div>
+                  </div>
+                  <div class="flex items-center gap-1 flex-shrink-0">
+                    <span class="text-sm font-semibold">${p}</span>
+                    <i data-lucide="pencil" class="w-4 h-4 text-slate-400"></i>
+                  </div>
+                </div>`).join('')}
+          </div>
+          <button class="mt-3 text-sm text-teal-700 font-semibold flex items-center gap-1 w-full justify-center"><i data-lucide="plus" class="w-4 h-4"></i>Add custom service</button>
+          <div class="mt-6 flex flex-col gap-2">
+            <button class="btn-ghost tap" onclick="show('b2b-onboard-1')"><i data-lucide="arrow-left" class="w-4 h-4"></i> Back</button>
+            <button class="btn-primary tap" onclick="show('b2b-pending')">Submit for verification <i data-lucide="arrow-right" class="w-4 h-4"></i></button>
           </div>
         </div>
-      </div>
     </div>
   </div>
-</div>`,
-
-/* --- ONBOARD 4: HOURS ----------------------------------- */
-'b2b-onboard-4': `
-<div class="screen" data-screen="b2b-onboard-4">
-  <div class="flex-1 flex">
-    ${b2bSideNav('onboard')}
-    <div class="flex-1 bg-slate-50 overflow-y-auto">
-      ${b2bTopbar('Welcome, Omar')}
-      <div class="p-8">
-        ${onboardStepper(3)}
-        <div class="bg-white rounded-2xl border border-slate-200 p-8 max-w-3xl">
-          <div class="text-xl font-bold">Hours & capacity</div>
-          <div class="text-sm text-slate-500 mt-1">Capacity sets how many jobs can run in parallel per 30-min slot.</div>
-          <div class="mt-6 space-y-2">
-            ${[['Saturday','09:00','22:00',3],['Sunday','09:00','22:00',3],['Monday','09:00','22:00',3],['Tuesday','09:00','22:00',3],['Wednesday','09:00','22:00',3],['Thursday','09:00','22:00',3],['Friday','—','—',0]].map(([day,open,close,cap])=>`
-              <div class="flex items-center gap-3 py-2">
-                <div class="w-10 h-6 rounded-full ${cap?'bg-teal-600':'bg-slate-200'} relative"><div class="absolute top-0.5 ${cap?'right-0.5':'left-0.5'} w-5 h-5 rounded-full bg-white shadow"></div></div>
-                <div class="w-24 text-sm font-semibold">${day}</div>
-                <div class="rounded-lg border border-slate-200 px-3 py-2 text-sm w-24 ${!cap?'text-slate-300':''}">${open}</div>
-                <div class="text-slate-400">–</div>
-                <div class="rounded-lg border border-slate-200 px-3 py-2 text-sm w-24 ${!cap?'text-slate-300':''}">${close}</div>
-                <div class="ml-auto flex items-center gap-2">
-                  <span class="text-xs text-slate-500">Capacity / slot</span>
-                  <div class="flex items-center gap-1"><button class="w-7 h-7 rounded-lg bg-slate-100">−</button><div class="w-8 text-center font-semibold">${cap}</div><button class="w-7 h-7 rounded-lg bg-slate-100">+</button></div>
-                </div>
-              </div>`).join('')}
-          </div>
-          <div class="mt-6 p-4 rounded-xl bg-blue-50 border border-blue-100 text-xs text-blue-900 flex gap-2"><i data-lucide="info" class="w-4 h-4 mt-0.5 flex-shrink-0"></i><div>With capacity = 3 and 13 hours open × 2 slots/hour, you can accept up to <b>78 bookings/day</b>. You can pause bookings any time from your dashboard.</div></div>
-          <div class="mt-8 flex justify-between">
-            <button class="btn-ghost tap" onclick="show('b2b-onboard-3')"><i data-lucide="arrow-left" class="w-4 h-4"></i> Back</button>
-            <button class="btn-primary tap" onclick="show('b2b-pending')">Submit for verification</button>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
+  <div class="home-indicator"></div>
 </div>`,
 
 /* --- PENDING -------------------------------------------- */
 'b2b-pending': `
 <div class="screen" data-screen="b2b-pending">
-  <div class="flex-1 flex">
-    ${b2bSideNav('onboard')}
-    <div class="flex-1 bg-slate-50 overflow-y-auto">
-      ${b2bTopbar('Welcome, Omar')}
-      <div class="p-8 flex items-center justify-center" style="min-height:600px">
-        <div class="bg-white rounded-2xl border border-slate-200 p-10 max-w-lg text-center">
-          <div class="w-16 h-16 rounded-2xl bg-amber-100 flex items-center justify-center mx-auto"><i data-lucide="shield-check" class="w-8 h-8 text-amber-700"></i></div>
-          <div class="text-2xl font-bold mt-4">Verification in progress</div>
-          <div class="text-sm text-slate-500 mt-2">Our team is reviewing your documents. Typical turnaround is 24–48 hours.</div>
-          <div class="mt-6 text-left space-y-2">
-            ${[['Business information','done'],['Documents submitted','done'],['Identity verification','review'],['Final approval','pending']].map(([t,s])=>`
-              <div class="flex items-center gap-3 p-2">
-                <div class="w-6 h-6 rounded-full ${s==='done'?'bg-teal-600':s==='review'?'bg-amber-500':'bg-slate-200'} flex items-center justify-center text-white text-xs font-bold">${s==='done'?'✓':s==='review'?'…':''}</div>
-                <div class="flex-1 text-sm font-medium">${t}</div>
-                <div class="text-xs text-slate-500">${s==='done'?'Done':s==='review'?'In review':'Waiting'}</div>
+  <div class="status-bar"><span>9:41</span><span></span></div>
+  <div class="flex-1 flex flex-col min-h-0 bg-slate-50">
+    ${b2bTopbarMobile('Welcome, Omar')}
+    <div class="flex-1 overflow-y-auto p-4 flex items-start justify-center">
+        <div class="bg-white rounded-2xl border border-slate-200 p-5 w-full text-center">
+          <div class="w-14 h-14 rounded-2xl bg-amber-100 flex items-center justify-center mx-auto"><i data-lucide="shield-check" class="w-7 h-7 text-amber-700"></i></div>
+          <div class="text-xl font-bold mt-3">Verification in progress</div>
+          <div class="text-sm text-slate-500 mt-2">We’re reviewing your business and catalog. Typical turnaround is 24–48 hours.</div>
+          <div class="mt-5 text-left space-y-1.5">
+            ${[['Business information','done'],['Service catalog','done'],['Account checks','review'],['List on map','pending']].map(([t,s])=>`
+              <div class="flex items-center gap-2 p-1.5">
+                <div class="w-5 h-5 rounded-full ${s==='done'?'bg-teal-600':s==='review'?'bg-amber-500':'bg-slate-200'} flex items-center justify-center text-white text-[10px] font-bold">${s==='done'?'✓':s==='review'?'…':''}</div>
+                <div class="flex-1 text-xs font-medium">${t}</div>
+                <div class="text-[10px] text-slate-500">${s==='done'?'Done':s==='review'?'In review':'Wait'}</div>
               </div>`).join('')}
           </div>
-          <div class="mt-6 p-3 rounded-xl bg-teal-50 text-xs text-teal-900 text-left"><b>While you wait</b> — finish your listing photos and add your team members. Your dashboard is ready.</div>
-          <button class="btn-primary w-full mt-5 tap" onclick="show('b2b-dashboard')">Explore dashboard</button>
+          <div class="mt-4 p-3 rounded-xl bg-teal-50 text-xs text-teal-900 text-left"><b>While you wait</b> — add photos and your team. You can open the dashboard anytime.</div>
+          <button class="btn-primary w-full mt-4 tap" onclick="show('b2b-dashboard')">Explore dashboard</button>
         </div>
-      </div>
     </div>
   </div>
+  <div class="home-indicator"></div>
 </div>`,
 
 /* --- DASHBOARD ------------------------------------------ */
 'b2b-dashboard': `
-<div class="screen" data-screen="b2b-dashboard">
-  <div class="flex-1 flex">
-    ${b2bSideNav('dashboard')}
-    <div class="flex-1 bg-slate-50 overflow-y-auto">
-      ${b2bTopbar('AutoPro Heliopolis · Sat 18 Apr')}
-      <div class="p-6">
-        <div class="grid grid-cols-4 gap-4">
-          <div class="kpi"><div class="text-xs text-slate-500">Today's bookings</div><div class="flex items-end gap-2 mt-1"><div class="text-3xl font-bold">7</div><div class="text-xs text-green-600 pb-1">+2 vs yesterday</div></div></div>
-          <div class="kpi"><div class="text-xs text-slate-500">Revenue today</div><div class="flex items-end gap-2 mt-1"><div class="text-3xl font-bold">EGP 3,450</div></div></div>
-          <div class="kpi"><div class="text-xs text-slate-500">Rating (30d)</div><div class="flex items-end gap-2 mt-1"><div class="text-3xl font-bold">4.8</div><div class="text-xs text-slate-500 pb-1">★ 62 reviews</div></div></div>
-          <div class="kpi"><div class="text-xs text-slate-500">Acceptance rate</div><div class="flex items-end gap-2 mt-1"><div class="text-3xl font-bold">96%</div><div class="text-xs text-green-600 pb-1">Excellent</div></div></div>
+<div class="screen active" data-screen="b2b-dashboard">
+  <div class="status-bar"><span>9:41</span><span></span></div>
+  <div class="flex-1 flex flex-col min-h-0 bg-slate-50">
+    ${b2bTopbarMobile('AutoPro · Today')}
+    <div class="flex-1 overflow-y-auto p-3 space-y-3">
+        <div class="grid grid-cols-2 gap-2">
+          <div class="kpi p-3"><div class="text-[10px] text-slate-500">Bookings</div><div class="text-2xl font-bold">7</div><div class="text-[10px] text-green-600">+2 vs yesterday</div></div>
+          <div class="kpi p-3"><div class="text-[10px] text-slate-500">Revenue</div><div class="text-2xl font-bold">3.4k</div><div class="text-[10px] text-slate-500">EGP</div></div>
+          <div class="kpi p-3"><div class="text-[10px] text-slate-500">Rating</div><div class="text-2xl font-bold">4.8</div><div class="text-[10px] text-slate-500">62 rev.</div></div>
+          <div class="kpi p-3"><div class="text-[10px] text-slate-500">Accept</div><div class="text-2xl font-bold">96%</div><div class="text-[10px] text-green-600">OK</div></div>
         </div>
-
-        <div class="grid grid-cols-3 gap-4 mt-6">
-          <div class="col-span-2 bg-white rounded-2xl border border-slate-200">
-            <div class="p-4 flex justify-between items-center border-b border-slate-200">
+        <div class="bg-white rounded-2xl border border-slate-200 p-3">
+          <div class="flex justify-between items-center mb-2">
+            <div class="font-bold text-sm">Today’s line-up</div>
+            <span class="text-xs text-slate-500 flex items-center gap-1"><span class="dot bg-red-500"></span>1 new</span>
+          </div>
+          ${[['11:00','Youssef S.','Oil (std)','New','b-blue',true],['10:00','Karim H.','Brake pads','In progress','b-amber',true],['09:00','Layla M.','Oil+filter','Done','b-green',true]].map(([time,cust,svc,label,badge,act])=>`
+            <div class="tap border border-slate-100 rounded-xl p-2.5 mb-2 flex justify-between items-center" ${act?`onclick="show('b2b-booking')"`:''}>
               <div>
-                <div class="font-bold">Today's bookings</div>
-                <div class="text-xs text-slate-500">Live · updates automatically</div>
+                <div class="text-xs font-bold">${time}</div>
+                <div class="text-sm font-semibold">${cust}</div>
+                <div class="text-xs text-slate-500">${svc}</div>
               </div>
-              <div class="flex items-center gap-2 text-xs"><span class="dot bg-red-500"></span>1 new</div>
-            </div>
-            <table class="table w-full">
-              <thead><tr><th>Time</th><th>Customer</th><th>Service</th><th>Car</th><th>Mechanic</th><th>Status</th><th></th></tr></thead>
-              <tbody>
-                <tr><td class="font-semibold">09:00</td><td>Layla M.</td><td>Oil + filter combo</td><td>Corolla '20</td><td>Ahmed</td><td><span class="badge b-green">Completed</span></td><td class="text-right"><i data-lucide="chevron-right" class="w-4 h-4 text-slate-400 tap inline-block" onclick="show('b2b-booking')"></i></td></tr>
-                <tr><td class="font-semibold">10:00</td><td>Karim H.</td><td>Brake pads</td><td>Accent '18</td><td>Hassan</td><td><span class="badge b-amber">In progress</span></td><td class="text-right"><i data-lucide="chevron-right" class="w-4 h-4 text-slate-400 tap inline-block" onclick="show('b2b-booking')"></i></td></tr>
-                <tr style="background:#FFF7ED"><td class="font-semibold">11:00</td><td>Youssef S.</td><td>Oil change (std)</td><td>Corolla '19</td><td class="text-slate-400">Unassigned</td><td><span class="badge b-blue">New · 14m ago</span></td><td class="text-right"><button class="text-xs font-semibold text-teal-700 tap" onclick="show('b2b-booking')">Review</button></td></tr>
-                <tr><td class="font-semibold">12:30</td><td>Mona A.</td><td>AC recharge</td><td>Tucson '22</td><td>Ahmed</td><td><span class="badge b-slate">Scheduled</span></td><td class="text-right"><i data-lucide="chevron-right" class="w-4 h-4 text-slate-400 tap inline-block"></i></td></tr>
-                <tr><td class="font-semibold">14:00</td><td>Rami F.</td><td>Engine diag.</td><td>Elantra '21</td><td class="text-slate-400">Unassigned</td><td><span class="badge b-slate">Scheduled</span></td><td class="text-right"><i data-lucide="chevron-right" class="w-4 h-4 text-slate-400 tap inline-block"></i></td></tr>
-              </tbody>
-            </table>
-            <div class="p-3 text-center text-xs"><span class="text-teal-700 font-semibold tap" onclick="show('b2b-bookings')">See all bookings →</span></div>
-          </div>
-
-          <div class="space-y-4">
-            <div class="bg-white rounded-2xl border border-slate-200 p-4">
-              <div class="font-bold">Mechanics today</div>
-              ${[['Ahmed',2,3],['Hassan',3,3],['Karim',0,3]].map(([n,b,cap])=>`
-                <div class="mt-3">
-                  <div class="flex justify-between text-sm mb-1"><span class="font-semibold">${n}</span><span class="text-slate-500">${b}/${cap} slots</span></div>
-                  <div class="h-1.5 rounded-full bg-slate-100 overflow-hidden"><div class="h-full bg-teal-600" style="width:${(b/cap)*100}%"></div></div>
-                </div>`).join('')}
-            </div>
-            <div class="bg-white rounded-2xl border border-slate-200 p-4">
-              <div class="font-bold">Alerts</div>
-              <div class="mt-3 p-3 rounded-xl bg-amber-50 text-xs"><b>3 reviews need a reply</b><div class="mt-1 text-amber-800">Quick replies improve your acceptance score.</div><button class="mt-2 text-teal-700 font-semibold tap" onclick="show('b2b-reviews')">Open reviews →</button></div>
-              <div class="mt-2 p-3 rounded-xl bg-blue-50 text-xs"><b>Mechanic ID expires 30 Apr</b><div class="mt-1 text-blue-800">Upload renewed doc to keep verified.</div></div>
-            </div>
-          </div>
+              <span class="badge ${badge} text-[10px]">${label}</span>
+            </div>`).join('')}
+          <div class="text-center text-xs text-teal-700 font-semibold pt-1 tap" onclick="show('b2b-bookings')">Full calendar</div>
         </div>
-      </div>
+        <div class="bg-white rounded-2xl border border-slate-200 p-3">
+          <div class="font-bold text-sm mb-2">Mechanics</div>
+          ${[['Ahmed',2,3],['Hassan',3,3],['Karim',0,3]].map(([n,b,cap])=>`
+            <div class="mb-2 last:mb-0">
+              <div class="flex justify-between text-xs"><span class="font-semibold">${n}</span><span class="text-slate-500">${b}/${cap}</span></div>
+              <div class="h-1.5 rounded-full bg-slate-100 overflow-hidden mt-0.5"><div class="h-full bg-teal-600" style="width:${(b/cap)*100}%"></div></div>
+            </div>`).join('')}
+        </div>
+        <div class="bg-amber-50 border border-amber-100 rounded-xl p-3 text-xs">
+          <b>3 reviews</b> need a reply. <span class="text-teal-800 font-semibold tap" onclick="show('b2b-reviews')">Open</span>
+        </div>
     </div>
   </div>
+  ${b2bTabBar('dashboard')}
+  <div class="home-indicator"></div>
 </div>`,
 
 /* --- BOOKINGS (calendar) -------------------------------- */
 'b2b-bookings': `
 <div class="screen" data-screen="b2b-bookings">
-  <div class="flex-1 flex">
-    ${b2bSideNav('bookings')}
-    <div class="flex-1 bg-slate-50 overflow-y-auto">
-      ${b2bTopbar('Bookings')}
-      <div class="p-6">
-        <div class="flex items-center justify-between mb-4">
-          <div class="flex items-center gap-2">
-            <div class="rounded-xl bg-white border border-slate-200 p-1 flex gap-1 text-sm font-semibold">
-              <button class="px-3 py-1.5 rounded-lg bg-teal-600 text-white">Week</button>
-              <button class="px-3 py-1.5 rounded-lg text-slate-500">Day</button>
-              <button class="px-3 py-1.5 rounded-lg text-slate-500">Month</button>
-            </div>
-            <div class="flex items-center gap-2 ml-2">
-              <button class="w-8 h-8 rounded-lg bg-white border border-slate-200 flex items-center justify-center"><i data-lucide="chevron-left" class="w-4 h-4"></i></button>
-              <div class="font-semibold">Apr 13 – 19, 2026</div>
-              <button class="w-8 h-8 rounded-lg bg-white border border-slate-200 flex items-center justify-center"><i data-lucide="chevron-right" class="w-4 h-4"></i></button>
-            </div>
-          </div>
-          <div class="flex items-center gap-2">
-            <div class="rounded-xl border border-slate-200 bg-white px-3 py-1.5 text-xs">All mechanics <i data-lucide="chevron-down" class="w-3 h-3 inline"></i></div>
-            <div class="rounded-xl border border-slate-200 bg-white px-3 py-1.5 text-xs">All services <i data-lucide="chevron-down" class="w-3 h-3 inline"></i></div>
-            <button class="btn-primary py-2 px-3 text-xs tap">+ New manual booking</button>
-          </div>
-        </div>
-
-        <div class="bg-white rounded-2xl border border-slate-200 overflow-hidden">
-          <div class="grid" style="grid-template-columns: 60px repeat(7, 1fr);">
-            <div class="border-r border-b border-slate-200 p-2"></div>
-            ${['Sat 13','Sun 14','Mon 15','Tue 16','Wed 17','Thu 18','Fri 19'].map((d,i)=>`<div class="border-b border-l border-slate-200 p-2 text-center text-xs font-semibold ${i===5?'bg-teal-50 text-teal-800':'text-slate-600'}">${d}</div>`).join('')}
-            ${['9','10','11','12','13','14','15','16','17'].map(h=>{
-              const cells = Array(7).fill('').map((_,ci)=>{
-                const events = [];
-                if(h==='9' && ci===0) events.push(['Oil · Layla','b-green']);
-                if(h==='10' && ci===5) events.push(['Brakes · Karim','b-amber']);
-                if(h==='11' && ci===5) events.push(['Oil · Youssef','b-blue']);
-                if(h==='12' && ci===5) events.push(['AC · Mona','b-slate']);
-                if(h==='14' && ci===5) events.push(['Diag · Rami','b-slate']);
-                if(h==='10' && ci===3) events.push(['Tires · Ibrahim','b-slate']);
-                if(h==='13' && ci===2) events.push(['Oil · Sara','b-slate']);
-                if(h==='11' && ci===1) events.push(['Brakes · Tarek','b-slate']);
-                return `<div class="border-l border-b border-slate-200 h-16 p-1 relative">${events.map(([t,c])=>`<div class="tap text-[10px] font-semibold rounded px-1.5 py-1 mb-1 badge ${c}" onclick="show('b2b-booking')">${t}</div>`).join('')}</div>`;
-              }).join('');
-              return `<div class="border-r border-b border-slate-200 text-xs text-slate-500 p-1 pt-2">${h}:00</div>${cells}`;
-            }).join('')}
-          </div>
-        </div>
-
-        <div class="mt-4 text-xs text-slate-500 flex items-center gap-4">
-          <span class="flex items-center gap-1"><span class="dot bg-blue-500"></span>New</span>
-          <span class="flex items-center gap-1"><span class="dot bg-amber-500"></span>In progress</span>
-          <span class="flex items-center gap-1"><span class="dot bg-green-500"></span>Completed</span>
-          <span class="flex items-center gap-1"><span class="dot bg-slate-400"></span>Scheduled</span>
-        </div>
+  <div class="status-bar"><span>9:41</span><span></span></div>
+  <div class="flex-1 flex flex-col min-h-0 bg-slate-50">
+    ${b2bTopbarMobile('Bookings')}
+    <div class="px-3 pt-2 flex items-center justify-between">
+      <div class="rounded-xl bg-white border border-slate-200 p-0.5 flex text-xs font-semibold">
+        <span class="px-2.5 py-1 rounded-lg bg-teal-600 text-white">Week</span>
+        <span class="px-2.5 py-1 rounded-lg text-slate-500">Day</span>
+      </div>
+      <div class="flex items-center gap-1">
+        <button class="w-8 h-8 rounded-lg bg-white border border-slate-200 flex items-center justify-center"><i data-lucide="chevron-left" class="w-4 h-4"></i></button>
+        <div class="text-xs font-semibold">Apr 13 – 19</div>
+        <button class="w-8 h-8 rounded-lg bg-white border border-slate-200 flex items-center justify-center"><i data-lucide="chevron-right" class="w-4 h-4"></i></button>
       </div>
     </div>
+    <div class="flex-1 overflow-y-auto p-3">
+        <div class="overflow-x-auto pb-2 -mx-1">
+          <div class="inline-flex gap-1 min-w-max">
+            ${['S13','M14','T15','W16','T17','T18','F19'].map((d,i)=>`<div class="w-10 text-center p-1.5 rounded-lg text-xs font-semibold ${i===5?'bg-teal-600 text-white':'bg-white border border-slate-200 text-slate-600'}">${d}</div>`).join('')}
+          </div>
+        </div>
+        <button class="btn-primary w-full text-xs py-2.5 mb-3">+ Manual booking</button>
+        <div class="space-y-2">
+          ${[['11:00','Youssef S.','Oil (std)','b-blue','New'],['10:00','Karim H.','Brake pads','b-amber','In progress'],['09:00','Layla M.','Oil+filter','b-green','Done']].map(([time,cust,svc,badge,l])=>`
+            <div class="tap bg-white border border-slate-200 rounded-xl p-3 flex justify-between" onclick="show('b2b-booking')">
+              <div>
+                <div class="text-xs text-slate-500">${time}</div>
+                <div class="text-sm font-semibold">${cust}</div>
+                <div class="text-xs text-slate-500">${svc}</div>
+              </div>
+              <span class="badge ${badge} text-[10px] self-start">${l}</span>
+            </div>`).join('')}
+        </div>
+        <div class="mt-3 text-[10px] text-slate-500 flex flex-wrap gap-2">
+          <span class="flex items-center gap-0.5"><span class="dot bg-blue-500"></span>New</span>
+          <span class="flex items-center gap-0.5"><span class="dot bg-amber-500"></span>Active</span>
+          <span class="flex items-center gap-0.5"><span class="dot bg-green-500"></span>Done</span>
+        </div>
+    </div>
   </div>
+  ${b2bTabBar('bookings')}
+  <div class="home-indicator"></div>
 </div>`,
 
 /* --- BOOKING DETAIL ------------------------------------- */
 'b2b-booking': `
 <div class="screen" data-screen="b2b-booking">
-  <div class="flex-1 flex">
-    ${b2bSideNav('bookings')}
-    <div class="flex-1 bg-slate-50 overflow-y-auto">
-      ${b2bTopbar('Booking #CC-4A1F9')}
-      <div class="p-6 grid grid-cols-3 gap-5">
-        <div class="col-span-2 space-y-4">
-          <div class="bg-white rounded-2xl border border-slate-200 p-5">
-            <div class="flex items-start justify-between">
-              <div>
-                <div class="flex items-center gap-2"><span class="badge b-blue">New · 14m ago</span><span class="text-xs text-slate-500">Saturday 18 Apr · 11:00 · ~45 min</span></div>
-                <div class="text-2xl font-bold mt-2">Oil change (standard)</div>
-                <div class="text-sm text-slate-500">Toyota Corolla 2019 · 82,450 km · س ب ج 7421</div>
-              </div>
-              <div class="text-right">
-                <div class="text-xs text-slate-500">Quoted price</div>
-                <div class="text-2xl font-bold">EGP 350</div>
-              </div>
-            </div>
-            <div class="flex gap-2 mt-4">
-              <button class="btn-accent tap">Accept booking</button>
-              <button class="btn-ghost tap">Propose alternative time</button>
-              <button class="btn-ghost tap text-red-600">Reject</button>
-            </div>
-          </div>
-
-          <div class="bg-white rounded-2xl border border-slate-200 p-5">
-            <div class="label mb-3">Job status</div>
-            <div class="flex items-center gap-3">
-              ${['Received','Accepted','In progress','Ready','Invoiced'].map((s,i)=>`
-                <div class="flex items-center gap-2 ${i===0?'':'ml-2'}">
-                  <div class="w-8 h-8 rounded-full ${i===0?'bg-teal-600 text-white':'bg-slate-100 text-slate-400'} flex items-center justify-center text-sm font-bold">${i+1}</div>
-                  <div class="text-sm font-medium ${i===0?'':'text-slate-400'}">${s}</div>
-                  ${i<4?`<div class="w-8 h-px bg-slate-200"></div>`:''}
-                </div>`).join('')}
-            </div>
-          </div>
-
-          <div class="bg-white rounded-2xl border border-slate-200 p-5">
-            <div class="flex justify-between items-start mb-3"><div class="label">Invoice (draft)</div><button class="text-xs font-semibold text-teal-700 flex items-center gap-1"><i data-lucide="plus" class="w-3.5 h-3.5"></i>Add line item</button></div>
-            <table class="w-full table">
-              <thead><tr><th>Item</th><th>Qty</th><th>Unit</th><th class="text-right">Total</th></tr></thead>
-              <tbody>
-                <tr><td>Oil change (standard)</td><td>1</td><td>350.00</td><td class="text-right">350.00</td></tr>
-                <tr class="italic text-slate-400"><td>+ Cabin filter (proposed)</td><td>1</td><td>180.00</td><td class="text-right">180.00</td></tr>
-              </tbody>
-              <tfoot>
-                <tr><td colspan="3" class="text-right font-semibold">Subtotal</td><td class="text-right font-semibold">350.00</td></tr>
-                <tr><td colspan="3" class="text-right text-slate-500">CarCare commission (10%)</td><td class="text-right text-slate-500">−35.00</td></tr>
-                <tr><td colspan="3" class="text-right font-bold">Your payout</td><td class="text-right font-bold">EGP 315.00</td></tr>
-              </tfoot>
-            </table>
+  <div class="status-bar"><span>9:41</span><span></span></div>
+  <div class="flex-1 flex flex-col min-h-0 bg-slate-50">
+    <div class="bg-white border-b border-slate-200 h-12 flex items-center px-3 flex-shrink-0">
+      <button class="tap w-9 h-9 flex items-center justify-center -ml-1" onclick="show('b2b-bookings')"><i data-lucide="arrow-left" class="w-5 h-5"></i></button>
+      <div class="font-semibold text-sm truncate flex-1">#CC-4A1F9</div>
+    </div>
+    <div class="flex-1 overflow-y-auto p-3 space-y-3">
+      <div class="bg-white rounded-2xl border border-slate-200 p-4">
+        <div class="flex items-center gap-2 flex-wrap">
+          <span class="badge b-blue">New · 14m</span>
+          <span class="text-xs text-slate-500">Sat 18 Apr · 11:00</span>
+        </div>
+        <div class="text-xl font-bold mt-2">Oil change (standard)</div>
+        <div class="text-sm text-slate-500">Corolla 2019 · 82,450 km</div>
+        <div class="mt-2 flex justify-between">
+          <span class="text-xs text-slate-500">Quote</span>
+          <span class="text-lg font-bold">EGP 350</span>
+        </div>
+        <div class="flex flex-col gap-2 mt-3">
+          <button class="btn-accent w-full">Accept booking</button>
+          <button class="btn-ghost w-full text-sm">Propose new time</button>
+          <button class="btn-ghost w-full text-sm text-red-600">Reject</button>
+        </div>
+      </div>
+      <div class="bg-white rounded-2xl border border-slate-200 p-4">
+        <div class="label mb-2">Customer</div>
+        <div class="flex items-center gap-2">
+          <div class="w-10 h-10 rounded-full bg-teal-100 text-teal-800 font-bold flex items-center justify-center">YS</div>
+          <div>
+            <div class="font-semibold text-sm">Youssef Salem</div>
+            <div class="text-[10px] text-slate-500">4 bookings</div>
           </div>
         </div>
-
-        <div class="space-y-4">
-          <div class="bg-white rounded-2xl border border-slate-200 p-5">
-            <div class="label mb-3">Customer</div>
-            <div class="flex items-center gap-3">
-              <div class="w-12 h-12 rounded-full bg-teal-100 flex items-center justify-center text-teal-800 font-bold">YS</div>
-              <div class="flex-1"><div class="font-semibold">Youssef Salem</div><div class="text-xs text-slate-500">Customer since Feb 2026 · 4 bookings</div></div>
-            </div>
-            <div class="mt-4 flex gap-2">
-              <button class="btn-ghost py-2 text-xs flex-1 flex items-center justify-center gap-1"><i data-lucide="phone" class="w-3.5 h-3.5"></i>Call</button>
-              <button class="btn-ghost py-2 text-xs flex-1 flex items-center justify-center gap-1"><i data-lucide="message-circle" class="w-3.5 h-3.5"></i>Message</button>
-            </div>
-            <div class="mt-4 text-xs text-slate-500">Customer's note: "Please check wiper fluid while you're at it."</div>
-          </div>
-
-          <div class="bg-white rounded-2xl border border-slate-200 p-5">
-            <div class="label mb-3">Assign mechanic</div>
-            <div class="space-y-2">
-              ${[['Ahmed',2,3],['Hassan',3,3],['Karim',0,3]].map(([n,b,cap],i)=>`
-                <label class="flex items-center gap-3 p-2 rounded-xl ${i===2?'bg-teal-50 border-2 border-teal-500':'border border-slate-200'} tap">
-                  <div class="w-4 h-4 rounded-full border-2 ${i===2?'border-teal-600':'border-slate-300'} flex items-center justify-center">${i===2?'<div class="w-2 h-2 rounded-full bg-teal-600"></div>':''}</div>
-                  <div class="flex-1"><div class="text-sm font-semibold">${n}</div><div class="text-xs text-slate-500">${b}/${cap} slots today</div></div>
-                  ${b===cap?'<span class="text-xs text-red-600">Full</span>':''}
-                </label>`).join('')}
-            </div>
-          </div>
-
-          <div class="bg-white rounded-2xl border border-slate-200 p-5">
-            <div class="label mb-3">Internal notes</div>
-            <textarea class="w-full rounded-xl border border-slate-200 px-3 py-2 text-sm h-20" placeholder="Seen on the shop floor only."></textarea>
-          </div>
+        <div class="grid grid-cols-2 gap-2 mt-3">
+          <button class="btn-ghost text-xs py-2"><i data-lucide="phone" class="w-3.5 h-3.5 inline"></i> Call</button>
+          <button class="btn-ghost text-xs py-2"><i data-lucide="message-circle" class="w-3.5 h-3.5 inline"></i> Message</button>
         </div>
+      </div>
+      <div class="bg-white rounded-2xl border border-slate-200 p-4">
+        <div class="label mb-2">Assign mechanic</div>
+        ${[['Ahmed',2,3,0],['Hassan',3,3,1],['Karim',0,3,2]].map(([n,b,cap,ix])=>`
+          <div class="flex items-center justify-between p-2 rounded-xl border ${ix===2?'border-teal-500 bg-teal-50':'border-slate-200'} mb-2 last:mb-0">
+            <div><div class="text-sm font-semibold">${n}</div><div class="text-xs text-slate-500">${b}/${cap} slots</div></div>
+            ${ix===2?'<div class="w-2.5 h-2.5 rounded-full bg-teal-600"></div>':'<div class="w-4 h-4 rounded-full border-2 border-slate-200"></div>'}
+          </div>`).join('')}
+      </div>
+      <div class="bg-white rounded-2xl border border-slate-200 p-4">
+        <div class="label mb-2">Invoice (draft)</div>
+        <div class="text-sm flex justify-between py-1"><span>Oil (std)</span><span>EGP 350</span></div>
+        <div class="text-xs text-slate-400 flex justify-between py-1">Commission 10%<span>−35</span></div>
+        <div class="divider my-2"></div>
+        <div class="font-bold flex justify-between">Your payout <span>EGP 315</span></div>
       </div>
     </div>
   </div>
+  <div class="home-indicator"></div>
 </div>`,
 
 /* --- CATALOG -------------------------------------------- */
 'b2b-catalog': `
 <div class="screen" data-screen="b2b-catalog">
-  <div class="flex-1 flex">
-    ${b2bSideNav('catalog')}
-    <div class="flex-1 bg-slate-50 overflow-y-auto">
-      ${b2bTopbar('Catalog & pricing')}
-      <div class="p-6">
-        <div class="flex justify-between items-center mb-4">
-          <div class="flex gap-2">
-            <div class="chip on">All · 14</div>
-            <div class="chip">Oil · 3</div>
-            <div class="chip">Brakes · 2</div>
-            <div class="chip">AC · 2</div>
-            <div class="chip">Body · 4</div>
-            <div class="chip">Other · 3</div>
-          </div>
-          <div class="flex gap-2">
-            <button class="btn-ghost py-2 px-3 text-xs flex items-center gap-1"><i data-lucide="upload" class="w-3.5 h-3.5"></i>Import CSV</button>
-            <button class="btn-primary py-2 px-3 text-xs tap">+ Add service</button>
-          </div>
-        </div>
-
-        <div class="bg-white rounded-2xl border border-slate-200 overflow-hidden">
-          <table class="table w-full">
-            <thead><tr><th></th><th>Service</th><th>Category</th><th>Duration</th><th>Price type</th><th>Price (EGP)</th><th>Bookings / mo</th><th>Live</th><th></th></tr></thead>
-            <tbody>
-              ${[['Oil change (standard)','Oil','45 min','Fixed','350',62,true],
-                 ['Oil change (premium)','Oil','45 min','Fixed','620',41,true],
-                 ['Oil + filter combo','Oil','1 h','Fixed','450',28,true],
-                 ['Brake pads — front','Brakes','1.5 h','Fixed','650',22,true],
-                 ['Brake inspection','Brakes','15 min','Fixed','0',18,true],
-                 ['AC recharge','AC','1 h','Fixed','450',34,true],
-                 ['AC full service','AC','2.5 h','Range','800–1,500',9,true],
-                 ['Engine diagnostic','Other','30 min','Range','200–500',26,true],
-                 ['Full body paint','Body','—','Quote','—',3,false]].map(([s,c,d,t,p,b,live])=>`
-                <tr><td><i data-lucide="grip-vertical" class="w-4 h-4 text-slate-400"></i></td><td class="font-semibold">${s}</td><td><span class="badge b-slate">${c}</span></td><td class="text-slate-500">${d}</td><td><span class="badge ${t==='Fixed'?'b-green':t==='Range'?'b-amber':'b-blue'}">${t}</span></td><td class="font-semibold">${p}</td><td class="text-slate-500">${b}</td><td><div class="w-9 h-5 rounded-full ${live?'bg-teal-600':'bg-slate-300'} relative"><div class="absolute top-0.5 ${live?'right-0.5':'left-0.5'} w-4 h-4 rounded-full bg-white shadow"></div></div></td><td><i data-lucide="more-vertical" class="w-4 h-4 text-slate-400 tap"></i></td></tr>`).join('')}
-            </tbody>
-          </table>
-        </div>
+  <div class="status-bar"><span>9:41</span><span></span></div>
+  <div class="flex-1 flex flex-col min-h-0 bg-slate-50">
+    ${b2bTopbarMobile('Catalog')}
+    <div class="px-3 flex gap-2 overflow-x-auto no-scrollbar py-2">
+      <span class="chip on flex-shrink-0">All</span>
+      <span class="chip flex-shrink-0">Oil</span>
+      <span class="chip flex-shrink-0">Brakes</span>
+      <span class="chip flex-shrink-0">AC</span>
+    </div>
+    <div class="flex-1 overflow-y-auto p-3 space-y-2">
+      <div class="flex gap-2">
+        <button class="btn-ghost text-xs flex-1 py-2">Import</button>
+        <button class="btn-primary text-xs flex-1 py-2">+ Service</button>
       </div>
+      ${[['Oil (standard)','EGP 350','Fixed','62',true],['Brake pads','EGP 650','Fixed','22',true],['AC recharge','EGP 450','Fixed','34',true]].map(([s,p,t,b,live])=>`
+        <div class="bg-white border border-slate-200 rounded-xl p-3 flex justify-between items-start">
+          <div>
+            <div class="text-sm font-semibold">${s}</div>
+            <div class="text-xs text-slate-500 mt-0.5"><span class="badge b-slate">${t}</span> ${b}/mo</div>
+            <div class="text-sm font-bold mt-1">${p}</div>
+          </div>
+          <div class="w-9 h-5 rounded-full ${live?'bg-teal-600':'bg-slate-300'}"><div class="w-4 h-4 m-0.5 rounded-full bg-white float-right"></div></div>
+        </div>`).join('')}
     </div>
   </div>
+  ${b2bTabBar('catalog')}
+  <div class="home-indicator"></div>
 </div>`,
 
 /* --- REVIEWS -------------------------------------------- */
 'b2b-reviews': `
 <div class="screen" data-screen="b2b-reviews">
-  <div class="flex-1 flex">
-    ${b2bSideNav('reviews')}
-    <div class="flex-1 bg-slate-50 overflow-y-auto">
-      ${b2bTopbar('Reviews')}
-      <div class="p-6 grid grid-cols-3 gap-5">
-        <div class="space-y-4">
-          <div class="kpi">
-            <div class="flex items-end gap-2"><div class="text-4xl font-bold">4.8</div><div class="text-xs text-slate-500 pb-2">★ 312 reviews</div></div>
-            <div class="mt-3 space-y-1">
-              ${[[5,240],[4,48],[3,16],[2,5],[1,3]].map(([s,c])=>`
-                <div class="flex items-center gap-2 text-xs"><span class="w-3">${s}</span><div class="flex-1 h-1.5 rounded-full bg-slate-100 overflow-hidden"><div class="h-full bg-amber-500" style="width:${c/312*100}%"></div></div><span class="w-8 text-right text-slate-500">${c}</span></div>`).join('')}
-            </div>
-          </div>
-          <div class="kpi">
-            <div class="label mb-2">Category averages</div>
-            ${[['Quality',4.9],['Price',4.6],['Speed',4.8],['Honesty',4.9]].map(([l,v])=>`<div class="flex justify-between py-1.5 text-sm"><span>${l}</span><span class="font-bold">${v}</span></div>`).join('')}
-          </div>
-          <div class="kpi">
-            <div class="label mb-2">Response rate</div>
-            <div class="text-3xl font-bold">68%</div>
-            <div class="text-xs text-slate-500">24 reviews awaiting reply</div>
-          </div>
-        </div>
-
-        <div class="col-span-2 bg-white rounded-2xl border border-slate-200">
-          <div class="p-4 flex gap-3 border-b border-slate-200">
-            <div class="chip on">All</div>
-            <div class="chip">Unresponded · 24</div>
-            <div class="chip">5-star · 240</div>
-            <div class="chip">Flagged · 2</div>
-          </div>
-          <div class="divide-y divide-slate-200">
-            ${[['Mohamed H.','MH','2d ago',5,'Fast, clean, honest pricing. Texted me when the car was ready.','Oil change','responded'],
-               ['Sara A.','SA','5d ago',4,'Good service. Waited 20 minutes past my slot but quality work.','AC recharge','pending'],
-               ['Karim T.','KT','1w ago',2,'They quoted 450 and charged me 680. Explain that.','Brake inspection','flagged']].map(([n,ini,t,r,txt,svc,state])=>`
-              <div class="p-4">
-                <div class="flex items-start gap-3">
-                  <div class="w-10 h-10 rounded-full bg-teal-100 flex items-center justify-center font-bold text-teal-800">${ini}</div>
-                  <div class="flex-1">
-                    <div class="flex items-center gap-2"><div class="font-semibold">${n}</div><div class="text-xs text-slate-400">${t}</div>${state==='flagged'?'<span class="badge b-red">Flagged</span>':state==='pending'?'<span class="badge b-amber">Awaiting reply</span>':''}</div>
-                    <div class="flex gap-0.5 mt-1">${[1,2,3,4,5].map(i=>`<i data-lucide="star" class="w-3.5 h-3.5 ${i<=r?'text-amber-500 fill-amber-500':'text-slate-300'}"></i>`).join('')}<span class="text-xs text-slate-400 ml-2">${svc}</span></div>
-                    <div class="mt-2 text-sm">${txt}</div>
-                    ${state==='responded'?'<div class="mt-2 p-2 rounded-lg bg-slate-50 text-xs"><b>You replied:</b> Thank you Mohamed, see you next service!</div>':state==='pending'?'<div class="mt-3 flex gap-2"><input class="flex-1 rounded-xl border border-slate-200 px-3 py-2 text-xs" placeholder="Reply publicly..."/><button class="btn-primary py-2 px-3 text-xs">Post</button></div>':'<div class="mt-3 flex gap-2"><button class="btn-ghost py-2 px-3 text-xs">Dispute review</button><button class="btn-primary py-2 px-3 text-xs">Reply publicly</button></div>'}
+  <div class="status-bar"><span>9:41</span><span></span></div>
+  <div class="flex-1 flex flex-col min-h-0 bg-slate-50">
+    <div class="bg-white border-b border-slate-200 h-12 flex items-center px-2 flex-shrink-0">
+      <button class="tap w-9 h-9" onclick="show('b2b-dashboard')"><i data-lucide="arrow-left" class="w-5 h-5"></i></button>
+      <div class="font-semibold text-sm">Reviews</div>
+    </div>
+    <div class="flex-1 overflow-y-auto p-3 space-y-3">
+      <div class="kpi p-3">
+        <div class="text-3xl font-bold">4.8 <span class="text-sm text-slate-500 font-normal">312 reviews</span></div>
+        <div class="text-xs text-amber-700 mt-1">24 need reply</div>
+      </div>
+      <div class="flex gap-2 overflow-x-auto no-scrollbar">
+        <span class="chip on flex-shrink-0">All</span>
+        <span class="chip flex-shrink-0">Pending</span>
+        <span class="chip flex-shrink-0">5★</span>
+      </div>
+      <div class="bg-white rounded-2xl border border-slate-200 divide-y divide-slate-100">
+            ${[['Mohamed H.','MH',5,'Great service & honest pricing.','responded'], ['Sara A.','SA',4,'Good, slight wait.','pending']].map(([n,ini,r,txt,state])=>`
+            <div class="p-3">
+              <div class="flex gap-2">
+                <div class="w-8 h-8 rounded-full bg-teal-100 text-xs font-bold text-teal-800 flex items-center justify-center">${ini}</div>
+                <div class="flex-1 min-w-0">
+                  <div class="flex justify-between items-start">
+                    <span class="text-sm font-semibold">${n}</span>
+                    ${state==='pending'?'<span class="badge b-amber text-[9px]">Reply</span>':''}
                   </div>
+                  <div class="flex gap-0.5 mt-0.5">${[1,2,3,4,5].map(i=>`<i data-lucide="star" class="w-3 h-3 ${i<=r?'text-amber-500 fill-amber-500':'text-slate-300'}"></i>`).join('')}</div>
+                  <div class="text-sm mt-1">${txt}</div>
                 </div>
-              </div>`).join('')}
-          </div>
-        </div>
+              </div>
+            </div>`).join('')}
       </div>
     </div>
   </div>
+  <div class="home-indicator"></div>
 </div>`,
 
 /* --- PAYOUTS (Phase 2) ---------------------------------- */
 'b2b-payouts': `
 <div class="screen" data-screen="b2b-payouts">
-  <div class="flex-1 flex">
-    ${b2bSideNav('payouts')}
-    <div class="flex-1 bg-slate-50 overflow-y-auto">
-      ${b2bTopbar('Payouts')}
-      <div class="p-6">
-        <div class="flex items-center gap-2 mb-3"><span class="badge b-amber">Phase 2</span><span class="text-xs text-slate-500">Included here for spec completeness — shipping after MVP.</span></div>
-        <div class="grid grid-cols-3 gap-4 mb-6">
-          <div class="kpi"><div class="text-xs text-slate-500">Available balance</div><div class="text-3xl font-bold mt-1">EGP 12,840</div><button class="btn-primary mt-3 py-2 text-xs w-full">Request payout</button></div>
-          <div class="kpi"><div class="text-xs text-slate-500">This month (gross)</div><div class="text-3xl font-bold mt-1">EGP 42,310</div><div class="text-xs text-slate-500 mt-1">Across 118 bookings</div></div>
-          <div class="kpi"><div class="text-xs text-slate-500">Commission (10%)</div><div class="text-3xl font-bold mt-1">EGP 4,231</div><div class="text-xs text-teal-700 mt-1">Pro tier — 10%</div></div>
+  <div class="status-bar"><span>9:41</span><span></span></div>
+  <div class="flex-1 flex flex-col min-h-0 bg-slate-50">
+    <div class="bg-white border-b border-slate-200 h-12 flex items-center px-2 flex-shrink-0">
+      <button class="tap w-9 h-9" onclick="show('b2b-more')"><i data-lucide="arrow-left" class="w-5 h-5"></i></button>
+      <div class="font-semibold text-sm pl-1">Payouts <span class="badge b-amber text-[9px] ml-1">P2</span></div>
+    </div>
+    <div class="flex-1 overflow-y-auto p-3 space-y-3">
+        <div class="kpi p-3 text-center">
+          <div class="text-xs text-slate-500">Available</div>
+          <div class="text-2xl font-bold">EGP 12,840</div>
+          <button class="btn-primary w-full text-xs py-2 mt-2">Request payout</button>
         </div>
-        <div class="bg-white rounded-2xl border border-slate-200 overflow-hidden">
-          <div class="p-4 border-b border-slate-200 flex justify-between items-center"><div class="font-bold">Recent payouts</div><button class="btn-ghost py-1.5 px-3 text-xs">Download CSV</button></div>
-          <table class="table w-full">
-            <thead><tr><th>Date</th><th>Period</th><th>Bookings</th><th>Gross</th><th>Commission</th><th>Payout</th><th>Status</th></tr></thead>
-            <tbody>
-              ${[['11 Apr','Apr 4–10',24,'EGP 8,420','EGP 842','EGP 7,578','paid'],
-                 ['4 Apr','Mar 28–Apr 3',28,'EGP 9,880','EGP 988','EGP 8,892','paid'],
-                 ['28 Mar','Mar 21–27',31,'EGP 10,540','EGP 1,054','EGP 9,486','paid'],
-                 ['21 Mar','Mar 14–20',22,'EGP 7,610','EGP 761','EGP 6,849','on hold']].map(([d,p,b,g,c,pay,s])=>`
-                <tr><td class="font-semibold">${d}</td><td class="text-slate-500">${p}</td><td>${b}</td><td>${g}</td><td class="text-slate-500">${c}</td><td class="font-semibold">${pay}</td><td><span class="badge ${s==='paid'?'b-green':'b-amber'}">${s}</span></td></tr>`).join('')}
-            </tbody>
-          </table>
+        <div class="grid grid-cols-2 gap-2">
+          <div class="kpi p-2 text-center text-xs">Gross (mo)<div class="font-bold text-sm mt-0.5">42,310</div></div>
+          <div class="kpi p-2 text-center text-xs">Comm. 10%<div class="font-bold text-sm mt-0.5">4,231</div></div>
+        </div>
+        <div class="text-xs text-slate-500">Recent</div>
+        ${[['11 Apr','EGP 7,578','paid'], ['4 Apr','EGP 8,892','paid'], ['28 Mar','EGP 9,486','paid']].map(([d,pay,s])=>`
+          <div class="bg-white border border-slate-200 rounded-xl p-3 flex justify-between text-sm">
+            <div><div class="font-semibold">${d}</div><div class="text-xs text-slate-500">Payout to bank</div></div>
+            <div class="text-right">
+              <div class="font-bold">${pay}</div>
+              <span class="badge ${s==='paid'?'b-green':'b-amber'} text-[9px]">${s}</span>
+            </div>
+          </div>`).join('')}
+    </div>
+  </div>
+  <div class="home-indicator"></div>
+</div>`,
+
+/* --- MORE (hub) ---------------------------------------- */
+'b2b-more': `
+<div class="screen" data-screen="b2b-more">
+  <div class="status-bar"><span>9:41</span><span></span></div>
+  <div class="flex-1 flex flex-col min-h-0 bg-slate-50">
+    ${b2bTopbarMobile('More')}
+    <div class="flex-1 overflow-y-auto p-3">
+      <div class="text-xs text-slate-500 mb-2">Account</div>
+      <div class="bg-white rounded-2xl border border-slate-200 divide-y divide-slate-100">
+        <button class="w-full p-3 flex items-center justify-between text-left tap" onclick="show('b2b-reviews')">
+          <span class="flex items-center gap-2 text-sm font-medium"><i data-lucide="star" class="w-4 h-4 text-amber-500"></i> Reviews</span>
+          <i data-lucide="chevron-right" class="w-4 h-4 text-slate-400"></i>
+        </button>
+        <button class="w-full p-3 flex items-center justify-between text-left tap" onclick="show('b2b-payouts')">
+          <span class="flex items-center gap-2 text-sm font-medium"><i data-lucide="wallet" class="w-4 h-4 text-teal-600"></i> Payouts</span>
+          <span class="badge b-amber text-[9px]">P2</span>
+        </button>
+        <div class="p-3 flex items-center justify-between text-slate-400">
+          <span class="flex items-center gap-2 text-sm"><i data-lucide="users" class="w-4 h-4"></i> Team</span>
+          <span class="text-xs">Soon</span>
+        </div>
+        <div class="p-3 flex items-center justify-between text-slate-400">
+          <span class="flex items-center gap-2 text-sm"><i data-lucide="settings" class="w-4 h-4"></i> Settings</span>
+          <i data-lucide="chevron-right" class="w-4 h-4"></i>
         </div>
       </div>
     </div>
   </div>
+  ${b2bTabBar('more')}
+  <div class="home-indicator"></div>
 </div>`,
 };
 
 /* =========================================================
    B2B helpers
    ========================================================= */
-function b2bSideNav(active){
-  const items = [
-    ['dashboard','layout-dashboard','Dashboard'],
-    ['bookings','calendar','Bookings'],
-    ['catalog','tag','Catalog'],
-    ['reviews','star','Reviews'],
-    ['customers','users','Customers'],
-    ['payouts','coins','Payouts'],
-    ['settings','settings','Settings'],
-  ];
-  return `
-    <div class="side-nav">
-      <div class="flex items-center gap-2 px-2 mb-5">
-        <div class="w-8 h-8 rounded-lg bg-teal-500/20 flex items-center justify-center"><i data-lucide="wrench" class="w-4 h-4 text-teal-400"></i></div>
-        <div><div class="text-white text-sm font-bold">CarCare</div><div class="text-[10px] uppercase tracking-wider text-teal-400">Business</div></div>
-      </div>
-      ${items.map(([id,ic,l])=>`<div class="side-item ${active===id?'on':''} tap" ${id==='dashboard'?'onclick="show(\'b2b-dashboard\')"':id==='bookings'?'onclick="show(\'b2b-bookings\')"':id==='catalog'?'onclick="show(\'b2b-catalog\')"':id==='reviews'?'onclick="show(\'b2b-reviews\')"':id==='payouts'?'onclick="show(\'b2b-payouts\')"':''}><i data-lucide="${ic}" class="w-4 h-4"></i>${l}</div>`).join('')}
-      <div class="mt-auto pt-4 border-t border-slate-800">
-        <div class="side-item"><div class="w-7 h-7 rounded-full bg-teal-600 flex items-center justify-center text-xs font-bold text-white">OS</div><div class="flex-1"><div class="text-white text-xs font-semibold">Omar Saleh</div><div class="text-[10px] text-teal-400">Free tier · Upgrade</div></div></div>
-      </div>
-    </div>`;
-}
-function b2bTopbar(title){
-  return `
-    <div class="bg-white border-b border-slate-200 h-14 flex items-center px-6 justify-between">
-      <div class="font-semibold text-sm">${title}</div>
-      <div class="flex items-center gap-3">
-        <div class="w-72 rounded-xl border border-slate-200 bg-slate-50 px-3 py-1.5 flex items-center gap-2"><i data-lucide="search" class="w-4 h-4 text-slate-400"></i><input class="flex-1 bg-transparent text-xs outline-none" placeholder="Search customers, bookings..."/></div>
-        <div class="relative"><i data-lucide="bell" class="w-5 h-5 text-slate-500"></i><span class="absolute -top-1 -right-1 w-4 h-4 rounded-full bg-red-500 text-white text-[9px] font-bold flex items-center justify-center">3</span></div>
-        <i data-lucide="help-circle" class="w-5 h-5 text-slate-500"></i>
-      </div>
-    </div>`;
-}
 function onboardStepper(active){
-  const steps = ['Business','Documents','Catalog','Hours'];
-  return `<div class="flex items-center gap-3 mb-6">${steps.map((s,i)=>`
+  const steps = ['Business','Catalog'];
+  return `<div class="flex flex-wrap items-center gap-2 sm:gap-3 mb-4">${steps.map((s,i)=>`
     <div class="flex items-center gap-2">
       <div class="w-7 h-7 rounded-full ${i<=active?'bg-teal-600 text-white':'bg-slate-200 text-slate-500'} flex items-center justify-center text-xs font-bold">${i<active?'✓':i+1}</div>
       <div class="text-sm font-medium ${i===active?'':'text-slate-500'}">${s}</div>
