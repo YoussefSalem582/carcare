@@ -27,15 +27,17 @@ function renderScreenList(){
   for (const s of arr) {
     const g = s.group || 'Screens';
     if (g !== lastGroup) {
-      parts.push(`<div class="screen-group-label label mb-1.5 px-0.5 ${firstSection ? '' : 'mt-4'}">${g}</div>`);
+      const gLabel = typeof tGroup === 'function' ? tGroup(g) : g;
+      parts.push(`<div class="screen-group-label label mb-1.5 px-0.5 ${firstSection ? '' : 'mt-4'}">${gLabel}</div>`);
       firstSection = false;
       lastGroup = g;
     }
+    const nm = typeof catalogField === 'function' ? catalogField(s, 'name') : s.name;
     parts.push(`
-    <button type="button" class="screen-btn ${s.id===currentScreen?'active':''} text-left text-sm px-3 py-2 rounded-lg hover:bg-slate-50 flex items-center justify-between w-full border-0 bg-transparent font-[inherit] cursor-pointer" onclick="show('${s.id}')">
+    <button type="button" class="screen-btn ${s.id===currentScreen?'active':''} text-left text-sm px-3 py-2 rounded-lg hover:bg-slate-50 dark:hover:bg-slate-800 flex items-center justify-between w-full border-0 bg-transparent font-[inherit] cursor-pointer" onclick="show('${s.id}')">
       <span class="flex items-center gap-2 min-w-0">
         <span class="dot flex-shrink-0" style="background:${s.phase===1?'#10B981':'#F59E0B'}"></span>
-        <span class="truncate">${s.name}</span>
+        <span class="truncate">${nm}</span>
       </span>
     </button>`);
   }
@@ -44,9 +46,18 @@ function renderScreenList(){
 
 function specRelatedFlowsLine(screenId) {
   if (screenId.startsWith('ftg-')) {
-    return 'CarCare PRD · Flutter + Supabase · internal engineering handbook';
+    return typeof t === 'function'
+      ? t('spec.flows_ftg', 'CarCare PRD · Flutter + Supabase · internal engineering handbook')
+      : 'CarCare PRD · Flutter + Supabase · internal engineering handbook';
   }
-  return `PRD §${screenId.startsWith('b2c')?'3':'4'} · Core flow ${screenId.startsWith('b2c')?'§6.1':'§6.3'}`;
+  if (screenId.startsWith('b2c')) {
+    return typeof t === 'function'
+      ? t('spec.flows_b2c', 'PRD §3 · Core flow §6.1')
+      : 'PRD §3 · Core flow §6.1';
+  }
+  return typeof t === 'function'
+    ? t('spec.flows_b2b', 'PRD §4 · Core flow §6.3')
+    : 'PRD §4 · Core flow §6.3';
 }
 
 function escapeHtml(str) {
@@ -67,7 +78,13 @@ function buildSpecHtml(){
   const all = [...SCREENS.b2c, ...SCREENS.b2b, ...SCREENS.flutterGuide];
   const s = all.find(x => x.id === currentScreen);
   if (!s) return '';
-  const statesJoined = s.states.join(', ');
+  const spec = (a, b) => (typeof t === 'function' ? t(a, b) : b);
+  const name = typeof catalogField === 'function' ? catalogField(s, 'name') : s.name;
+  const purpose = typeof catalogField === 'function' ? catalogField(s, 'purpose') : s.purpose;
+  const notes = typeof catalogField === 'function' ? catalogField(s, 'notes') : s.notes;
+  const group = typeof catalogField === 'function' ? catalogField(s, 'group') : (s.group || '—');
+  const statesArr = typeof catalogStatesArray === 'function' ? catalogStatesArray(s) : s.states;
+  const statesJoined = typeof catalogField === 'function' ? catalogField(s, 'states') : s.states.join(', ');
   const includeProduct = currentSurface === 'b2c' || currentSurface === 'b2b';
   const techHtml = s.tech ? nl2br(escapeHtml(s.tech)) : '';
   const codeHintBlock =
@@ -77,11 +94,11 @@ function buildSpecHtml(){
   const productExtras =
     includeProduct
       ? `
-  <div class="divider my-4"></div>
-  <div class="label">Flutter / implementation</div>
-  <div class="text-sm mt-1 text-slate-700 leading-relaxed proto-tech-block">${techHtml || '<span class="text-slate-400">—</span>'}</div>
-  <div class="mt-4 label">Code hint</div>
-  ${codeHintBlock || '<p class="text-xs text-slate-500">—</p>'}`
+  <div class="divider my-4 dark:bg-slate-700"></div>
+  <div class="label">${spec('spec.flutter_impl', 'Flutter / implementation')}</div>
+  <div class="text-sm mt-1 text-slate-700 dark:text-slate-300 leading-relaxed proto-tech-block">${techHtml || '<span class="text-slate-400 dark:text-slate-500">—</span>'}</div>
+  <div class="mt-4 label">${spec('spec.code_hint', 'Code hint')}</div>
+  ${codeHintBlock || '<p class="text-xs text-slate-500 dark:text-slate-400">—</p>'}`
       : '';
   const techDl =
     includeProduct && s.tech
@@ -93,36 +110,36 @@ function buildSpecHtml(){
       : '<dd>—</dd>';
   return `
 <div class="proto-detail-spec-block">
-  <div class="label mb-2 text-slate-600">Screen spec</div>
-  <div class="text-lg font-bold">${s.name}</div>
+  <div class="label mb-2 text-slate-600 dark:text-slate-400">${spec('spec.screen_spec', 'Screen spec')}</div>
+  <div class="text-lg font-bold text-slate-900 dark:text-slate-100">${name}</div>
   <div class="mt-1 flex flex-wrap items-center gap-2">
-    <span class="badge ${s.phase===1?'b-green':'b-amber'}">Phase ${s.phase}</span>
-    <span class="text-xs text-slate-500 font-mono">${s.id}</span>
+    <span class="badge ${s.phase===1?'b-green':'b-amber'}">${spec('spec.phase', 'Phase')} ${s.phase}</span>
+    <span class="text-xs text-slate-500 dark:text-slate-400 font-mono">${s.id}</span>
   </div>
-  <div class="mt-3 label">Group</div>
-  <div class="text-sm mt-1 text-slate-800">${s.group || '—'}</div>
-  <div class="mt-4 label">Purpose</div>
-  <div class="text-sm mt-1">${s.purpose}</div>
-  <div class="mt-4 label">States to build</div>
-  <div class="mt-1 flex flex-wrap gap-1.5">${s.states.map(st => `<span class="chip">${st}</span>`).join('')}</div>
-  <div class="mt-2 label" style="font-size:10px;letter-spacing:0.06em;">All states (copy)</div>
-  <div class="text-xs mt-1 text-slate-600 font-mono leading-relaxed break-all">${statesJoined}</div>
-  <div class="mt-4 label">Dev notes</div>
-  <div class="text-sm mt-1 text-slate-700 leading-relaxed">${s.notes}</div>${productExtras}
-  <div class="divider my-4"></div>
-  <div class="label">Related flows</div>
-  <div class="text-xs text-slate-500 leading-relaxed mt-1">${specRelatedFlowsLine(s.id)}</div>
-  <div class="divider my-4"></div>
-  <div class="label">Raw catalog</div>
-  <p class="text-xs text-slate-500 mt-1 mb-2">All fields from <code class="text-[11px]">screens.js</code> for this row.</p>
+  <div class="mt-3 label">${spec('spec.group', 'Group')}</div>
+  <div class="text-sm mt-1 text-slate-800 dark:text-slate-200">${group}</div>
+  <div class="mt-4 label">${spec('spec.purpose', 'Purpose')}</div>
+  <div class="text-sm mt-1 text-slate-800 dark:text-slate-200">${purpose}</div>
+  <div class="mt-4 label">${spec('spec.states', 'States to build')}</div>
+  <div class="mt-1 flex flex-wrap gap-1.5">${statesArr.map(st => `<span class="chip">${st}</span>`).join('')}</div>
+  <div class="mt-2 label" style="font-size:10px;letter-spacing:0.06em;">${spec('spec.states_copy', 'All states (copy)')}</div>
+  <div class="text-xs mt-1 text-slate-600 dark:text-slate-400 font-mono leading-relaxed break-all">${statesJoined}</div>
+  <div class="mt-4 label">${spec('spec.dev_notes', 'Dev notes')}</div>
+  <div class="text-sm mt-1 text-slate-700 dark:text-slate-300 leading-relaxed">${notes}</div>${productExtras}
+  <div class="divider my-4 dark:bg-slate-700"></div>
+  <div class="label">${spec('spec.related', 'Related flows')}</div>
+  <div class="text-xs text-slate-500 dark:text-slate-400 leading-relaxed mt-1">${specRelatedFlowsLine(s.id)}</div>
+  <div class="divider my-4 dark:bg-slate-700"></div>
+  <div class="label">${spec('spec.raw_catalog', 'Raw catalog')}</div>
+  <p class="text-xs text-slate-500 dark:text-slate-400 mt-1 mb-2">${spec('spec.raw_hint', 'All fields from screens.js for this row.')}</p>
   <dl class="proto-spec-dl">
     <dt>id</dt><dd>${s.id}</dd>
-    <dt>name</dt><dd>${s.name}</dd>
-    <dt>group</dt><dd>${s.group || ''}</dd>
+    <dt>name</dt><dd>${name}</dd>
+    <dt>group</dt><dd>${group}</dd>
     <dt>phase</dt><dd>${s.phase}</dd>
-    <dt>purpose</dt><dd>${s.purpose}</dd>
+    <dt>purpose</dt><dd>${purpose}</dd>
     <dt>states</dt><dd>${statesJoined}</dd>
-    <dt>notes</dt><dd>${s.notes}</dd>
+    <dt>notes</dt><dd>${notes}</dd>
     <dt>tech</dt>${techDl}
     <dt>codeHint</dt>${codeDl}
   </dl>
@@ -168,7 +185,7 @@ function show(id){
 }
 
 function setTabStyles() {
-  const inactive = 'px-3 py-2 rounded-lg text-sm font-semibold text-slate-600 whitespace-nowrap';
+  const inactive = 'px-3 py-2 rounded-lg text-sm font-semibold text-slate-600 dark:text-slate-400 whitespace-nowrap';
   const active = 'px-3 py-2 rounded-lg text-sm font-semibold tab-active whitespace-nowrap';
   document.getElementById('toggleB2C').className = currentSurface === 'b2c' ? active : inactive;
   document.getElementById('toggleB2B').className = currentSurface === 'b2b' ? active : inactive;

@@ -410,16 +410,25 @@ const FTG_GUIDE = {
   },
 };
 
+function getFtgGuide(screenId) {
+  if (typeof getLocale === 'function' && getLocale() === 'ar-EG' && window.FTG_GUIDE_AR && window.FTG_GUIDE_AR[screenId]) {
+    return window.FTG_GUIDE_AR[screenId];
+  }
+  return FTG_GUIDE[screenId];
+}
+
 /** Handbook body (implementation-first; merged with Screen spec in app.js). */
 function buildFtgHandbookBodyHtml(screenId) {
-  const g = FTG_GUIDE[screenId];
+  const g = getFtgGuide(screenId);
   if (!g) return '';
   const hintHtml = g.hint ? `<p class="ftg-guide-hint">${g.hint}</p>` : '';
   const extra = g.extraHtml || '';
+  const intro = typeof t === 'function' ? t('ftg.intro', 'Flutter · Supabase · feature-first clean architecture') : 'Flutter · Supabase · feature-first clean architecture';
+  const implLabel = typeof t === 'function' ? t('ftg.impl_label', 'Implementation') : 'Implementation';
   return `
-  <p class="ftg-tech-intro">Flutter · Supabase · feature-first clean architecture</p>
-  <div class="label mt-1 text-slate-600">Implementation</div>
-  <p class="text-xs text-slate-500 mt-0.5 mb-2"><span class="font-semibold text-slate-600">${g.eyebrow}</span> · ${g.title}</p>
+  <p class="ftg-tech-intro">${intro}</p>
+  <div class="label mt-1 text-slate-600 dark:text-slate-400">${implLabel}</div>
+  <p class="text-xs text-slate-500 dark:text-slate-400 mt-0.5 mb-2"><span class="font-semibold text-slate-600 dark:text-slate-300">${g.eyebrow}</span> · ${g.title}</p>
   ${hintHtml}
   <ul class="ftg-list ftg-list-structured">${ftgStructuredItemsHtml(g.items)}</ul>
   ${extra}`;
@@ -427,7 +436,8 @@ function buildFtgHandbookBodyHtml(screenId) {
 
 function buildFtgHandbookAsideHtml(screenId) {
   const body = buildFtgHandbookBodyHtml(screenId);
-  if (!body) return '<p class="text-sm text-slate-500 p-2">No handbook entry for this screen.</p>';
+  const noEntry = typeof t === 'function' ? t('ftg.no_entry', 'No handbook entry for this screen.') : 'No handbook entry for this screen.';
+  if (!body) return `<p class="text-sm text-slate-500 dark:text-slate-400 p-2">${noEntry}</p>`;
   return `<div class="ftg-handbook-inner">${body}</div>`;
 }
 
