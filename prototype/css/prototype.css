@@ -861,5 +861,109 @@ button:focus-visible { outline: 2px solid rgba(15, 118, 110, 0.5); outline-offse
 }
 .ftg-list li { margin-bottom: 0.4rem; }
 .ftg-list li:last-child { margin-bottom: 0; }
+
+.ftg-list.ftg-list-structured > li {
+  list-style: none;
+  margin-left: -1.125rem;
+  padding-left: 0;
+  margin-bottom: 0.75rem;
+  border-left: 3px solid var(--brand-soft);
+  padding-left: 0.65rem;
+}
+.ftg-list.ftg-list-structured {
+  list-style: none;
+  padding-left: 0;
+  margin-top: 0.35rem;
+}
+.ftg-li-label {
+  display: block;
+  font-weight: 700;
+  font-size: 0.8125rem;
+  color: var(--brand-dark);
+  margin-bottom: 0.2rem;
+  letter-spacing: 0.01em;
+}
+.ftg-li-body {
+  display: block;
+  font-size: 0.8125rem;
+  color: #334155;
+  line-height: 1.5;
+}
+.ftg-li-body strong {
+  color: var(--ink);
+  font-weight: 600;
+}
+.ftg-sublist {
+  margin: 0.35rem 0 0;
+  padding-left: 1.125rem;
+  font-size: 0.75rem;
+  color: #475569;
+  line-height: 1.45;
+}
+.ftg-sublist li { margin-bottom: 0.25rem; }
+
+.ftg-arch-diagram {
+  margin-top: 0.85rem;
+  padding: 0.75rem 0.7rem;
+  border-radius: 12px;
+  background: var(--surface-2);
+  border: 1px solid #e2e8f0;
+  box-shadow: 0 1px 0 rgba(15, 23, 42, 0.04);
+}
+.ftg-arch-title {
+  font-size: 0.65rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.07em;
+  color: var(--muted);
+  margin-bottom: 0.5rem;
+}
+.ftg-arch-row {
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+  padding: 0.45rem 0;
+  border-top: 1px solid #e2e8f0;
+}
+.ftg-arch-row:first-of-type { border-top: 0; padding-top: 0; }
+.ftg-arch-layer {
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: var(--brand-dark);
+}
+.ftg-arch-desc {
+  font-size: 0.72rem;
+  color: #475569;
+  line-height: 1.4;
+}
+
+.ftg-pkg-wrap {
+  margin-top: 0.75rem;
+}
+.ftg-pkg-eyebrow {
+  font-size: 0.65rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.07em;
+  color: var(--muted);
+  margin-bottom: 0.4rem;
+}
+.ftg-pkg-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem;
+}
+.ftg-pkg {
+  display: inline-block;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  font-size: 0.68rem;
+  font-weight: 500;
+  color: var(--indigo);
+  background: var(--indigo-soft);
+  padding: 0.2rem 0.45rem;
+  border-radius: 6px;
+  border: 1px solid rgba(79, 70, 229, 0.15);
+}
+
 details summary { list-style: none; cursor: pointer; }
 details summary::-webkit-details-marker { display: none; }
