@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=1280" />
-<title>CarCare — MVP UI/UX Prototype (B2C + B2B)</title>
+<title>CarCare — MVP UI/UX Prototype (B2C + B2B + Flutter guide)</title>
 <script src="https://cdn.tailwindcss.com"></script>
 <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -18,12 +18,13 @@
       <div class="w-11 h-11 rounded-2xl flex items-center justify-center shadow-md ring-1 ring-black/5" style="background:var(--brand);color:white;"><i data-lucide="wrench" class="w-5 h-5"></i></div>
       <div>
         <div class="text-lg font-bold tracking-tight text-slate-900">CarCare — MVP UI/UX Prototype</div>
-        <div class="text-xs text-slate-500 mt-0.5">Map-first maintenance marketplace · B2C + B2B · Flutter-targeted</div>
+        <div class="text-xs text-slate-500 mt-0.5">Map-first maintenance marketplace · B2C + B2B · Flutter team handbook</div>
       </div>
     </div>
-    <div class="flex items-center gap-1.5 bg-white/90 backdrop-blur rounded-2xl p-1 border border-slate-200/80 shadow-sm">
-      <button id="toggleB2C" class="px-4 py-2 rounded-lg text-sm font-semibold tab-active">B2C — Car Owner</button>
-      <button id="toggleB2B" class="px-4 py-2 rounded-lg text-sm font-semibold text-slate-600">B2B — Service Center</button>
+    <div class="flex flex-wrap items-center justify-end gap-1.5 bg-white/90 backdrop-blur rounded-2xl p-1 border border-slate-200/80 shadow-sm max-w-xl">
+      <button type="button" id="toggleB2C" class="px-3 py-2 rounded-lg text-sm font-semibold tab-active whitespace-nowrap">B2C — Car Owner</button>
+      <button type="button" id="toggleB2B" class="px-3 py-2 rounded-lg text-sm font-semibold text-slate-600 whitespace-nowrap">B2B — Service Center</button>
+      <button type="button" id="toggleFlutterGuide" class="px-3 py-2 rounded-lg text-sm font-semibold text-slate-600 whitespace-nowrap">Flutter Team Guide</button>
     </div>
   </header>
 
@@ -41,6 +42,7 @@
     <main class="flex items-start justify-center pt-4 pb-10" style="min-height: 900px;">
       <div id="b2cStage" class="phone-frame"></div>
       <div id="b2bStage" class="phone-frame hidden"></div>
+      <div id="ftgStage" class="phone-frame hidden"></div>
     </main>
 
     <aside class="rail rounded-2xl border border-slate-200/90 p-5 shadow-sm shadow-slate-200/50 h-fit sticky top-4" style="max-height: calc(100vh - 32px);">
@@ -73,6 +75,7 @@
 <script src="js/b2b/onboarding.js"></script>
 <script src="js/b2b/operations.js"></script>
 <script src="js/b2b/index.js"></script>
+<script src="js/ftg/index.js"></script>
 <script src="js/app.js"></script>
 </body>
 </html>

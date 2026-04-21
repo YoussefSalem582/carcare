@@ -826,5 +826,40 @@ button:focus-visible { outline: 2px solid rgba(15, 118, 110, 0.5); outline-offse
 
 .rail { background: #fff; border-left: 1px solid #E2E8F0; width: 340px; overflow-y: auto; }
 .screen-list { max-height: calc(100vh - 220px); overflow-y: auto; }
+
+/* Flutter Team Guide mocks */
+.ftg-screen-inner {
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+  padding: 1rem 1.25rem 1.25rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.65rem;
+  background: linear-gradient(180deg, #f8fafc 0%, #fff 28%);
+}
+.ftg-eyebrow {
+  font-size: 0.65rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: #64748b;
+  font-weight: 600;
+}
+.ftg-title {
+  font-size: 1.0625rem;
+  font-weight: 700;
+  color: #0f172a;
+  line-height: 1.25;
+  margin: 0;
+}
+.ftg-list {
+  font-size: 0.8125rem;
+  color: #334155;
+  line-height: 1.45;
+  padding-left: 1.125rem;
+  margin: 0.25rem 0 0;
+}
+.ftg-list li { margin-bottom: 0.4rem; }
+.ftg-list li:last-child { margin-bottom: 0; }
 details summary { list-style: none; cursor: pointer; }
 details summary::-webkit-details-marker { display: none; }
