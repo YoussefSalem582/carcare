@@ -13,6 +13,7 @@
       document.documentElement.classList.add('dark');
     } else {
       document.documentElement.dataset.theme = 'light';
+      document.documentElement.classList.remove('dark');
     }
     var loc = localStorage.getItem('carcare_proto_locale') || 'en';
     document.documentElement.lang = loc === 'ar-EG' ? 'ar-EG' : 'en';
@@ -32,7 +33,7 @@ tailwind.config = {
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Noto+Sans+Arabic:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="css/prototype.css" />
 </head>
-<body class="min-h-screen bg-slate-100 text-slate-900 dark:bg-slate-950 dark:text-slate-100 transition-colors">
+<body class="min-h-screen transition-colors">
 
 <div class="max-w-[1600px] mx-auto px-6 py-8 proto-shell">
   <header class="flex flex-wrap items-center justify-between gap-4 mb-6">
