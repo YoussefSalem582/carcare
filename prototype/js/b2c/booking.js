@@ -3,7 +3,7 @@ const B2C_BOOKING = {
 
 <div class="screen" data-screen="b2c-service">
   <div class="status-bar"><span>9:41</span><span></span></div>
-  <div class="screen-topbar"><button type="button" class="funnel-back tap -ml-1" onclick="show('b2c-shop')"><i data-lucide="arrow-left" class="w-5 h-5"></i></button><div class="font-semibold text-slate-900">Select service</div><div class="w-10"></div></div>
+  <div class="screen-topbar"><button type="button" class="funnel-back tap -ml-1" onclick="show(window._bookingReturn || 'b2c-shop')"><i data-lucide="arrow-left" class="w-5 h-5"></i></button><div class="font-semibold text-slate-900">Select service</div><div class="w-10"></div></div>
   <div class="flex-1 app-surface px-5 pt-4 overflow-y-auto min-h-0">
     <div class="label mb-2">Pick your car</div>
     <div class="flex gap-2 mb-5 overflow-x-auto">

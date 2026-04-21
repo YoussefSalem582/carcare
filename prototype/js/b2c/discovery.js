@@ -83,8 +83,8 @@ const B2C_DISCOVERY = {
     <div class="absolute z-10" style="left:64%; top:66%;"><div class="pin" style="background:#0F766E"><i data-lucide="badge-check" class="w-4 h-4 text-white"></i></div></div>
     <div class="absolute z-10" style="left:22%; top:70%;"><div class="pin" style="background:#64748B"><i data-lucide="wrench" class="w-4 h-4 text-white"></i></div></div>
     <div class="absolute z-10" style="left:78%; top:18%;"><div class="pin" style="background:#0F766E"><i data-lucide="badge-check" class="w-4 h-4 text-white"></i></div></div>
-    <div class="absolute tap z-10" style="left:46%; top:68%;" onclick="show('b2c-search')"><div class="pin" style="background:#1D4ED8"><i data-lucide="truck" class="w-4 h-4 text-white"></i></div></div>
-    <div class="absolute z-10" style="left:12%; top:38%;"><div class="pin" style="background:#1E40AF"><i data-lucide="truck" class="w-4 h-4 text-white"></i></div></div>
+    <div class="absolute tap z-10" style="left:46%; top:68%;" onclick="show('b2c-tow')"><div class="pin" style="background:#1D4ED8"><i data-lucide="truck" class="w-4 h-4 text-white"></i></div></div>
+    <div class="absolute tap z-10" style="left:12%; top:38%;" onclick="show('b2c-tow')"><div class="pin" style="background:#1E40AF"><i data-lucide="truck" class="w-4 h-4 text-white"></i></div></div>
 
     <button type="button" class="absolute right-3 map-fab rounded-full bg-white flex items-center justify-center tap" style="bottom:300px;"><i data-lucide="locate-fixed" class="w-[18px] h-[18px] text-teal-700"></i></button>
     <button type="button" class="absolute right-3 map-fab rounded-full bg-white flex items-center justify-center tap" style="bottom:352px;" onclick="show('b2c-search')"><i data-lucide="list" class="w-[18px] h-[18px] text-slate-700"></i></button>
@@ -258,7 +258,7 @@ const B2C_DISCOVERY = {
       ['Cairo Motors Workshop','3.1 km','4.3','94','EGP 200–700',false,'Tomorrow 09:00','Closes 6pm'],
       ['Mobile Mechanic — Khaled',' on-demand','4.7','66','EGP 300–600',false,'Now','Mobile'],
     ].map(([n,d,r,c,p,v,next,state], idx)=>`
-      <div class="listing-card tap p-3.5 rounded-2xl border ${idx===0?'border-2 border-teal-300/80 bg-gradient-to-br from-teal-50 to-white shadow-sm':'border-slate-200 bg-white shadow-sm'}" onclick="show('b2c-shop')">
+      <div class="listing-card tap p-3.5 rounded-2xl border ${idx===0?'border-2 border-teal-300/80 bg-gradient-to-br from-teal-50 to-white shadow-sm':'border-slate-200 bg-white shadow-sm'}" onclick="show('${state==='Tow'?'b2c-tow':'b2c-shop'}')">
         <div class="flex gap-3">
           <div class="w-16 h-16 rounded-xl ${idx===0?'bg-slate-100 ring-1 ring-slate-200/80':'bg-slate-200'} flex items-center justify-center">${state==='Tow'?'<i data-lucide="truck" class="w-7 h-7 text-blue-700"></i>':'<i data-lucide="wrench" class="w-7 h-7 text-slate-500"></i>'}</div>
           <div class="flex-1 min-w-0">
@@ -314,7 +314,7 @@ const B2C_DISCOVERY = {
       <div class="label mb-2">Popular services</div>
       <div class="space-y-2">
         ${[['Oil change (standard)','45 min','EGP 350'],['Brake pads — front','1.5 h','EGP 650'],['AC recharge','1 h','EGP 450'],['Full engine diagnostic','30 min','From EGP 200 (quote)']].map(([t,d,p])=>`
-          <div class="tap flex items-center justify-between p-3 rounded-xl border border-slate-200/90 bg-white shadow-sm hover:border-teal-200/80" onclick="show('b2c-service')">
+          <div class="tap flex items-center justify-between p-3 rounded-xl border border-slate-200/90 bg-white shadow-sm hover:border-teal-200/80" onclick="window._bookingReturn='b2c-shop'; show('b2c-service')">
             <div><div class="font-semibold text-sm">${t}</div><div class="text-xs text-slate-500">${d}</div></div>
             <div class="flex items-center gap-2"><div class="font-semibold text-sm">${p}</div><i data-lucide="chevron-right" class="w-4 h-4 text-slate-400"></i></div>
           </div>`).join('')}
@@ -348,7 +348,123 @@ const B2C_DISCOVERY = {
   </div>
 
   <div class="p-4 border-t border-slate-200/90 bg-white/95 backdrop-blur-sm shadow-[0_-8px_30px_rgba(15,23,42,.08)]">
-    <button type="button" class="btn-primary w-full tap rounded-2xl py-3.5 shadow-md" onclick="show('b2c-service')">Book service · from EGP 350</button>
+    <button type="button" class="btn-primary w-full tap rounded-2xl py-3.5 shadow-md" onclick="window._bookingReturn='b2c-shop'; show('b2c-service')">Book service · from EGP 350</button>
+  </div>
+  <div class="home-indicator"></div>
+</div>`,
+
+  'b2c-tow': `
+
+<div class="screen" data-screen="b2c-tow">
+  <div class="flex-1 overflow-y-auto">
+    <div class="relative h-52 gradient-hero-tow">
+      <div class="status-bar absolute top-0 left-0 right-0" style="color:white"><span>9:41</span><span></span></div>
+      <div class="absolute top-12 left-4 w-9 h-9 rounded-full bg-white/90 flex items-center justify-center tap" onclick="show('b2c-map')"><i data-lucide="arrow-left" class="w-4 h-4 text-slate-800"></i></div>
+      <div class="absolute top-12 right-4 flex gap-2">
+        <div class="w-9 h-9 rounded-full bg-white/90 flex items-center justify-center tap"><i data-lucide="share-2" class="w-4 h-4 text-slate-800"></i></div>
+        <div class="w-9 h-9 rounded-full bg-white/90 flex items-center justify-center tap"><i data-lucide="heart" class="w-4 h-4 text-slate-800"></i></div>
+      </div>
+      <div class="absolute inset-0 flex items-center justify-center pointer-events-none opacity-30"><i data-lucide="truck" class="w-24 h-24 text-white"></i></div>
+      <div class="absolute bottom-3 right-3 bg-black/50 text-white text-xs px-2 py-0.5 rounded">1/6</div>
+    </div>
+    <div class="px-5 -mt-6 relative z-10">
+      <div class="bg-white rounded-2xl p-4 shadow-lg border border-slate-200/80 ring-1 ring-black/[0.03]">
+        <div class="flex items-start justify-between gap-3">
+          <div>
+            <div class="flex items-center gap-2 flex-wrap">
+              <div class="text-xl font-bold">City Tow 24/7</div>
+              <i data-lucide="badge-check" class="w-5 h-5 text-teal-700 flex-shrink-0"></i>
+              <span class="badge b-blue">Tow partner</span>
+            </div>
+            <div class="text-xs text-slate-500 mt-1">Heliopolis · East Cairo coverage</div>
+            <div class="flex items-center gap-2 mt-2 text-xs flex-wrap">
+              <span class="flex items-center gap-0.5 font-semibold"><i data-lucide="star" class="w-3 h-3 text-amber-500 fill-amber-500"></i>4.7</span>
+              <span class="text-slate-400">(201 reviews)</span>
+              <span class="text-slate-300">·</span>
+              <span class="text-emerald-600 font-semibold flex items-center gap-1"><span class="inline-block w-1.5 h-1.5 rounded-full bg-emerald-500"></span>Live · ~15 min</span>
+            </div>
+          </div>
+          <div class="text-right">
+            <div class="text-sm font-semibold">1.1 km</div>
+            <div class="text-xs text-slate-500">away</div>
+          </div>
+        </div>
+        <div class="grid grid-cols-3 gap-2 mt-3">
+          <button type="button" class="btn-ghost py-2.5 text-xs flex flex-col items-center"><i data-lucide="phone" class="w-4 h-4 mb-1"></i>Call</button>
+          <button type="button" class="btn-ghost py-2.5 text-xs flex flex-col items-center"><i data-lucide="navigation" class="w-4 h-4 mb-1"></i>Base</button>
+          <button type="button" class="btn-ghost py-2.5 text-xs flex flex-col items-center"><i data-lucide="message-circle" class="w-4 h-4 mb-1"></i>Message</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="px-5 pt-5">
+      <div class="callout-info p-4 rounded-2xl flex gap-3">
+        <div class="w-10 h-10 rounded-xl bg-blue-100 flex items-center justify-center flex-shrink-0"><i data-lucide="shield-check" class="w-5 h-5 text-blue-700"></i></div>
+        <div class="min-w-0">
+          <div class="text-sm font-semibold text-slate-900">Licensed &amp; insured</div>
+          <div class="text-xs text-slate-600 mt-0.5 leading-relaxed">Commercial tow registration on file. Cargo insurance up to EGP 500k per job.</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="px-5 pt-5">
+      <div class="label mb-2">Tow services</div>
+      <div class="space-y-2">
+        ${[['Flatbed (cars &amp; SUVs)','Wheel lift · low clearance OK'],['Jump start &amp; lockout','On-scene in ~15 min avg'],['Winch recovery','Stuck vehicle · off-road add-on'],['Fuel delivery (5L)','Emergency top-up']].map(([t,s])=>`
+          <div class="flex items-center justify-between p-3 rounded-xl border border-slate-200/90 bg-white shadow-sm">
+            <div><div class="font-semibold text-sm">${t}</div><div class="text-xs text-slate-500">${s}</div></div>
+            <i data-lucide="chevron-right" class="w-4 h-4 text-slate-400 flex-shrink-0"></i>
+          </div>`).join('')}
+      </div>
+    </div>
+
+    <div class="px-5 pt-5">
+      <div class="label mb-2">Fleet &amp; coverage</div>
+      <div class="grid grid-cols-2 gap-2">
+        <div class="kpi-tile kpi-tile--blue p-3 rounded-2xl">
+          <div class="text-[10px] font-semibold uppercase tracking-wide text-slate-500">Trucks on shift</div>
+          <div class="text-lg font-bold text-slate-900 mt-0.5">4 / 6</div>
+        </div>
+        <div class="kpi-tile kpi-tile--blue p-3 rounded-2xl">
+          <div class="text-[10px] font-semibold uppercase tracking-wide text-slate-500">Service radius</div>
+          <div class="text-lg font-bold text-slate-900 mt-0.5">~15 km</div>
+        </div>
+      </div>
+      <div class="text-xs text-slate-500 mt-2">Surge pricing may apply during storms or peak nights — you’ll see a quote before dispatch.</div>
+    </div>
+
+    <div class="px-5 pt-5">
+      <div class="label mb-2">Typical pricing</div>
+      <div class="space-y-2">
+        ${[['Hook + dispatch','from EGP 400'],['Per km (loaded)','EGP 12–18'],['After-hours','+25% 11pm–6am']].map(([t,p])=>`
+          <div class="flex items-center justify-between p-3 rounded-xl border border-slate-200/90 bg-slate-50/80">
+            <div class="text-sm font-medium text-slate-800">${t}</div>
+            <div class="text-sm font-semibold text-slate-900">${p}</div>
+          </div>`).join('')}
+      </div>
+    </div>
+
+    <div class="px-5 pt-5">
+      <div class="flex justify-between items-end mb-2"><div class="label">Reviews · 4.7</div><div class="text-xs text-teal-700 font-semibold">See all</div></div>
+      <div class="grid grid-cols-4 gap-2 mb-3">
+        ${[['Response','4.8','teal'],['Price','4.5','amber'],['Care','4.7','cyan'],['Safety','4.9','violet']].map(([l,v,tone])=>`<div class="p-2 rounded-xl text-center ${tone==='teal'?'bg-teal-50 text-teal-900':tone==='amber'?'bg-amber-50 text-amber-900':tone==='cyan'?'bg-cyan-50 text-cyan-900':'bg-violet-50 text-violet-900'}"><div class="text-[10px] font-semibold uppercase tracking-wide opacity-80">${l}</div><div class="font-bold">${v}</div></div>`).join('')}
+      </div>
+      <div class="p-3 rounded-xl border border-slate-200">
+        <div class="flex items-center gap-2 mb-1">
+          <div class="w-7 h-7 rounded-full bg-blue-100 flex items-center justify-center text-xs font-semibold text-blue-800">SK</div>
+          <div class="text-sm font-semibold">Sara K.</div>
+          <div class="text-xs text-slate-400 ml-auto">1 week ago</div>
+        </div>
+        <div class="flex gap-0.5 mb-1">${[1,1,1,1,1].map(()=>`<i data-lucide="star" class="w-3 h-3 text-amber-500 fill-amber-500"></i>`).join('')}</div>
+        <div class="text-sm text-slate-700">Arrived in 12 minutes, driver was careful with my lowered car. Fair price.</div>
+      </div>
+    </div>
+
+    <div class="h-24"></div>
+  </div>
+
+  <div class="p-4 border-t border-slate-200/90 bg-white/95 backdrop-blur-sm shadow-[0_-8px_30px_rgba(15,23,42,.08)]">
+    <button type="button" class="w-full tap rounded-2xl py-3.5 shadow-md bg-blue-600 hover:bg-blue-700 text-white font-semibold" onclick="window._bookingReturn='b2c-tow'; show('b2c-service')">Request tow · from EGP 400</button>
   </div>
   <div class="home-indicator"></div>
 </div>`,
