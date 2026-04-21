@@ -1,0 +1,40 @@
+/* =========================================================
+   Data: screen catalog + specs
+   ========================================================= */
+const SCREENS = {
+  b2c: [
+    { id:'b2c-login',      name:'Login (Phone OTP)',     phase:1, purpose:'Capture user identity via phone OTP or social.', states:['default','invalid number','sending OTP'], notes:'Supabase/Firebase Auth phone sign-in. Arabic/English toggle.' },
+    { id:'b2c-otp',        name:'Verify OTP',             phase:1, purpose:'Confirm 6-digit code from SMS.', states:['default','error','resend cooldown'], notes:'60s resend timer. 3 tries then block 15m.' },
+    { id:'b2c-addcar',     name:'Add first car',          phase:1, purpose:'Onboard user with their vehicle so the map & tracker are useful.', states:['empty','saving','VIN lookup success/fail'], notes:'Skippable — user can browse map without a car, but can\'t book.' },
+    { id:'b2c-map',        name:'Map — Home (CORE)',      phase:1, purpose:'Discover nearby verified service centers in <60s.', states:['loading pins','no results','location denied','emergency mode'], notes:'PostGIS query <within radius>. Bottom sheet shows top 3 pins. One-tap call on pin.' },
+    { id:'b2c-marketplace', name:'Parts marketplace',   phase:1, purpose:'Browse filters, oil, batteries, and accessories; compare sellers; cart placeholder.', states:['browse','search','empty cart','seller detail'], notes:'B2C parts layer — feed from catalog or partner API; checkout Phase 1 optional.' },
+    { id:'b2c-filters',    name:'Filters sheet',          phase:1, purpose:'Narrow results by service, price, rating, open-now, distance, verified.', states:['default','applied','reset'], notes:'Filter chips on map header persist selection.' },
+    { id:'b2c-search',     name:'Search results (list)',  phase:1, purpose:'Alt view to map — sortable list.', states:['default','empty','sorting'], notes:'Toggle between map/list.' },
+    { id:'b2c-shop',       name:'Service center profile', phase:1, purpose:'Decide whether to book here.', states:['default','closed now','no photos','unverified'], notes:'Verified badge is load-bearing for trust.' },
+    { id:'b2c-service',    name:'Pick service',           phase:1, purpose:'Choose the job to book.', states:['fixed price','range price','quote-only'], notes:'Quote-only routes to chat flow (phase 2) — for MVP use tap-to-call.' },
+    { id:'b2c-slot',       name:'Pick slot',              phase:1, purpose:'Reserve a time from center\'s capacity.', states:['no slots today','held slot','held expired'], notes:'Edge function holds slot for 10 min via `booking_holds` row.' },
+    { id:'b2c-payment',    name:'Review & pay',           phase:1, purpose:'Confirm booking and pay (or defer to cash).', states:['card','cash on service','promo applied','payment failed'], notes:'MVP open question: cash-only vs in-app pay. Support both, default card.' },
+    { id:'b2c-confirmed',  name:'Booking confirmed',      phase:1, purpose:'Reassure, give next steps.', states:['default','add-to-calendar'], notes:'FCM/APNS local reminder scheduled 1h before.' },
+    { id:'b2c-bookings',   name:'My bookings',            phase:1, purpose:'Track upcoming & past.', states:['empty','upcoming','in progress','past'], notes:'Realtime status via Supabase Realtime channel on booking_id.' },
+    { id:'b2c-progress',   name:'Booking in progress',    phase:1, purpose:'Live status while the shop works.', states:['received','in progress','awaiting parts','ready for pickup'], notes:'Timeline component mirrors B2B status updates.' },
+    { id:'b2c-review',     name:'Rate & review',          phase:1, purpose:'Capture post-service feedback.', states:['default','submitted','flagged'], notes:'Category ratings: quality, price, speed, honesty.' },
+    { id:'b2c-garage',     name:'Garage (cars)',          phase:1, purpose:'List + manage vehicles.', states:['empty','multi-car'], notes:'Mileage edit inline.' },
+    { id:'b2c-cardetail',  name:'Car detail + history',   phase:1, purpose:'Service timeline + reminders.', states:['empty history','auto-logged','manual entry'], notes:'Auto-logged entries come from completed bookings — no duplicate UI.' },
+    { id:'b2c-dashboard',  name:'Dashboard',              phase:1, purpose:'Daily touch-point: health + reminders + recent.', states:['fresh user','active user','due soon'], notes:'"Due soon" card drives re-book flow.' },
+    { id:'b2c-reminder',   name:'Reminder → Book',        phase:2, purpose:'Retention flow: push → 3 recommendations → book in 2 taps.', states:['default'], notes:'Smart reminders tied to booking history.' },
+    { id:'b2c-expenses',   name:'Expenses (Phase 2)',     phase:2, purpose:'Fuel + expense tracker — retention.', states:['empty','populated'], notes:'Phase 2. Placeholder here for spec completeness.' },
+  ],
+  b2b: [
+    { id:'b2b-signup',     name:'Sign up (business)',     phase:1, purpose:'Create service-center account.', states:['default','email in use','weak password'], notes:'Separate app binary; Supabase role = "shop_owner".' },
+    { id:'b2b-onboard-1',  name:'Onboarding — Business',  phase:1, purpose:'Collect legal business info.', states:['default','invalid tax id'], notes:'Step 1 of 2.' },
+    { id:'b2b-onboard-3',  name:'Onboarding — Catalog',   phase:1, purpose:'Set services + pricing.', states:['default','bulk-add'], notes:'Prepopulate common services (oil, tires, brakes, AC).' },
+    { id:'b2b-pending',    name:'Verification pending',   phase:1, purpose:'Hold screen while admin reviews.', states:['pending','changes requested','approved'], notes:'Blocks map listing until approved.' },
+    { id:'b2b-dashboard',  name:'Dashboard (today)',      phase:1, purpose:'Live ops: today\'s bookings + KPIs.', states:['empty day','busy day','realtime new'], notes:'Toast + sound on new booking via Realtime.' },
+    { id:'b2b-bookings',   name:'Bookings — calendar',    phase:1, purpose:'Weekly view with assign/update.', states:['week','day','filter by mechanic'], notes:'Drag-drop reschedule in Phase 2.' },
+    { id:'b2b-booking',    name:'Booking detail',         phase:1, purpose:'Accept/reject/assign/update status + invoice.', states:['received','accepted','in progress','completed','rejected'], notes:'Status changes push to B2C in realtime.' },
+    { id:'b2b-catalog',    name:'Catalog & pricing',      phase:1, purpose:'Edit services, prices, promos.', states:['default','add service','quote-only'], notes:'Price types: fixed, range, quote.' },
+    { id:'b2b-reviews',    name:'Reviews',                phase:1, purpose:'Read + respond to reviews.', states:['default','flagged','responded'], notes:'Response is public, one per review.' },
+    { id:'b2b-more',       name:'More (B2B hub)',         phase:1, purpose:'Reach reviews, payouts, and settings from bottom tab overflow.', states:['default'], notes:'Fourth tab; keeps primary nav uncluttered on phone.' },
+    { id:'b2b-payouts',    name:'Payouts (Phase 2)',      phase:2, purpose:'See earnings, commissions, payout schedule.', states:['pending','paid','on hold'], notes:'Commission % tied to tier (Free 15% / Pro 10% / Authorized 8%).' },
+  ],
+};
