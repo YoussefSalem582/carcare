@@ -49,12 +49,48 @@ function specRelatedFlowsLine(screenId) {
   return `PRD §${screenId.startsWith('b2c')?'3':'4'} · Core flow ${screenId.startsWith('b2c')?'§6.1':'§6.3'}`;
 }
 
-/** Full screen spec + raw catalog (B2C, B2B, FTG). */
+function escapeHtml(str) {
+  if (str == null) return '';
+  return String(str)
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;');
+}
+
+function nl2br(escaped) {
+  return escaped.replace(/\n/g, '<br>');
+}
+
+/** Full screen spec + raw catalog (B2C, B2B, FTG). B2C/B2B add Flutter tech + code hint. */
 function buildSpecHtml(){
   const all = [...SCREENS.b2c, ...SCREENS.b2b, ...SCREENS.flutterGuide];
   const s = all.find(x => x.id === currentScreen);
   if (!s) return '';
   const statesJoined = s.states.join(', ');
+  const includeProduct = currentSurface === 'b2c' || currentSurface === 'b2b';
+  const techHtml = s.tech ? nl2br(escapeHtml(s.tech)) : '';
+  const codeHintBlock =
+    s.codeHint
+      ? `<pre class="proto-code-hint" tabindex="0"><code>${escapeHtml(s.codeHint)}</code></pre>`
+      : '';
+  const productExtras =
+    includeProduct
+      ? `
+  <div class="divider my-4"></div>
+  <div class="label">Flutter / implementation</div>
+  <div class="text-sm mt-1 text-slate-700 leading-relaxed proto-tech-block">${techHtml || '<span class="text-slate-400">—</span>'}</div>
+  <div class="mt-4 label">Code hint</div>
+  ${codeHintBlock || '<p class="text-xs text-slate-500">—</p>'}`
+      : '';
+  const techDl =
+    includeProduct && s.tech
+      ? `<dd class="proto-spec-dd-pre">${escapeHtml(s.tech)}</dd>`
+      : '<dd>—</dd>';
+  const codeDl =
+    includeProduct && s.codeHint
+      ? `<dd class="proto-spec-dd-pre">${escapeHtml(s.codeHint)}</dd>`
+      : '<dd>—</dd>';
   return `
 <div class="proto-detail-spec-block">
   <div class="label mb-2 text-slate-600">Screen spec</div>
@@ -72,7 +108,7 @@ function buildSpecHtml(){
   <div class="mt-2 label" style="font-size:10px;letter-spacing:0.06em;">All states (copy)</div>
   <div class="text-xs mt-1 text-slate-600 font-mono leading-relaxed break-all">${statesJoined}</div>
   <div class="mt-4 label">Dev notes</div>
-  <div class="text-sm mt-1 text-slate-700 leading-relaxed">${s.notes}</div>
+  <div class="text-sm mt-1 text-slate-700 leading-relaxed">${s.notes}</div>${productExtras}
   <div class="divider my-4"></div>
   <div class="label">Related flows</div>
   <div class="text-xs text-slate-500 leading-relaxed mt-1">${specRelatedFlowsLine(s.id)}</div>
@@ -87,6 +123,8 @@ function buildSpecHtml(){
     <dt>purpose</dt><dd>${s.purpose}</dd>
     <dt>states</dt><dd>${statesJoined}</dd>
     <dt>notes</dt><dd>${s.notes}</dd>
+    <dt>tech</dt>${techDl}
+    <dt>codeHint</dt>${codeDl}
   </dl>
 </div>`;
 }

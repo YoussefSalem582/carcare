@@ -1008,6 +1008,39 @@ button:focus-visible { outline: 2px solid rgba(15, 118, 110, 0.5); outline-offse
   color: var(--ink);
   line-height: 1.45;
 }
+.proto-spec-dl dd.proto-spec-dd-pre {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  font-size: 0.75rem;
+  white-space: pre-wrap;
+  word-break: break-word;
+  max-height: 12rem;
+  overflow: auto;
+  padding: 0.35rem 0.45rem;
+  background: var(--surface-2);
+  border-radius: 6px;
+  border: 1px solid #e2e8f0;
+}
+.proto-tech-block {
+  max-width: 100%;
+}
+.proto-code-hint {
+  margin: 0.35rem 0 0;
+  padding: 0.65rem 0.75rem;
+  font-size: 0.72rem;
+  line-height: 1.45;
+  background: #0f172a;
+  color: #e2e8f0;
+  border-radius: 10px;
+  border: 1px solid #334155;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  user-select: all;
+}
+.proto-code-hint code {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  white-space: pre;
+  display: block;
+}
 .ftg-handbook-aside {
   width: min(460px, 100%);
   max-height: calc(100vh - 120px);
