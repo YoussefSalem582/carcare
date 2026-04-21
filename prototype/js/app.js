@@ -1,12 +1,13 @@
 /* =========================================================
    Mount + nav
    ========================================================= */
+const b2cLayout = document.getElementById('b2cLayout');
+const b2bLayout = document.getElementById('b2bLayout');
+const ftgLayout = document.getElementById('ftgLayout');
 const b2cStage = document.getElementById('b2cStage');
 const b2bStage = document.getElementById('b2bStage');
-const ftgStage = document.getElementById('ftgStage');
 Object.values(B2C_HTML).forEach(h => b2cStage.insertAdjacentHTML('beforeend', h));
 Object.values(B2B_HTML).forEach(h => b2bStage.insertAdjacentHTML('beforeend', h));
-Object.values(FTG_HTML).forEach(h => ftgStage.insertAdjacentHTML('beforeend', h));
 
 let currentSurface = 'b2c';
 let currentScreen = 'b2c-splash';
@@ -48,28 +49,68 @@ function specRelatedFlowsLine(screenId) {
   return `PRD §${screenId.startsWith('b2c')?'3':'4'} · Core flow ${screenId.startsWith('b2c')?'§6.1':'§6.3'}`;
 }
 
-function renderSpec(){
+/** Full screen spec + raw catalog (B2C, B2B, FTG). */
+function buildSpecHtml(){
   const all = [...SCREENS.b2c, ...SCREENS.b2b, ...SCREENS.flutterGuide];
   const s = all.find(x => x.id === currentScreen);
-  if (!s) return;
-  document.getElementById('specPanel').innerHTML = `
-    <div class="text-lg font-bold">${s.name}</div>
-    <div class="mt-1 flex items-center gap-2"><span class="badge ${s.phase===1?'b-green':'b-amber'}">Phase ${s.phase}</span><span class="text-xs text-slate-500">${s.id}</span></div>
-    <div class="mt-4 label">Purpose</div>
-    <div class="text-sm mt-1">${s.purpose}</div>
-    <div class="mt-4 label">States to build</div>
-    <div class="mt-1 flex flex-wrap gap-1.5">${s.states.map(st => `<span class="chip">${st}</span>`).join('')}</div>
-    <div class="mt-4 label">Dev notes</div>
-    <div class="text-sm mt-1 text-slate-700 leading-relaxed">${s.notes}</div>
-    <div class="divider my-4"></div>
-    <div class="label">Related flows</div>
-    <div class="text-xs text-slate-500 leading-relaxed mt-1">${specRelatedFlowsLine(s.id)}</div>
-  `;
+  if (!s) return '';
+  const statesJoined = s.states.join(', ');
+  return `
+<div class="proto-detail-spec-block">
+  <div class="label mb-2 text-slate-600">Screen spec</div>
+  <div class="text-lg font-bold">${s.name}</div>
+  <div class="mt-1 flex flex-wrap items-center gap-2">
+    <span class="badge ${s.phase===1?'b-green':'b-amber'}">Phase ${s.phase}</span>
+    <span class="text-xs text-slate-500 font-mono">${s.id}</span>
+  </div>
+  <div class="mt-3 label">Group</div>
+  <div class="text-sm mt-1 text-slate-800">${s.group || '—'}</div>
+  <div class="mt-4 label">Purpose</div>
+  <div class="text-sm mt-1">${s.purpose}</div>
+  <div class="mt-4 label">States to build</div>
+  <div class="mt-1 flex flex-wrap gap-1.5">${s.states.map(st => `<span class="chip">${st}</span>`).join('')}</div>
+  <div class="mt-2 label" style="font-size:10px;letter-spacing:0.06em;">All states (copy)</div>
+  <div class="text-xs mt-1 text-slate-600 font-mono leading-relaxed break-all">${statesJoined}</div>
+  <div class="mt-4 label">Dev notes</div>
+  <div class="text-sm mt-1 text-slate-700 leading-relaxed">${s.notes}</div>
+  <div class="divider my-4"></div>
+  <div class="label">Related flows</div>
+  <div class="text-xs text-slate-500 leading-relaxed mt-1">${specRelatedFlowsLine(s.id)}</div>
+  <div class="divider my-4"></div>
+  <div class="label">Raw catalog</div>
+  <p class="text-xs text-slate-500 mt-1 mb-2">All fields from <code class="text-[11px]">screens.js</code> for this row.</p>
+  <dl class="proto-spec-dl">
+    <dt>id</dt><dd>${s.id}</dd>
+    <dt>name</dt><dd>${s.name}</dd>
+    <dt>group</dt><dd>${s.group || ''}</dd>
+    <dt>phase</dt><dd>${s.phase}</dd>
+    <dt>purpose</dt><dd>${s.purpose}</dd>
+    <dt>states</dt><dd>${statesJoined}</dd>
+    <dt>notes</dt><dd>${s.notes}</dd>
+  </dl>
+</div>`;
+}
+
+function renderSpec(){
+  const specHtml = buildSpecHtml();
+  if (currentSurface === 'b2c') {
+    document.getElementById('b2cDetailAside').innerHTML = specHtml;
+  } else if (currentSurface === 'b2b') {
+    document.getElementById('b2bDetailAside').innerHTML = specHtml;
+  } else if (currentSurface === 'flutterGuide') {
+    const body =
+      typeof window.buildFtgHandbookBodyHtml === 'function'
+        ? window.buildFtgHandbookBodyHtml(currentScreen)
+        : '';
+    document.getElementById('ftgHandbookAside').innerHTML = body
+      ? `<div class="ftg-handbook-inner ftg-tech-primary">${body}</div><div class="divider my-5"></div>${specHtml}`
+      : specHtml;
+  }
 }
 
 function activeStageEl() {
+  if (currentSurface === 'flutterGuide') return null;
   if (currentSurface === 'b2b') return b2bStage;
-  if (currentSurface === 'flutterGuide') return ftgStage;
   return b2cStage;
 }
 
@@ -77,9 +118,11 @@ function show(id){
   const targetSurface = surfaceForScreenId(id);
   if (targetSurface !== currentSurface) switchSurface(targetSurface);
   const stage = activeStageEl();
-  stage.querySelectorAll('.screen').forEach(el => el.classList.remove('active'));
-  const target = stage.querySelector(`[data-screen="${id}"]`);
-  if (target) target.classList.add('active');
+  if (stage) {
+    stage.querySelectorAll('.screen').forEach(el => el.classList.remove('active'));
+    const target = stage.querySelector(`[data-screen="${id}"]`);
+    if (target) target.classList.add('active');
+  }
   currentScreen = id;
   renderScreenList();
   renderSpec();
@@ -97,9 +140,9 @@ function setTabStyles() {
 function switchSurface(s){
   currentSurface = s;
   setTabStyles();
-  document.getElementById('b2cStage').classList.toggle('hidden', s !== 'b2c');
-  document.getElementById('b2bStage').classList.toggle('hidden', s !== 'b2b');
-  document.getElementById('ftgStage').classList.toggle('hidden', s !== 'flutterGuide');
+  b2cLayout.hidden = s !== 'b2c';
+  b2bLayout.hidden = s !== 'b2b';
+  ftgLayout.hidden = s !== 'flutterGuide';
   if (s === 'b2c' && !currentScreen.startsWith('b2c')) currentScreen = 'b2c-map';
   if (s === 'b2b' && !currentScreen.startsWith('b2b')) currentScreen = 'b2b-splash';
   if (s === 'flutterGuide' && !currentScreen.startsWith('ftg')) currentScreen = 'ftg-overview';

@@ -28,7 +28,7 @@
     </div>
   </header>
 
-  <div class="grid grid-cols-[260px_1fr_340px] gap-5">
+  <div class="grid grid-cols-[260px_1fr] gap-5">
     <aside class="bg-white rounded-2xl border border-slate-200/90 p-4 shadow-sm shadow-slate-200/50 h-fit sticky top-4">
       <div class="label mb-2 text-slate-600">Screens</div>
       <div id="screenList" class="screen-list flex flex-col gap-1"></div>
@@ -39,16 +39,19 @@
       </div>
     </aside>
 
-    <main class="flex items-start justify-center pt-4 pb-10" style="min-height: 900px;">
-      <div id="b2cStage" class="phone-frame"></div>
-      <div id="b2bStage" class="phone-frame hidden"></div>
-      <div id="ftgStage" class="phone-frame hidden"></div>
+    <main class="flex items-start justify-center pt-4 pb-10 w-full min-w-0" style="min-height: 900px;">
+      <div id="b2cLayout" class="proto-pair-layout ftg-main-layout w-full max-w-full min-w-0 px-1">
+        <div id="b2cStage" class="phone-frame flex-shrink-0"></div>
+        <aside id="b2cDetailAside" class="ftg-handbook-aside proto-detail-aside" aria-label="Screen spec"></aside>
+      </div>
+      <div id="b2bLayout" class="proto-pair-layout ftg-main-layout w-full max-w-full min-w-0 px-1" hidden>
+        <div id="b2bStage" class="phone-frame flex-shrink-0"></div>
+        <aside id="b2bDetailAside" class="ftg-handbook-aside proto-detail-aside" aria-label="Screen spec"></aside>
+      </div>
+      <div id="ftgLayout" class="ftg-guide-layout ftg-main-layout w-full max-w-full min-w-0 px-1" hidden>
+        <aside id="ftgHandbookAside" class="ftg-handbook-aside proto-detail-aside ftg-guide-full mx-auto" aria-label="Flutter Team Guide — technical handbook"></aside>
+      </div>
     </main>
-
-    <aside class="rail rounded-2xl border border-slate-200/90 p-5 shadow-sm shadow-slate-200/50 h-fit sticky top-4" style="max-height: calc(100vh - 32px);">
-      <div class="label mb-2 text-slate-600">Screen spec</div>
-      <div id="specPanel"></div>
-    </aside>
   </div>
 
   <footer class="mt-12 text-xs text-slate-500 text-center pb-8">
@@ -59,6 +62,7 @@
 <script src="js/data/screens.js"></script>
 <script src="js/shared/chrome.js"></script>
 <script src="js/helpers.js"></script>
+<script src="js/shared/b2cMapFragment.js"></script>
 <script src="js/b2c/funnel.js"></script>
 <script src="js/b2c/discovery/addcar.js"></script>
 <script src="js/b2c/discovery/map.js"></script>

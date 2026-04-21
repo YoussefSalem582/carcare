@@ -965,5 +965,107 @@ button:focus-visible { outline: 2px solid rgba(15, 118, 110, 0.5); outline-offse
   border: 1px solid rgba(79, 70, 229, 0.15);
 }
 
+/* Phone + detail column (B2C, B2B) */
+.proto-pair-layout {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  justify-content: center;
+  gap: 1.5rem;
+}
+/* Flutter Team Guide: single centered technical column */
+.ftg-guide-layout {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  justify-content: flex-start;
+  width: 100%;
+}
+.ftg-main-layout {
+  align-items: flex-start;
+}
+.proto-detail-spec-block {
+  padding-bottom: 0.25rem;
+}
+.proto-spec-dl {
+  display: grid;
+  grid-template-columns: minmax(4rem, auto) 1fr;
+  gap: 0.35rem 1rem;
+  font-size: 0.8125rem;
+  margin: 0;
+}
+.proto-spec-dl dt {
+  margin: 0;
+  font-weight: 600;
+  color: var(--muted);
+  font-size: 0.68rem;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+.proto-spec-dl dd {
+  margin: 0;
+  color: var(--ink);
+  line-height: 1.45;
+}
+.ftg-handbook-aside {
+  width: min(460px, 100%);
+  max-height: calc(100vh - 120px);
+  overflow-y: auto;
+  overflow-x: hidden;
+  padding: 1.1rem 1.15rem 1.25rem;
+  background: var(--elevated);
+  border: 1px solid #e2e8f0;
+  border-radius: 1.25rem;
+  box-shadow: 0 10px 40px -12px rgba(15, 23, 42, 0.15);
+  position: sticky;
+  top: 1rem;
+  -webkit-overflow-scrolling: touch;
+}
+.ftg-handbook-aside.ftg-guide-full {
+  width: 100%;
+  max-width: 56rem;
+  min-height: min(70vh, 720px);
+}
+.ftg-tech-intro {
+  font-size: 0.7rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--brand-dark);
+  margin: 0 0 0.75rem;
+  padding: 0.45rem 0.6rem;
+  background: var(--brand-soft);
+  border-radius: 8px;
+  border: 1px solid rgba(15, 118, 110, 0.2);
+}
+.ftg-tech-primary {
+  padding-bottom: 0.25rem;
+}
+.ftg-handbook-inner .ftg-handbook-title {
+  font-size: 1.2rem;
+  font-weight: 700;
+  color: var(--ink);
+  line-height: 1.25;
+  margin: 0.2rem 0 0.35rem;
+}
+.ftg-handbook-inner .ftg-eyebrow {
+  margin-bottom: 0.1rem;
+}
+.ftg-guide-hint {
+  font-size: 0.7rem;
+  color: var(--muted);
+  line-height: 1.35;
+  margin: 0 0 0.55rem;
+  padding: 0.45rem 0.55rem;
+  background: var(--info-soft);
+  border-radius: 8px;
+  border: 1px solid rgba(37, 99, 235, 0.2);
+}
+.ftg-guide-hint strong {
+  color: var(--brand-dark);
+  font-weight: 600;
+}
+
 details summary { list-style: none; cursor: pointer; }
 details summary::-webkit-details-marker { display: none; }
