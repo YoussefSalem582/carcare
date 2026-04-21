@@ -13,7 +13,7 @@ function b2cTabBar(active){
 }
 
 function b2bTopbarMobile(title){
-  return `<div class="bg-white border-b border-slate-200 h-12 flex items-center px-4 justify-between flex-shrink-0">
+  return `<div class="b2b-topbar h-12 flex items-center px-4 justify-between flex-shrink-0">
     <div class="font-semibold text-sm truncate max-w-[200px]">${title}</div>
     <div class="flex items-center gap-1">
       <button class="w-9 h-9 rounded-xl border border-slate-200 flex items-center justify-center tap"><i data-lucide="search" class="w-4 h-4 text-slate-500"></i></button>
