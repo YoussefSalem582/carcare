@@ -1,45 +1,125 @@
 const B2C_HTML = {
 
-/* --- LOGIN ---------------------------------------------- */
-'b2c-login': `
-<div class="screen active" data-screen="b2c-login">
+/* --- SPLASH --------------------------------------------- */
+'b2c-splash': `
+<div class="screen" data-screen="b2c-splash">
   <div class="status-bar"><span>9:41</span><span class="flex gap-1 items-center"><i data-lucide="signal" class="w-3.5 h-3.5"></i><i data-lucide="wifi" class="w-3.5 h-3.5"></i><i data-lucide="battery-full" class="w-3.5 h-3.5"></i></span></div>
-  <div class="flex-1 px-7 pt-10 flex flex-col">
-    <div class="w-14 h-14 rounded-2xl flex items-center justify-center mb-5" style="background:var(--brand);color:white;"><i data-lucide="wrench" class="w-7 h-7"></i></div>
-    <div class="text-2xl font-bold leading-tight">Welcome to CarCare</div>
-    <div class="text-sm text-slate-500 mt-1.5">Find verified service centers near you.</div>
-    <div class="mt-8">
-      <div class="label mb-2">Phone number</div>
-      <div class="flex gap-2">
-        <div class="rounded-xl border border-slate-200 px-3 py-3.5 text-sm font-medium flex items-center gap-1">🇪🇬 +20<i data-lucide="chevron-down" class="w-4 h-4 text-slate-400"></i></div>
-        <input class="flex-1 rounded-xl border border-slate-200 px-3.5 text-base" value="100 555 0142">
-      </div>
-      <div class="text-xs text-slate-500 mt-2">We'll text a 6-digit code.</div>
+  <div class="flex-1 flex flex-col items-center justify-center px-8 text-center" style="background:linear-gradient(180deg,#F0FDFA 0%,#fff 55%);">
+    <div class="w-20 h-20 rounded-3xl flex items-center justify-center mb-6 shadow-lg" style="background:var(--brand);color:white;"><i data-lucide="wrench" class="w-10 h-10"></i></div>
+    <div class="text-2xl font-extrabold tracking-tight text-slate-900">CarCare</div>
+    <div class="text-sm text-slate-500 mt-2 max-w-[260px]">Verified workshops near you. Book maintenance in minutes.</div>
+    <button class="btn-primary w-full max-w-[280px] mt-10 tap" onclick="show('b2c-lang')">Get started</button>
+    <button class="tap text-sm text-teal-700 font-semibold mt-4" onclick="show('b2c-auth')">I already have an account</button>
+  </div>
+  <div class="home-indicator"></div>
+</div>`,
+
+/* --- LANGUAGE ------------------------------------------- */
+'b2c-lang': `
+<div class="screen" data-screen="b2c-lang">
+  <div class="status-bar"><span>9:41</span><span></span></div>
+  <div class="px-5 pt-3 flex items-center gap-3"><button class="tap text-slate-500" onclick="show('b2c-splash')"><i data-lucide="arrow-left" class="w-5 h-5"></i></button><div class="font-semibold">Language</div></div>
+  <div class="flex-1 px-6 pt-6 flex flex-col">
+    <div class="text-xl font-bold">Choose your language</div>
+    <div class="text-sm text-slate-500 mt-1">You can change this later in Settings.</div>
+    <div class="mt-6 space-y-2">
+      <button class="w-full flex items-center justify-between p-4 rounded-2xl border-2 border-teal-600 bg-teal-50 tap">
+        <span class="font-semibold">English</span><i data-lucide="check" class="w-5 h-5 text-teal-700"></i>
+      </button>
+      <button class="w-full flex items-center justify-between p-4 rounded-2xl border border-slate-200 tap">
+        <span class="font-semibold">العربية</span><span class="text-xs text-slate-400">RTL</span>
+      </button>
     </div>
-    <button class="btn-primary mt-6 tap" onclick="show('b2c-otp')"><span>Continue</span><i data-lucide="arrow-right" class="w-4 h-4"></i></button>
-    <div class="flex items-center gap-3 my-5"><div class="flex-1 h-px bg-slate-200"></div><div class="text-xs text-slate-500">or</div><div class="flex-1 h-px bg-slate-200"></div></div>
-    <button class="btn-ghost tap flex items-center justify-center gap-2"><i data-lucide="mail" class="w-4 h-4"></i>Continue with email</button>
-    <button class="btn-ghost tap mt-2 flex items-center justify-center gap-2"><i data-lucide="apple" class="w-4 h-4"></i>Continue with Apple</button>
+    <div class="flex-1"></div>
+    <button class="btn-primary w-full tap mb-4" onclick="show('b2c-onboarding')">Continue</button>
+  </div>
+  <div class="home-indicator"></div>
+</div>`,
+
+/* --- ONBOARDING ----------------------------------------- */
+'b2c-onboarding': `
+<div class="screen" data-screen="b2c-onboarding">
+  <div class="status-bar"><span>9:41</span><span></span></div>
+  <div class="px-5 pt-3 flex items-center justify-between">
+    <button class="tap text-slate-500" onclick="show('b2c-lang')"><i data-lucide="arrow-left" class="w-5 h-5"></i></button>
+    <button class="tap text-sm text-teal-700 font-semibold" onclick="show('b2c-auth')">Skip</button>
+  </div>
+  <div class="flex-1 px-6 pt-4 overflow-y-auto">
+    <div class="flex justify-center gap-1.5 mb-6"><span class="h-1.5 w-6 rounded-full bg-teal-600"></span><span class="h-1.5 w-6 rounded-full bg-teal-600"></span><span class="h-1.5 w-6 rounded-full bg-teal-600"></span></div>
+    <div class="space-y-4">
+      <div class="p-4 rounded-2xl border border-slate-200 bg-white">
+        <div class="w-11 h-11 rounded-xl bg-teal-100 flex items-center justify-center mb-3"><i data-lucide="map-pin" class="w-5 h-5 text-teal-700"></i></div>
+        <div class="font-bold">Map-first discovery</div>
+        <div class="text-sm text-slate-500 mt-1">See trusted centers around you with distance, hours, and ratings.</div>
+      </div>
+      <div class="p-4 rounded-2xl border border-slate-200 bg-white">
+        <div class="w-11 h-11 rounded-xl bg-teal-100 flex items-center justify-center mb-3"><i data-lucide="badge-check" class="w-5 h-5 text-teal-700"></i></div>
+        <div class="font-bold">Verified for quality</div>
+        <div class="text-sm text-slate-500 mt-1">Book with confidence — we highlight verified partners.</div>
+      </div>
+      <div class="p-4 rounded-2xl border border-slate-200 bg-white">
+        <div class="w-11 h-11 rounded-xl bg-teal-100 flex items-center justify-center mb-3"><i data-lucide="calendar-check" class="w-5 h-5 text-teal-700"></i></div>
+        <div class="font-bold">Book & track</div>
+        <div class="text-sm text-slate-500 mt-1">Pick a slot, pay your way, and follow status until pickup.</div>
+      </div>
+    </div>
+    <button class="btn-primary w-full tap mt-6 mb-4" onclick="show('b2c-auth')">Continue</button>
+  </div>
+  <div class="home-indicator"></div>
+</div>`,
+
+/* --- AUTH PICKER ---------------------------------------- */
+'b2c-auth': `
+<div class="screen" data-screen="b2c-auth">
+  <div class="status-bar"><span>9:41</span><span></span></div>
+  <div class="px-5 pt-3"><button class="tap text-slate-500" onclick="show('b2c-onboarding')"><i data-lucide="arrow-left" class="w-5 h-5"></i></button></div>
+  <div class="flex-1 px-7 pt-8 flex flex-col">
+    <div class="text-2xl font-bold leading-tight">Sign in or sign up</div>
+    <div class="text-sm text-slate-500 mt-1.5">Use your email — no SMS codes.</div>
+    <button class="btn-primary w-full mt-10 tap" onclick="show('b2c-login')">Log in</button>
+    <button class="btn-ghost w-full mt-3 tap" onclick="show('b2c-register')">Create account</button>
     <div class="flex-1"></div>
     <div class="text-[11px] text-slate-400 text-center mb-6">By continuing you agree to our Terms and Privacy Policy.</div>
   </div>
   <div class="home-indicator"></div>
 </div>`,
 
-/* --- OTP ------------------------------------------------ */
-'b2c-otp': `
-<div class="screen" data-screen="b2c-otp">
-  <div class="status-bar"><span>9:41</span><span></span></div>
-  <div class="px-7 pt-4 flex items-center gap-3"><button class="tap text-slate-500" onclick="show('b2c-login')"><i data-lucide="arrow-left" class="w-5 h-5"></i></button></div>
+/* --- LOGIN (email) -------------------------------------- */
+'b2c-login': `
+<div class="screen" data-screen="b2c-login">
+  <div class="status-bar"><span>9:41</span><span class="flex gap-1 items-center"><i data-lucide="signal" class="w-3.5 h-3.5"></i><i data-lucide="wifi" class="w-3.5 h-3.5"></i><i data-lucide="battery-full" class="w-3.5 h-3.5"></i></span></div>
+  <div class="px-7 pt-4 flex items-center gap-3"><button class="tap text-slate-500" onclick="show('b2c-auth')"><i data-lucide="arrow-left" class="w-5 h-5"></i></button></div>
   <div class="flex-1 px-7 pt-4 flex flex-col">
-    <div class="text-2xl font-bold leading-tight">Enter the 6-digit code</div>
-    <div class="text-sm text-slate-500 mt-1.5">Sent to +20 100 555 0142 · <span class="text-teal-700 font-semibold">Change</span></div>
-    <div class="grid grid-cols-6 gap-2 mt-8">
-      ${[9,4,1,2,'',''].map((v,i)=>`<div class="h-14 rounded-xl border-2 ${i<4?'border-teal-600':'border-slate-200'} flex items-center justify-center text-2xl font-bold">${v}</div>`).join('')}
+    <div class="text-2xl font-bold leading-tight">Welcome back</div>
+    <div class="text-sm text-slate-500 mt-1.5">Log in with your email and password.</div>
+    <div class="mt-8 space-y-4">
+      <div><div class="label mb-2">Email</div><input type="email" class="w-full rounded-xl border border-slate-200 px-3.5 py-3.5 text-sm" value="you@example.com" autocomplete="off"></div>
+      <div><div class="label mb-2">Password</div><input type="password" class="w-full rounded-xl border border-slate-200 px-3.5 py-3.5 text-sm" value="••••••••••" autocomplete="off"></div>
+      <div class="text-right text-xs font-semibold text-teal-700 tap">Forgot password?</div>
     </div>
-    <div class="mt-6 text-sm text-slate-500">Didn't get it? <span class="text-slate-400">Resend in 42s</span></div>
-    <button class="btn-primary mt-8 tap" onclick="show('b2c-addcar')">Verify</button>
-    <div class="mt-4 flex items-start gap-2 p-3 rounded-xl bg-amber-50 text-amber-800 text-xs"><i data-lucide="info" class="w-4 h-4 mt-0.5"></i><div><b>Dev state: error</b> — "Code incorrect. 2 tries left."</div></div>
+    <button class="btn-primary mt-8 tap w-full" onclick="show('b2c-addcar')"><span>Log in</span><i data-lucide="arrow-right" class="w-4 h-4"></i></button>
+    <div class="text-sm text-slate-500 text-center mt-6">No account? <button class="text-teal-700 font-semibold tap" onclick="show('b2c-register')">Create one</button></div>
+    <div class="flex-1"></div>
+  </div>
+  <div class="home-indicator"></div>
+</div>`,
+
+/* --- REGISTER (email) ----------------------------------- */
+'b2c-register': `
+<div class="screen" data-screen="b2c-register">
+  <div class="status-bar"><span>9:41</span><span></span></div>
+  <div class="px-7 pt-4 flex items-center gap-3"><button class="tap text-slate-500" onclick="show('b2c-auth')"><i data-lucide="arrow-left" class="w-5 h-5"></i></button></div>
+  <div class="flex-1 px-7 pt-4 flex flex-col overflow-y-auto">
+    <div class="text-2xl font-bold leading-tight">Create your account</div>
+    <div class="text-sm text-slate-500 mt-1.5">Email and password only.</div>
+    <div class="mt-6 space-y-3">
+      <div><div class="label mb-1.5">Full name <span class="text-slate-400 normal-case font-normal">optional</span></div><input class="w-full rounded-xl border border-slate-200 px-3.5 py-3 text-sm" value="Youssef Salem"></div>
+      <div><div class="label mb-1.5">Email</div><input type="email" class="w-full rounded-xl border border-slate-200 px-3.5 py-3 text-sm" value="you@example.com"></div>
+      <div><div class="label mb-1.5">Password</div><input type="password" class="w-full rounded-xl border border-slate-200 px-3.5 py-3 text-sm" value="••••••••••"></div>
+      <div><div class="label mb-1.5">Confirm password</div><input type="password" class="w-full rounded-xl border border-slate-200 px-3.5 py-3 text-sm" value="••••••••••"></div>
+    </div>
+    <button class="btn-primary w-full mt-8 tap" onclick="show('b2c-addcar')">Create account</button>
+    <div class="text-sm text-slate-500 text-center mt-4 mb-4">Already have an account? <button class="text-teal-700 font-semibold tap" onclick="show('b2c-login')">Log in</button></div>
   </div>
   <div class="home-indicator"></div>
 </div>`,

@@ -1,5 +1,109 @@
 const B2B_HTML = {
-/* --- SIGNUP --------------------------------------------- */
+/* --- SPLASH --------------------------------------------- */
+'b2b-splash': `
+<div class="screen" data-screen="b2b-splash">
+  <div class="status-bar"><span>9:41</span><span></span></div>
+  <div class="flex-1 flex flex-col items-center justify-center px-8 text-center" style="background:linear-gradient(180deg,#0F766E 0%,#0B4F4A 40%,#0F172A 100%);">
+    <div class="w-20 h-20 rounded-3xl flex items-center justify-center mb-6 bg-white/10 border border-white/20"><i data-lucide="wrench" class="w-10 h-10 text-white"></i></div>
+    <div class="text-2xl font-extrabold tracking-tight text-white">CarCare Business</div>
+    <div class="text-sm text-teal-100 mt-2 max-w-[260px]">Take bookings, manage your catalog, get paid.</div>
+    <button class="w-full max-w-[280px] mt-10 py-3.5 rounded-2xl bg-white text-teal-900 font-semibold tap" onclick="show('b2b-lang')">Get started</button>
+    <button class="tap text-sm text-teal-200 font-semibold mt-4" onclick="show('b2b-auth')">I already have an account</button>
+  </div>
+  <div class="home-indicator"></div>
+</div>`,
+
+/* --- LANGUAGE ------------------------------------------- */
+'b2b-lang': `
+<div class="screen" data-screen="b2b-lang">
+  <div class="status-bar"><span>9:41</span><span></span></div>
+  <div class="px-5 pt-3 flex items-center gap-3"><button class="tap text-slate-500" onclick="show('b2b-splash')"><i data-lucide="arrow-left" class="w-5 h-5"></i></button><div class="font-semibold">Language</div></div>
+  <div class="flex-1 px-6 pt-6 flex flex-col bg-white">
+    <div class="text-xl font-bold">Choose your language</div>
+    <div class="text-sm text-slate-500 mt-1">Business app · can change later in Settings.</div>
+    <div class="mt-6 space-y-2">
+      <button class="w-full flex items-center justify-between p-4 rounded-2xl border-2 border-teal-600 bg-teal-50 tap">
+        <span class="font-semibold">English</span><i data-lucide="check" class="w-5 h-5 text-teal-700"></i>
+      </button>
+      <button class="w-full flex items-center justify-between p-4 rounded-2xl border border-slate-200 tap">
+        <span class="font-semibold">العربية</span><span class="text-xs text-slate-400">RTL</span>
+      </button>
+    </div>
+    <div class="flex-1"></div>
+    <button class="btn-primary w-full tap mb-4" onclick="show('b2b-onboarding')">Continue</button>
+  </div>
+  <div class="home-indicator"></div>
+</div>`,
+
+/* --- ONBOARDING ----------------------------------------- */
+'b2b-onboarding': `
+<div class="screen" data-screen="b2b-onboarding">
+  <div class="status-bar"><span>9:41</span><span></span></div>
+  <div class="px-5 pt-3 flex items-center justify-between bg-white">
+    <button class="tap text-slate-500" onclick="show('b2b-lang')"><i data-lucide="arrow-left" class="w-5 h-5"></i></button>
+    <button class="tap text-sm text-teal-700 font-semibold" onclick="show('b2b-auth')">Skip</button>
+  </div>
+  <div class="flex-1 px-6 pt-4 overflow-y-auto bg-slate-50">
+    <div class="flex justify-center gap-1.5 mb-6"><span class="h-1.5 w-6 rounded-full bg-teal-600"></span><span class="h-1.5 w-6 rounded-full bg-teal-600"></span><span class="h-1.5 w-6 rounded-full bg-teal-600"></span></div>
+    <div class="space-y-4">
+      <div class="p-4 rounded-2xl border border-slate-200 bg-white">
+        <div class="w-11 h-11 rounded-xl bg-teal-100 flex items-center justify-center mb-3"><i data-lucide="calendar-check" class="w-5 h-5 text-teal-700"></i></div>
+        <div class="font-bold">Live bookings</div>
+        <div class="text-sm text-slate-500 mt-1">New jobs land on your calendar — assign and update status in one place.</div>
+      </div>
+      <div class="p-4 rounded-2xl border border-slate-200 bg-white">
+        <div class="w-11 h-11 rounded-xl bg-teal-100 flex items-center justify-center mb-3"><i data-lucide="tag" class="w-5 h-5 text-teal-700"></i></div>
+        <div class="font-bold">Catalog & pricing</div>
+        <div class="text-sm text-slate-500 mt-1">Set fixed, range, or quote-only services. Bulk-add common jobs to go live faster.</div>
+      </div>
+      <div class="p-4 rounded-2xl border border-slate-200 bg-white">
+        <div class="w-11 h-11 rounded-xl bg-teal-100 flex items-center justify-center mb-3"><i data-lucide="shield-check" class="w-5 h-5 text-teal-700"></i></div>
+        <div class="font-bold">Verification & payouts</div>
+        <div class="text-sm text-slate-500 mt-1">Get verified to appear on the map. Track commissions and weekly payouts.</div>
+      </div>
+    </div>
+    <button class="btn-primary w-full tap mt-6 mb-4" onclick="show('b2b-auth')">Continue</button>
+  </div>
+  <div class="home-indicator"></div>
+</div>`,
+
+/* --- AUTH PICKER ---------------------------------------- */
+'b2b-auth': `
+<div class="screen" data-screen="b2b-auth">
+  <div class="status-bar"><span>9:41</span><span></span></div>
+  <div class="px-5 pt-3 bg-white"><button class="tap text-slate-500" onclick="show('b2b-onboarding')"><i data-lucide="arrow-left" class="w-5 h-5"></i></button></div>
+  <div class="flex-1 px-7 pt-8 flex flex-col bg-white">
+    <div class="text-2xl font-bold leading-tight">Business sign in</div>
+    <div class="text-sm text-slate-500 mt-1.5">Use your work email — no SMS.</div>
+    <button class="btn-primary w-full mt-10 tap" onclick="show('b2b-login')">Log in</button>
+    <button class="btn-ghost w-full mt-3 tap" onclick="show('b2b-signup')">Create business account</button>
+    <div class="flex-1"></div>
+    <div class="text-[11px] text-slate-400 text-center mb-6">By continuing you agree to Business Terms and Privacy.</div>
+  </div>
+  <div class="home-indicator"></div>
+</div>`,
+
+/* --- LOGIN (email) -------------------------------------- */
+'b2b-login': `
+<div class="screen" data-screen="b2b-login">
+  <div class="status-bar"><span>9:41</span><span></span></div>
+  <div class="px-7 pt-4 flex items-center gap-3 bg-white"><button class="tap text-slate-500" onclick="show('b2b-auth')"><i data-lucide="arrow-left" class="w-5 h-5"></i></button></div>
+  <div class="flex-1 px-7 pt-4 flex flex-col bg-white">
+    <div class="text-2xl font-bold leading-tight">Welcome back</div>
+    <div class="text-sm text-slate-500 mt-1.5">Log in with your work email.</div>
+    <div class="mt-8 space-y-4">
+      <div><div class="label mb-2">Work email</div><input type="email" class="w-full rounded-xl border border-slate-200 px-3.5 py-3.5 text-sm" value="omar@autopro.eg"></div>
+      <div><div class="label mb-2">Password</div><input type="password" class="w-full rounded-xl border border-slate-200 px-3.5 py-3.5 text-sm" value="••••••••••"></div>
+      <div class="text-right text-xs font-semibold text-teal-700 tap">Forgot password?</div>
+    </div>
+    <button class="btn-primary mt-8 tap w-full" onclick="show('b2b-dashboard')">Log in</button>
+    <div class="text-sm text-slate-500 text-center mt-6">New here? <button class="text-teal-700 font-semibold tap" onclick="show('b2b-signup')">Create account</button></div>
+    <div class="flex-1"></div>
+  </div>
+  <div class="home-indicator"></div>
+</div>`,
+
+/* --- SIGNUP (register email) ---------------------------- */
 'b2b-signup': `
 <div class="screen" data-screen="b2b-signup">
   <div class="status-bar"><span>9:41</span><span></span></div>
@@ -18,14 +122,14 @@ const B2B_HTML = {
     </div>
     <div class="p-4 space-y-3">
       <div class="text-lg font-bold">Create your business account</div>
-      <div class="text-xs text-slate-500">Free to join. 8–15% commission on bookings only.</div>
+      <div class="text-xs text-slate-500">Free to join. 8–15% commission on bookings only. Phone number collected later if needed for verification.</div>
       <div><div class="label mb-1.5">Business name</div><input class="w-full rounded-xl border border-slate-200 px-3.5 py-2.5 text-sm" value="AutoPro Heliopolis"/></div>
       <div><div class="label mb-1.5">Owner name</div><input class="w-full rounded-xl border border-slate-200 px-3.5 py-2.5 text-sm" value="Omar Saleh"/></div>
-      <div><div class="label mb-1.5">Phone</div><input class="w-full rounded-xl border border-slate-200 px-3.5 py-2.5 text-sm" value="+20 100 555 0142"/></div>
-      <div><div class="label mb-1.5">Work email</div><input class="w-full rounded-xl border border-slate-200 px-3.5 py-2.5 text-sm" value="omar@autopro.eg"/></div>
+      <div><div class="label mb-1.5">Work email</div><input type="email" class="w-full rounded-xl border border-slate-200 px-3.5 py-2.5 text-sm" value="omar@autopro.eg"/></div>
       <div><div class="label mb-1.5">Password</div><input type="password" class="w-full rounded-xl border border-slate-200 px-3.5 py-2.5 text-sm" value="••••••••••"/></div>
+      <div><div class="label mb-1.5">Confirm password</div><input type="password" class="w-full rounded-xl border border-slate-200 px-3.5 py-2.5 text-sm" value="••••••••••"/></div>
       <button class="btn-primary w-full mt-2 tap" onclick="show('b2b-onboard-1')">Create account & continue</button>
-      <div class="text-xs text-slate-500 text-center">Already have an account? <span class="text-teal-700 font-semibold">Sign in</span></div>
+      <div class="text-xs text-slate-500 text-center">Already have an account? <button class="text-teal-700 font-semibold tap" onclick="show('b2b-login')">Sign in</button></div>
     </div>
   </div>
   <div class="home-indicator"></div>
@@ -130,7 +234,7 @@ const B2B_HTML = {
 
 /* --- DASHBOARD ------------------------------------------ */
 'b2b-dashboard': `
-<div class="screen active" data-screen="b2b-dashboard">
+<div class="screen" data-screen="b2b-dashboard">
   <div class="status-bar"><span>9:41</span><span></span></div>
   <div class="flex-1 flex flex-col min-h-0 bg-slate-50">
     ${b2bTopbarMobile('AutoPro · Today')}

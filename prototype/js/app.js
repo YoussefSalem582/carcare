@@ -7,7 +7,7 @@ Object.values(B2C_HTML).forEach(h => b2cStage.insertAdjacentHTML('beforeend', h)
 Object.values(B2B_HTML).forEach(h => b2bStage.insertAdjacentHTML('beforeend', h));
 
 let currentSurface = 'b2c';
-let currentScreen = 'b2c-map';
+let currentScreen = 'b2c-splash';
 
 function renderScreenList(){
   const list = document.getElementById('screenList');
@@ -61,7 +61,7 @@ function switchSurface(s){
   document.getElementById('b2cStage').classList.toggle('hidden', s!=='b2c');
   document.getElementById('b2bStage').classList.toggle('hidden', s!=='b2b');
   if (s==='b2c' && !currentScreen.startsWith('b2c')) currentScreen = 'b2c-map';
-  if (s==='b2b' && !currentScreen.startsWith('b2b')) currentScreen = 'b2b-dashboard';
+  if (s==='b2b' && !currentScreen.startsWith('b2b')) currentScreen = 'b2b-splash';
   show(currentScreen);
 }
 
@@ -69,7 +69,7 @@ document.getElementById('toggleB2C').addEventListener('click', () => switchSurfa
 document.getElementById('toggleB2B').addEventListener('click', () => switchSurface('b2b'));
 
 // initial
-show('b2c-map');
+show('b2c-splash');
 lucide.createIcons();
 
 window.show = show;
