@@ -1,0 +1,6 @@
+const B2C_HTML = {
+  ...B2C_FUNNEL,
+  ...B2C_DISCOVERY,
+  ...B2C_BOOKING,
+  ...B2C_ACCOUNT,
+};

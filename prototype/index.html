@@ -12,24 +12,24 @@
 </head>
 <body class="min-h-screen">
 
-<div class="max-w-[1600px] mx-auto px-6 py-6">
-  <header class="flex items-center justify-between mb-4">
+<div class="max-w-[1600px] mx-auto px-6 py-8 proto-shell">
+  <header class="flex items-center justify-between mb-6">
     <div class="flex items-center gap-3">
-      <div class="w-10 h-10 rounded-xl flex items-center justify-center" style="background:var(--brand);color:white;"><i data-lucide="wrench" class="w-5 h-5"></i></div>
+      <div class="w-11 h-11 rounded-2xl flex items-center justify-center shadow-md ring-1 ring-black/5" style="background:var(--brand);color:white;"><i data-lucide="wrench" class="w-5 h-5"></i></div>
       <div>
-        <div class="text-lg font-bold tracking-tight">CarCare — MVP UI/UX Prototype</div>
-        <div class="text-xs text-slate-500">Map-first maintenance marketplace · B2C + B2B · Flutter-targeted</div>
+        <div class="text-lg font-bold tracking-tight text-slate-900">CarCare — MVP UI/UX Prototype</div>
+        <div class="text-xs text-slate-500 mt-0.5">Map-first maintenance marketplace · B2C + B2B · Flutter-targeted</div>
       </div>
     </div>
-    <div class="flex items-center gap-2 bg-white rounded-xl p-1 border border-slate-200 shadow-sm">
+    <div class="flex items-center gap-1.5 bg-white/90 backdrop-blur rounded-2xl p-1 border border-slate-200/80 shadow-sm">
       <button id="toggleB2C" class="px-4 py-2 rounded-lg text-sm font-semibold tab-active">B2C — Car Owner</button>
       <button id="toggleB2B" class="px-4 py-2 rounded-lg text-sm font-semibold text-slate-600">B2B — Service Center</button>
     </div>
   </header>
 
   <div class="grid grid-cols-[260px_1fr_340px] gap-5">
-    <aside class="bg-white rounded-2xl border border-slate-200 p-4 shadow-sm h-fit sticky top-4">
-      <div class="label mb-3">Screens</div>
+    <aside class="bg-white rounded-2xl border border-slate-200/90 p-4 shadow-sm shadow-slate-200/50 h-fit sticky top-4">
+      <div class="label mb-2 text-slate-600">Screens</div>
       <div id="screenList" class="screen-list flex flex-col gap-1"></div>
       <div class="divider my-4"></div>
       <div class="text-xs text-slate-500 leading-relaxed">
@@ -43,21 +43,29 @@
       <div id="b2bStage" class="phone-frame hidden"></div>
     </main>
 
-    <aside class="rail rounded-2xl border border-slate-200 p-5 shadow-sm h-fit sticky top-4" style="max-height: calc(100vh - 32px);">
-      <div class="label mb-2">Screen spec</div>
+    <aside class="rail rounded-2xl border border-slate-200/90 p-5 shadow-sm shadow-slate-200/50 h-fit sticky top-4" style="max-height: calc(100vh - 32px);">
+      <div class="label mb-2 text-slate-600">Screen spec</div>
       <div id="specPanel"></div>
     </aside>
   </div>
 
-  <footer class="mt-10 text-xs text-slate-500 text-center pb-6">
+  <footer class="mt-12 text-xs text-slate-500 text-center pb-8">
     Built for developer handoff. Flutter target — layouts translate to Material/Cupertino widgets. Mock data is illustrative.
   </footer>
 </div>
 
 <script src="js/data/screens.js"></script>
+<script src="js/shared/chrome.js"></script>
 <script src="js/helpers.js"></script>
-<script src="js/b2c-html.js"></script>
-<script src="js/b2b-html.js"></script>
+<script src="js/b2c/funnel.js"></script>
+<script src="js/b2c/discovery.js"></script>
+<script src="js/b2c/booking.js"></script>
+<script src="js/b2c/account.js"></script>
+<script src="js/b2c/index.js"></script>
+<script src="js/b2b/funnel.js"></script>
+<script src="js/b2b/onboarding.js"></script>
+<script src="js/b2b/operations.js"></script>
+<script src="js/b2b/index.js"></script>
 <script src="js/app.js"></script>
 </body>
 </html>

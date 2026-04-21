@@ -12,13 +12,25 @@ let currentScreen = 'b2c-splash';
 function renderScreenList(){
   const list = document.getElementById('screenList');
   const arr = SCREENS[currentSurface];
-  list.innerHTML = arr.map(s => `
-    <button class="screen-btn ${s.id===currentScreen?'active':''} text-left text-sm px-3 py-2 rounded-lg hover:bg-slate-50 flex items-center justify-between" onclick="show('${s.id}')">
-      <span class="flex items-center gap-2">
-        <span class="dot" style="background:${s.phase===1?'#10B981':'#F59E0B'}"></span>
-        <span>${s.name}</span>
+  let lastGroup = null;
+  let firstSection = true;
+  const parts = [];
+  for (const s of arr) {
+    const g = s.group || 'Screens';
+    if (g !== lastGroup) {
+      parts.push(`<div class="screen-group-label label mb-1.5 px-0.5 ${firstSection ? '' : 'mt-4'}">${g}</div>`);
+      firstSection = false;
+      lastGroup = g;
+    }
+    parts.push(`
+    <button type="button" class="screen-btn ${s.id===currentScreen?'active':''} text-left text-sm px-3 py-2 rounded-lg hover:bg-slate-50 flex items-center justify-between w-full border-0 bg-transparent font-[inherit] cursor-pointer" onclick="show('${s.id}')">
+      <span class="flex items-center gap-2 min-w-0">
+        <span class="dot flex-shrink-0" style="background:${s.phase===1?'#10B981':'#F59E0B'}"></span>
+        <span class="truncate">${s.name}</span>
       </span>
-    </button>`).join('');
+    </button>`);
+  }
+  list.innerHTML = parts.join('');
 }
 
 function renderSpec(){
