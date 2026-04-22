@@ -1,5 +1,0 @@
-const B2B_HTML = {
-  ...B2B_FUNNEL,
-  ...B2B_ONBOARDING,
-  ...B2B_OPERATIONS,
-};

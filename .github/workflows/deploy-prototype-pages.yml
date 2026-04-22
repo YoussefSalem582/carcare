@@ -26,8 +26,18 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - uses: actions/configure-pages@v5
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: npm
+          cache-dependency-path: prototype/package-lock.json
+      - name: Install and build prototype
+        working-directory: prototype
+        run: |
+          npm ci
+          npm run build
       - uses: actions/upload-pages-artifact@v3
         with:
-          path: prototype
+          path: prototype/dist
       - uses: actions/deploy-pages@v4
         id: deployment
