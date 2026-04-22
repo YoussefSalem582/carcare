@@ -10,16 +10,11 @@ import {
 } from 'react';
 import { CATALOG_AR } from '../i18n/catalogAr';
 import { STRINGS_AR_EG } from '../i18n/stringsArEG';
+import { defaultScreenForSurface, surfaceForScreenId } from '../navigation/protoNavigation';
 import type { Locale, ScreenRow, Surface, ThemeMode } from '../types';
 
 const LOCALE_KEY = 'carcare_proto_locale';
 const THEME_KEY = 'carcare_proto_theme';
-
-function surfaceForScreenId(id: string): Surface {
-  if (id.startsWith('b2b-')) return 'b2b';
-  if (id.startsWith('ftg-')) return 'flutterGuide';
-  return 'b2c';
-}
 
 type ProtoContextValue = {
   locale: Locale;
@@ -153,10 +148,13 @@ export function ProtoProvider({ children }: { children: ReactNode }) {
     const target = surfaceForScreenId(id);
     setSurface((prevSurf) => {
       if (target !== prevSurf) {
-        let next = id;
-        if (target === 'b2c' && !id.startsWith('b2c')) next = 'b2c-map';
-        if (target === 'b2b' && !id.startsWith('b2b')) next = 'b2b-splash';
-        if (target === 'flutterGuide' && !id.startsWith('ftg')) next = 'ftg-overview';
+        const fallback = defaultScreenForSurface(target);
+        const next =
+          (target === 'b2c' && !id.startsWith('b2c')) ||
+          (target === 'b2b' && !id.startsWith('b2b')) ||
+          (target === 'flutterGuide' && !id.startsWith('ftg'))
+            ? fallback
+            : id;
         setCurrentScreen(next);
         return target;
       }
@@ -169,11 +167,10 @@ export function ProtoProvider({ children }: { children: ReactNode }) {
     setSurface((prev) => {
       if (prev === s) return prev;
       setCurrentScreen((cs) => {
-        let next = cs;
-        if (s === 'b2c' && !cs.startsWith('b2c')) next = 'b2c-map';
-        if (s === 'b2b' && !cs.startsWith('b2b')) next = 'b2b-splash';
-        if (s === 'flutterGuide' && !cs.startsWith('ftg')) next = 'ftg-overview';
-        return next;
+        if (s === 'b2c' && !cs.startsWith('b2c')) return defaultScreenForSurface('b2c');
+        if (s === 'b2b' && !cs.startsWith('b2b')) return defaultScreenForSurface('b2b');
+        if (s === 'flutterGuide' && !cs.startsWith('ftg')) return defaultScreenForSurface('flutterGuide');
+        return cs;
       });
       return s;
     });
