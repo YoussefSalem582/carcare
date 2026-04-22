@@ -129,6 +129,60 @@ html[lang="ar-EG"] body, html[lang="ar-EG"] { font-family: 'Noto Sans Arabic', '
 .funnel-hero-b2b {
   background: linear-gradient(165deg, #0f766e 0%, #0d5c56 38%, #0b4f4a 62%, #0f172a 100%);
 }
+
+/* Minimal splash: large logo + name + slogan (tap/keyboard to continue) */
+.splash-minimal {
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+  user-select: none;
+}
+.splash-minimal:focus {
+  outline: none;
+}
+.splash-minimal:focus-visible {
+  outline: 2px solid var(--brand);
+  outline-offset: 3px;
+}
+.splash-minimal--b2b:focus-visible {
+  outline-color: rgba(255, 255, 255, 0.9);
+}
+.splash-minimal-logo {
+  width: min(72vw, 260px);
+  height: auto;
+  max-height: min(38vh, 280px);
+  object-fit: contain;
+  display: block;
+  flex-shrink: 0;
+}
+.splash-minimal-logo--b2b {
+  filter: drop-shadow(0 14px 32px rgba(0, 0, 0, 0.35));
+}
+.splash-minimal-title {
+  font-size: clamp(1.75rem, 5.5vw, 2.35rem);
+  font-weight: 800;
+  letter-spacing: -0.04em;
+  line-height: 1.1;
+  margin: 0;
+}
+.splash-minimal-title--b2c {
+  color: #0f172a;
+}
+.splash-minimal-title--b2b {
+  color: #fff;
+}
+.splash-minimal-tagline {
+  margin: 0;
+  line-height: 1.55;
+  max-width: 22rem;
+  font-size: clamp(0.95rem, 2.9vw, 1.125rem);
+}
+.splash-minimal-tagline--b2c {
+  color: #475569;
+}
+.splash-minimal-tagline--b2b {
+  color: rgba(204, 251, 241, 0.96);
+}
+
 .funnel-progress {
   height: 3px;
   background: rgba(15, 23, 42, 0.08);
@@ -358,6 +412,19 @@ html[lang="ar-EG"] body, html[lang="ar-EG"] { font-family: 'Noto Sans Arabic', '
     0 16px 40px rgba(15, 118, 110, 0.35),
     0 0 0 1px rgba(255, 255, 255, 0.2) inset;
 }
+.preauth-splash-mark--logo {
+  background: #fff;
+  padding: 10px;
+  box-shadow:
+    0 16px 40px rgba(15, 118, 110, 0.22),
+    0 0 0 1px rgba(15, 118, 110, 0.08) inset;
+}
+.preauth-splash-logo-img {
+  width: 68px;
+  height: 68px;
+  object-fit: contain;
+  display: block;
+}
 .preauth-splash-title {
   font-size: 28px;
   font-weight: 800;
@@ -401,6 +468,18 @@ html[lang="ar-EG"] body, html[lang="ar-EG"] { font-family: 'Noto Sans Arabic', '
   color: #fff;
   box-shadow: 0 12px 32px rgba(0, 0, 0, 0.2);
   backdrop-filter: blur(8px);
+}
+.preauth-splash-b2b-mark--logo {
+  background: rgba(255, 255, 255, 0.96);
+  border: 1px solid rgba(255, 255, 255, 0.45);
+  padding: 10px;
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.25);
+}
+.preauth-splash-b2b-logo-img {
+  width: 68px;
+  height: 68px;
+  object-fit: contain;
+  display: block;
 }
 .preauth-splash-b2b-title {
   font-size: 28px;
@@ -1199,8 +1278,12 @@ details summary::-webkit-details-marker { display: none; }
 [data-theme="dark"] .preauth-headline,
 [data-theme="dark"] .preauth-page-title,
 [data-theme="dark"] .preauth-splash-title,
+[data-theme="dark"] .splash-minimal-title--b2c,
 [data-theme="dark"] .preauth-feature-title {
   color: var(--ink);
+}
+[data-theme="dark"] .splash-minimal-tagline--b2c {
+  color: var(--muted);
 }
 [data-theme="dark"] .preauth-sub,
 [data-theme="dark"] .preauth-feature-desc,

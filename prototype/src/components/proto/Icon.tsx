@@ -1,4 +1,4 @@
-import type { ComponentType } from 'react';
+import type { ElementType } from 'react';
 import * as LucideIcons from 'lucide-react';
 import type { LucideProps } from 'lucide-react';
 
@@ -13,9 +13,10 @@ type IconProps = { name: string; className?: string } & Omit<LucideProps, 'ref'>
 
 export function ProtoIcon({ name, className, ...rest }: IconProps) {
   const key = kebabToPascal(name) as keyof typeof LucideIcons;
-  const Cmp = LucideIcons[key] as ComponentType<LucideProps> | undefined;
-  if (!Cmp || typeof Cmp !== 'function') {
-    return <span className={className} aria-hidden />;
+  const Cmp = LucideIcons[key] as ElementType<LucideProps> | undefined;
+  /* lucide-react icons are forwardRef objects (typeof === 'object'), not plain functions */
+  if (Cmp == null) {
+    return <span className={className} aria-hidden title={`Unknown icon: ${name}`} />;
   }
   return <Cmp className={className} {...rest} />;
 }

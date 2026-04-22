@@ -31,7 +31,7 @@ export function B2cService() {
         <div className="w-10" />
       </div>
       <div className="flex-1 app-surface px-5 pt-4 overflow-y-auto min-h-0">
-        <div className="label mb-2">Pick your car</div>
+        <div className="label mb-2">{t('book.pick_car', 'Pick your car')}</div>
         <div className="flex gap-2 mb-5 overflow-x-auto">
           <div className="chip on whitespace-nowrap">
             <ProtoIcon name="car" className="w-3.5 h-3.5" />
@@ -43,10 +43,10 @@ export function B2cService() {
           </div>
           <div className="chip whitespace-nowrap">
             <ProtoIcon name="plus" className="w-3.5 h-3.5" />
-            Add car
+            {t('book.add_car', 'Add car')}
           </div>
         </div>
-        <div className="label mb-2">Services</div>
+        <div className="label mb-2">{t('book.services', 'Services')}</div>
         <div className="space-y-2">
           {rows.map(([rowTitle, d, dur, p, typ, on]) => (
             <label
@@ -70,16 +70,18 @@ export function B2cService() {
               </div>
               <div className="text-right">
                 <div className="font-semibold">{p}</div>
-                <div className="text-[10px] uppercase text-slate-400 dark:text-slate-500">{typ === 'range' ? 'from' : 'fixed'}</div>
+                <div className="text-[10px] uppercase text-slate-400 dark:text-slate-500">
+                  {typ === 'range' ? t('book.from', 'from') : t('book.fixed', 'fixed')}
+                </div>
               </div>
             </label>
           ))}
         </div>
-        <div className="label mt-6 mb-2">Add-ons</div>
+        <div className="label mt-6 mb-2">{t('book.addons', 'Add-ons')}</div>
         <div className="p-3 rounded-xl border border-slate-200 dark:border-slate-600 flex justify-between items-center">
           <div>
-            <div className="font-semibold text-sm">Cabin air filter</div>
-            <div className="text-xs text-slate-500 dark:text-slate-400">OEM · +10 min</div>
+            <div className="font-semibold text-sm">{t('book.cabin_filter', 'Cabin air filter')}</div>
+            <div className="text-xs text-slate-500 dark:text-slate-400">{t('book.cabin_sub', 'OEM · +10 min')}</div>
           </div>
           <div className="flex items-center gap-2">
             <div className="text-sm font-semibold">+EGP 180</div>
@@ -91,7 +93,7 @@ export function B2cService() {
       </div>
       <div className="cta-bar">
         <button type="button" className="btn-primary btn-primary-lg w-full tap shadow-md" onClick={() => show('b2c-slot')}>
-          Continue · EGP 350
+          {t('book.continue_price', 'Continue · EGP 350')}
         </button>
       </div>
       <ProtoHomeIndicator />
@@ -132,7 +134,7 @@ export function B2cSlot() {
             </div>
           ))}
         </div>
-        <div className="label mt-5 mb-2">Morning</div>
+        <div className="label mt-5 mb-2">{t('book.slot.morning', 'Morning')}</div>
         <div className="grid grid-cols-3 gap-2">
           {morning.map((time, i) => (
             <div
@@ -149,7 +151,7 @@ export function B2cSlot() {
             </div>
           ))}
         </div>
-        <div className="label mt-5 mb-2">Afternoon</div>
+        <div className="label mt-5 mb-2">{t('book.slot.afternoon', 'Afternoon')}</div>
         <div className="grid grid-cols-3 gap-2">
           {afternoon.map((time) => (
             <div
@@ -163,13 +165,13 @@ export function B2cSlot() {
         <div className="mt-5 p-3 rounded-xl bg-gradient-to-r from-amber-50 to-orange-50 border border-amber-200/80 flex gap-2 items-start shadow-sm">
           <ProtoIcon name="timer" className="w-4 h-4 text-amber-700 mt-0.5" />
           <div className="text-xs text-amber-950">
-            <b>Slot held for 10:00</b> · expires in 9m 42s. Complete payment to confirm.
+            <b>{t('book.slot.hold', 'Slot held for 10:00')}</b> · {t('book.slot.hold_sub', 'expires in 9m 42s. Complete payment to confirm.')}
           </div>
         </div>
       </div>
       <div className="cta-bar">
         <button type="button" className="btn-primary btn-primary-lg w-full tap shadow-md" onClick={() => show('b2c-payment')}>
-          Continue
+          {t('common.continue', 'Continue')}
         </button>
       </div>
       <ProtoHomeIndicator />
@@ -196,8 +198,8 @@ export function B2cPayment() {
               <ProtoIcon name="wrench" className="w-6 h-6 text-teal-700" />
             </div>
             <div className="flex-1">
-              <div className="font-semibold text-sm">AutoPro Heliopolis</div>
-              <div className="text-xs text-slate-500 dark:text-slate-400">Sat 18 Apr · 11:00 · ~45 min</div>
+              <div className="font-semibold text-sm">{t('book.pay.center', 'AutoPro Heliopolis')}</div>
+              <div className="text-xs text-slate-500 dark:text-slate-400">{t('book.pay.when', 'Sat 18 Apr · 11:00 · ~45 min')}</div>
             </div>
           </div>
           <div className="divider my-3" />
@@ -207,21 +209,21 @@ export function B2cPayment() {
               <span>EGP 350</span>
             </div>
             <div className="flex justify-between text-slate-500 dark:text-slate-400">
-              <span>Service fee</span>
+              <span>{t('book.pay.fee', 'Service fee')}</span>
               <span>EGP 15</span>
             </div>
             <div className="flex justify-between text-green-700">
-              <span>Promo FIRST50</span>
+              <span>{t('book.pay.promo', 'Promo FIRST50')}</span>
               <span>−EGP 50</span>
             </div>
           </div>
           <div className="divider my-3" />
           <div className="flex justify-between font-bold">
-            <span>Total</span>
+            <span>{t('book.pay.total', 'Total')}</span>
             <span>EGP 315</span>
           </div>
         </div>
-        <div className="label mt-5 mb-2">Payment method</div>
+        <div className="label mt-5 mb-2">{t('book.pay.method', 'Payment method')}</div>
         <div className="space-y-2">
           <label className="flex items-center gap-3 p-3 rounded-xl border-2 border-teal-500 bg-gradient-to-r from-teal-50 to-emerald-50/80 shadow-sm tap">
             <div className="w-5 h-5 rounded-full border-2 border-teal-600 flex items-center justify-center">
@@ -230,22 +232,22 @@ export function B2cPayment() {
             <ProtoIcon name="credit-card" className="w-5 h-5 text-indigo-600" />
             <div className="flex-1">
               <div className="text-sm font-semibold">Visa •• 4242</div>
-              <div className="text-xs text-slate-500 dark:text-slate-400">Expires 08/27</div>
+              <div className="text-xs text-slate-500 dark:text-slate-400">{t('book.pay.card_sub', 'Expires 08/27')}</div>
             </div>
           </label>
           <label className="flex items-center gap-3 p-3 rounded-xl border border-slate-200 dark:border-slate-600 bg-white dark:bg-slate-900 tap">
             <div className="w-5 h-5 rounded-full border-2 border-slate-300 dark:border-slate-600" />
             <ProtoIcon name="banknote" className="w-5 h-5 text-emerald-600" />
             <div className="flex-1">
-              <div className="text-sm font-semibold">Cash on service</div>
-              <div className="text-xs text-slate-500 dark:text-slate-400">Pay at the center</div>
+              <div className="text-sm font-semibold">{t('book.pay.cash', 'Cash on service')}</div>
+              <div className="text-xs text-slate-500 dark:text-slate-400">{t('book.pay.cash_sub', 'Pay at the center')}</div>
             </div>
           </label>
           <label className="flex items-center gap-3 p-3 rounded-xl border border-slate-200 dark:border-slate-600 bg-white dark:bg-slate-900 tap">
             <div className="w-5 h-5 rounded-full border-2 border-slate-300 dark:border-slate-600" />
             <ProtoIcon name="wallet" className="w-5 h-5 text-violet-600" />
             <div className="flex-1">
-              <div className="text-sm font-semibold">Vodafone Cash</div>
+              <div className="text-sm font-semibold">{t('book.pay.vf', 'Vodafone Cash')}</div>
               <div className="text-xs text-slate-500 dark:text-slate-400">+20 100 555 0142</div>
             </div>
           </label>
@@ -253,8 +255,8 @@ export function B2cPayment() {
         <div className="mt-5 callout-info flex items-start gap-2 text-xs text-slate-600 dark:text-slate-400 p-3">
           <ProtoIcon name="shield-check" className="w-4 h-4 text-blue-600 mt-0.5 flex-shrink-0" />
           <div>
-            If the service can’t be completed as described, CarCare refunds within 48h.{' '}
-            <span className="text-teal-700 font-semibold">Learn more</span>
+            {t('book.pay.refund', 'If the service can’t be completed as described, CarCare refunds within 48h.')}{' '}
+            <span className="text-teal-700 font-semibold">{t('book.pay.learn', 'Learn more')}</span>
           </div>
         </div>
       </div>
@@ -264,7 +266,7 @@ export function B2cPayment() {
           className="btn-accent btn-primary-lg w-full tap shadow-lg shadow-orange-500/25"
           onClick={() => show('b2c-confirmed')}
         >
-          Pay EGP 315 &amp; confirm
+          {t('book.pay.cta', 'Pay EGP 315 & confirm')}
         </button>
       </div>
       <ProtoHomeIndicator />
@@ -273,7 +275,7 @@ export function B2cPayment() {
 }
 
 export function B2cConfirmed() {
-  const { show } = useProto();
+  const { show, t } = useProto();
   return (
     <ScreenWrap id="b2c-confirmed">
       <ProtoStatusBar />
@@ -281,13 +283,11 @@ export function B2cConfirmed() {
         <div className="confirmed-hero-icon mb-4">
           <ProtoIcon name="check" className="w-11 h-11" />
         </div>
-        <div className="text-2xl font-bold">Booking confirmed</div>
-        <div className="text-sm text-slate-500 dark:text-slate-400 mt-2 max-w-xs">
-          You&apos;re booked at AutoPro Heliopolis on Sat 18 Apr at 11:00. We&apos;ll remind you an hour before.
-        </div>
+        <div className="text-2xl font-bold">{t('book.confirmed.title', 'Booking confirmed')}</div>
+        <div className="text-sm text-slate-500 dark:text-slate-400 mt-2 max-w-xs">{t('book.confirmed.lead', "You're booked at AutoPro Heliopolis on Sat 18 Apr at 11:00. We'll remind you an hour before.")}</div>
         <div className="mt-6 w-full app-panel p-4 text-left">
           <div className="flex justify-between text-xs text-slate-500 dark:text-slate-400">
-            <span>Booking ID</span>
+            <span>{t('book.confirmed.id', 'Booking ID')}</span>
             <span>#CC-4A1F9</span>
           </div>
           <div className="divider my-2" />
@@ -313,28 +313,28 @@ export function B2cConfirmed() {
         <div className="mt-4 w-full grid grid-cols-3 gap-2">
           <button type="button" className="btn-ghost py-2.5 text-xs flex flex-col items-center">
             <ProtoIcon name="calendar-plus" className="w-4 h-4 mb-1" />
-            Add to calendar
+            {t('book.confirmed.cal', 'Add to calendar')}
           </button>
           <button type="button" className="btn-ghost py-2.5 text-xs flex flex-col items-center">
             <ProtoIcon name="navigation" className="w-4 h-4 mb-1" />
-            Directions
+            {t('book.confirmed.nav', 'Directions')}
           </button>
           <button type="button" className="btn-ghost py-2.5 text-xs flex flex-col items-center">
             <ProtoIcon name="phone" className="w-4 h-4 mb-1" />
-            Call
+            {t('book.confirmed.call', 'Call')}
           </button>
         </div>
       </div>
       <div className="cta-bar space-y-2">
         <button type="button" className="btn-primary btn-primary-lg w-full tap shadow-md" onClick={() => show('b2c-progress')}>
-          View booking
+          {t('book.confirmed.view', 'View booking')}
         </button>
         <button
           type="button"
           className="text-sm w-full text-slate-600 dark:text-slate-400 font-medium tap py-2"
           onClick={() => show('b2c-map')}
         >
-          Back to map
+          {t('book.confirmed.map', 'Back to map')}
         </button>
       </div>
       <ProtoHomeIndicator />
@@ -343,12 +343,12 @@ export function B2cConfirmed() {
 }
 
 export function B2cBookings() {
-  const { show } = useProto();
+  const { show, t } = useProto();
   return (
     <ScreenWrap id="b2c-bookings">
       <ProtoStatusBar />
       <div className="px-5 pt-3 pb-3 flex items-center justify-between bg-white dark:bg-slate-900/90 border-b border-slate-100">
-        <div className="font-bold text-xl tracking-tight text-slate-900 dark:text-slate-100">Bookings</div>
+        <div className="font-bold text-xl tracking-tight text-slate-900 dark:text-slate-100">{t('book.list.title', 'Bookings')}</div>
         <button
           type="button"
           className="w-10 h-10 rounded-xl bg-gradient-to-br from-slate-100 to-indigo-50 border border-slate-200 dark:border-slate-600/80 flex items-center justify-center tap"
@@ -357,9 +357,9 @@ export function B2cBookings() {
         </button>
       </div>
       <div className="px-5 flex gap-6 border-b border-slate-200 dark:border-slate-600 text-sm font-semibold bg-white dark:bg-slate-900">
-        <div className="pb-3 border-b-2 border-teal-600 text-teal-700">Upcoming</div>
-        <div className="pb-3 text-slate-500 dark:text-slate-400">In progress</div>
-        <div className="pb-3 text-slate-500 dark:text-slate-400">Past</div>
+        <div className="pb-3 border-b-2 border-teal-600 text-teal-700">{t('book.list.upcoming', 'Upcoming')}</div>
+        <div className="pb-3 text-slate-500 dark:text-slate-400">{t('book.list.progress', 'In progress')}</div>
+        <div className="pb-3 text-slate-500 dark:text-slate-400">{t('book.list.past', 'Past')}</div>
       </div>
       <div className="flex-1 overflow-y-auto px-5 pt-4 space-y-3 app-surface min-h-0">
         <div
@@ -371,19 +371,19 @@ export function B2cBookings() {
         >
           <div className="flex justify-between items-start">
             <div>
-              <div className="text-xs text-teal-700 font-bold uppercase tracking-wide mb-1">Today · 11:00</div>
+              <div className="text-xs text-teal-700 font-bold uppercase tracking-wide mb-1">{t('book.list.today', 'Today · 11:00')}</div>
               <div className="font-semibold">Oil change — Toyota Corolla</div>
               <div className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">AutoPro Heliopolis · 0.8 km</div>
             </div>
-            <span className="badge b-indigo">Confirmed</span>
+            <span className="badge b-indigo">{t('book.list.badge.confirmed', 'Confirmed')}</span>
           </div>
           <div className="divider my-3" />
           <div className="flex gap-2">
             <button type="button" className="btn-ghost py-2 text-xs flex-1">
-              Reschedule
+              {t('book.list.resched', 'Reschedule')}
             </button>
             <button type="button" className="btn-ghost py-2 text-xs flex-1">
-              Cancel
+              {t('book.list.cancel', 'Cancel')}
             </button>
           </div>
         </div>
@@ -396,10 +396,10 @@ export function B2cBookings() {
               <div className="font-semibold">Brake inspection — Hyundai Tucson</div>
               <div className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">Toyota Authorized · 2.4 km</div>
             </div>
-            <span className="badge b-amber">Awaiting shop</span>
+            <span className="badge b-amber">{t('book.list.badge.await', 'Awaiting shop')}</span>
           </div>
         </div>
-        <div className="label mt-5 mb-2">Past</div>
+        <div className="label mt-5 mb-2">{t('book.list.past_lbl', 'Past')}</div>
         <div className="p-4 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-600">
           <div className="flex justify-between items-start">
             <div>
@@ -410,7 +410,7 @@ export function B2cBookings() {
               <div className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">QuickFix Nasr City · EGP 450</div>
             </div>
             <button type="button" className="text-xs font-semibold text-teal-700 tap" onClick={() => show('b2c-review')}>
-              Review
+              {t('book.list.review', 'Review')}
             </button>
           </div>
         </div>
@@ -424,11 +424,11 @@ export function B2cBookings() {
 export function B2cProgress() {
   const { show, t } = useProto();
   const steps = [
-    ['Booking confirmed', '11:02 AM', true],
-    ['Checked in at center', '11:15 AM', true],
-    ['In progress', '11:22 AM', 'active'],
-    ['Ready for pickup', '~ 12:00 PM', false],
-    ['Invoiced & paid', '', false],
+    [t('book.progress.step1', 'Booking confirmed'), '11:02 AM', true],
+    [t('book.progress.step2', 'Checked in at center'), '11:15 AM', true],
+    [t('book.progress.step3', 'In progress'), '11:22 AM', 'active'],
+    [t('book.progress.step4', 'Ready for pickup'), '~ 12:00 PM', false],
+    [t('book.progress.step5', 'Invoiced & paid'), '', false],
   ] as const;
   return (
     <ScreenWrap id="b2c-progress">
@@ -444,11 +444,11 @@ export function B2cProgress() {
       </div>
       <div className="flex-1 app-surface overflow-y-auto px-5 pt-4 min-h-0">
         <div className="p-4 rounded-2xl gradient-hero-brand text-white shadow-lg shadow-teal-900/20">
-          <div className="text-xs uppercase tracking-wider opacity-80">Status</div>
-          <div className="text-2xl font-bold mt-1">In progress</div>
-          <div className="text-sm opacity-80 mt-1">Mechanic Ahmed is working on your car</div>
+          <div className="text-xs uppercase tracking-wider opacity-80">{t('book.progress.status', 'Status')}</div>
+          <div className="text-2xl font-bold mt-1">{t('book.progress.doing', 'In progress')}</div>
+          <div className="text-sm opacity-80 mt-1">{t('book.progress.mech', 'Mechanic Ahmed is working on your car')}</div>
         </div>
-        <div className="label mt-5 mb-2">Timeline</div>
+        <div className="label mt-5 mb-2">{t('book.progress.timeline', 'Timeline')}</div>
         <div className="space-y-3">
           {steps.map(([rowTitle, time, done], i) => (
             <div key={rowTitle} className="flex gap-3">
@@ -479,7 +479,7 @@ export function B2cProgress() {
             </div>
           ))}
         </div>
-        <div className="label mt-3 mb-2">Shop</div>
+        <div className="label mt-3 mb-2">{t('book.progress.shop', 'Shop')}</div>
         <div className="app-panel p-3 flex items-center gap-3">
           <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-teal-100 to-cyan-50 flex items-center justify-center">
             <ProtoIcon name="wrench" className="w-6 h-6 text-teal-700" />
@@ -495,24 +495,24 @@ export function B2cProgress() {
             <ProtoIcon name="message-circle" className="w-4 h-4" />
           </button>
         </div>
-        <div className="label mt-5 mb-2">Invoice (so far)</div>
+        <div className="label mt-5 mb-2">{t('book.progress.invoice', 'Invoice (so far)')}</div>
         <div className="app-panel p-4 space-y-1 text-sm">
           <div className="flex justify-between">
             <span>Oil change (standard)</span>
             <span>EGP 350</span>
           </div>
           <div className="flex justify-between text-slate-400 dark:text-slate-500 italic">
-            <span>+ Cabin filter (pending approval)</span>
+            <span>{t('book.progress.addon', '+ Cabin filter (pending approval)')}</span>
             <span>EGP 180</span>
           </div>
           <div className="divider my-2" />
           <div className="flex justify-between font-bold">
-            <span>Total</span>
+            <span>{t('book.pay.total', 'Total')}</span>
             <span>EGP 350</span>
           </div>
         </div>
         <button type="button" className="mt-4 w-full py-3 rounded-xl text-sm font-semibold border border-slate-200 dark:border-slate-600 tap">
-          Add cabin filter (+EGP 180)
+          {t('book.progress.add_btn', 'Add cabin filter (+EGP 180)')}
         </button>
         <div className="h-6" />
       </div>
@@ -550,11 +550,19 @@ export function B2cReview() {
             <ProtoIcon key={i} name="star" className={`w-10 h-10 ${on ? 'text-amber-500 fill-amber-500' : 'text-slate-300'}`} />
           ))}
         </div>
-        <div className="text-center text-sm font-semibold mt-2">Great experience</div>
-        <div className="label mt-6 mb-2">Break it down</div>
+        <div className="text-center text-sm font-semibold mt-2">{t('book.rev.great', 'Great experience')}</div>
+        <div className="label mt-6 mb-2">{t('book.rev.breakdown', 'Break it down')}</div>
         {breakdown.map(([label, r]) => (
           <div key={label} className="flex justify-between items-center py-2">
-            <div className="text-sm">{label}</div>
+            <div className="text-sm">
+              {label === 'Quality'
+                ? t('disc.shop.rev.quality', 'Quality')
+                : label === 'Price'
+                  ? t('disc.shop.rev.price', 'Price')
+                  : label === 'Speed'
+                    ? t('disc.shop.rev.speed', 'Speed')
+                    : t('disc.shop.rev.honesty', 'Honesty')}
+            </div>
             <div className="flex gap-0.5">
               {[1, 2, 3, 4, 5].map((i) => (
                 <ProtoIcon
@@ -566,9 +574,9 @@ export function B2cReview() {
             </div>
           </div>
         ))}
-        <div className="label mt-4 mb-2">Tell others (optional)</div>
-        <textarea className="proto-input w-full p-3 text-sm h-24 resize-none" placeholder="What stood out?" />
-        <div className="label mt-4 mb-2">Add photos</div>
+        <div className="label mt-4 mb-2">{t('book.rev.tell', 'Tell others (optional)')}</div>
+        <textarea className="proto-input w-full p-3 text-sm h-24 resize-none" placeholder={t('book.rev.comment_ph', 'What stood out?')} />
+        <div className="label mt-4 mb-2">{t('book.rev.photos', 'Add photos')}</div>
         <div className="flex gap-2">
           <div className="w-16 h-16 rounded-xl border-2 border-dashed border-slate-300 dark:border-slate-600 flex items-center justify-center">
             <ProtoIcon name="plus" className="w-5 h-5 text-slate-400 dark:text-slate-500" />
@@ -578,7 +586,7 @@ export function B2cReview() {
       </div>
       <div className="cta-bar">
         <button type="button" className="btn-primary btn-primary-lg w-full tap shadow-md" onClick={() => show('b2c-bookings')}>
-          Submit review
+          {t('book.rev.submit', 'Submit review')}
         </button>
       </div>
       <ProtoHomeIndicator />

@@ -14,57 +14,65 @@ function ScreenWrap({ id, children }: { id: string; children: ReactNode }) {
 }
 
 export function B2cAddcar() {
-  const { show } = useProto();
+  const { show, t } = useProto();
   return (
     <ScreenWrap id="b2c-addcar">
       <ProtoStatusBar />
       <div className="screen-topbar">
-        <button type="button" className="funnel-back tap -ml-1" onClick={() => show('b2c-login')} aria-label="Back">
+        <button
+          type="button"
+          className="funnel-back tap -ml-1"
+          onClick={() => show('b2c-login')}
+          aria-label={t('disc.addcar.back', 'Back')}
+        >
           <ProtoIcon name="arrow-left" className="w-5 h-5" />
         </button>
         <button type="button" className="funnel-skip tap" onClick={() => show('b2c-map')}>
-          Skip
+          {t('disc.addcar.skip', 'Skip')}
         </button>
       </div>
       <div className="flex-1 app-surface px-6 pt-2 pb-4 flex flex-col overflow-y-auto min-h-0">
-        <span className="preauth-eyebrow">Your garage</span>
-        <h2 className="text-2xl font-extrabold leading-tight tracking-tight text-slate-900 dark:text-slate-100">Add your car</h2>
-        <p className="text-sm text-slate-600 dark:text-slate-400 mt-1.5">We’ll auto-log services you book through CarCare.</p>
+        <span className="preauth-eyebrow">{t('disc.addcar.eyebrow', 'Your garage')}</span>
+        <h2 className="text-2xl font-extrabold leading-tight tracking-tight text-slate-900 dark:text-slate-100">
+          {t('disc.addcar.title', 'Add your car')}
+        </h2>
+        <p className="text-sm text-slate-600 dark:text-slate-400 mt-1.5">{t('disc.addcar.lead', 'We’ll auto-log services you book through CarCare.')}</p>
         <button type="button" className="callout-violet mt-6 w-full text-left p-4 flex items-center gap-3 tap">
           <div className="w-11 h-11 rounded-xl flex items-center justify-center bg-white dark:bg-slate-900 shadow-sm border border-violet-100">
             <ProtoIcon name="scan-line" className="w-5 h-5 text-violet-600" />
           </div>
           <div className="flex-1 min-w-0">
-            <div className="text-sm font-semibold text-slate-900 dark:text-slate-100">Scan VIN with camera</div>
-            <div className="text-xs text-slate-600 dark:text-slate-400">Autofill brand, model, year</div>
+            <div className="text-sm font-semibold text-slate-900 dark:text-slate-100">{t('disc.addcar.vin_title', 'Scan VIN with camera')}</div>
+            <div className="text-xs text-slate-600 dark:text-slate-400">{t('disc.addcar.vin_sub', 'Autofill brand, model, year')}</div>
           </div>
           <ProtoIcon name="chevron-right" className="w-5 h-5 text-violet-400 flex-shrink-0" />
         </button>
         <div className="app-panel p-4 mt-5 space-y-3">
           <div>
-            <div className="label mb-1.5">Brand</div>
+            <div className="label mb-1.5">{t('disc.addcar.brand', 'Brand')}</div>
             <div className="proto-input px-3.5 py-3 text-sm flex justify-between items-center">
               Toyota <ProtoIcon name="chevron-down" className="w-4 h-4 text-slate-400 dark:text-slate-500" />
             </div>
           </div>
           <div className="grid grid-cols-2 gap-3">
             <div>
-              <div className="label mb-1.5">Model</div>
+              <div className="label mb-1.5">{t('disc.addcar.model', 'Model')}</div>
               <div className="proto-input px-3.5 py-3 text-sm">Corolla</div>
             </div>
             <div>
-              <div className="label mb-1.5">Year</div>
+              <div className="label mb-1.5">{t('disc.addcar.year', 'Year')}</div>
               <div className="proto-input px-3.5 py-3 text-sm">2019</div>
             </div>
           </div>
           <div className="grid grid-cols-2 gap-3">
             <div>
-              <div className="label mb-1.5">Mileage (km)</div>
+              <div className="label mb-1.5">{t('disc.addcar.mileage', 'Mileage (km)')}</div>
               <div className="proto-input px-3.5 py-3 text-sm">82,450</div>
             </div>
             <div>
               <div className="label mb-1.5">
-                Plate <span className="text-slate-400 dark:text-slate-500 normal-case font-normal">optional</span>
+                {t('disc.addcar.plate', 'Plate')}{' '}
+                <span className="text-slate-400 dark:text-slate-500 normal-case font-normal">{t('common.optional', 'optional')}</span>
               </div>
               <div className="proto-input px-3.5 py-3 text-sm">س ب ج 7421</div>
             </div>
@@ -72,7 +80,7 @@ export function B2cAddcar() {
         </div>
         <div className="flex-1 min-h-3" />
         <button type="button" className="btn-primary btn-primary-lg w-full tap shadow-md" onClick={() => show('b2c-map')}>
-          Save &amp; continue
+          {t('disc.addcar.save', 'Save & continue')}
         </button>
       </div>
       <ProtoHomeIndicator />
@@ -92,6 +100,7 @@ export function B2cMap() {
 }
 
 export function B2cMarketplace() {
+  const { t } = useProto();
   const rows = [
     ['Bosch cabin filter', 'EGP 185', '4.7', '1.2k sold', 'Cairo Parts'],
     ['Michelin 205/55 R16', 'EGP 2,890', '4.8', 'In stock', 'Elite Tires'],
@@ -102,12 +111,12 @@ export function B2cMarketplace() {
     <ScreenWrap id="b2c-marketplace">
       <ProtoStatusBar />
       <div className="px-4 pt-2 pb-2 bg-white dark:bg-slate-900 border-b border-slate-100">
-        <div className="font-bold text-lg">Shop</div>
-        <div className="text-xs text-slate-500 dark:text-slate-400">Parts &amp; accessories from verified sellers</div>
+        <div className="font-bold text-lg">{t('disc.market.title', 'Shop')}</div>
+        <div className="text-xs text-slate-500 dark:text-slate-400">{t('disc.market.sub', 'Parts & accessories from verified sellers')}</div>
         <div className="flex items-center gap-2 mt-3">
           <div className="flex-1 rounded-2xl border border-slate-200 dark:border-slate-600 bg-slate-50 dark:bg-slate-800/90 px-3 py-2.5 flex items-center gap-2">
             <ProtoIcon name="search" className="w-4 h-4 text-slate-400 dark:text-slate-500" />
-            <input className="flex-1 bg-transparent text-sm outline-none" placeholder="Search parts, oil, VIN…" />
+            <input className="flex-1 bg-transparent text-sm outline-none" placeholder={t('disc.market.search_ph', 'Search parts, oil, VIN…')} />
           </div>
           <div className="relative w-10 h-10 rounded-2xl bg-slate-100 dark:bg-slate-800/80 flex items-center justify-center tap">
             <ProtoIcon name="shopping-bag" className="w-5 h-5 text-slate-600 dark:text-slate-400" />
@@ -117,29 +126,29 @@ export function B2cMarketplace() {
           </div>
         </div>
         <div className="flex gap-2 mt-3 overflow-x-auto no-scrollbar">
-          <span className="chip on">For your car</span>
-          <span className="chip">Filters</span>
-          <span className="chip">Oil &amp; fluids</span>
-          <span className="chip">Batteries</span>
-          <span className="chip">Tires</span>
-          <span className="chip">Brakes</span>
+          <span className="chip on">{t('disc.market.chip_for_car', 'For your car')}</span>
+          <span className="chip">{t('disc.market.chip_filters', 'Filters')}</span>
+          <span className="chip">{t('disc.market.chip_oil', 'Oil & fluids')}</span>
+          <span className="chip">{t('disc.market.chip_batt', 'Batteries')}</span>
+          <span className="chip">{t('disc.market.chip_tires', 'Tires')}</span>
+          <span className="chip">{t('disc.market.chip_brakes', 'Brakes')}</span>
         </div>
       </div>
       <div className="flex-1 overflow-y-auto px-4 py-3 app-surface">
         <div className="p-3 rounded-2xl promo-banner-market text-white mb-4">
-          <div className="text-xs font-semibold opacity-90">Weekend deal</div>
-          <div className="font-bold mt-0.5">Bosch oil filter + 4L 5W-30</div>
+          <div className="text-xs font-semibold opacity-90">{t('disc.market.deal', 'Weekend deal')}</div>
+          <div className="font-bold mt-0.5">{t('disc.market.deal_title', 'Bosch oil filter + 4L 5W-30')}</div>
           <div className="flex items-end justify-between mt-2">
             <div>
               <span className="text-lg font-bold">EGP 620</span>
               <span className="text-xs line-through opacity-80 ml-2">EGP 780</span>
             </div>
             <button type="button" className="px-3 py-1.5 rounded-xl bg-white dark:bg-slate-900/20 text-xs font-semibold">
-              Add
+              {t('disc.market.add', 'Add')}
             </button>
           </div>
         </div>
-        <div className="label mb-2">Popular this week</div>
+        <div className="label mb-2">{t('disc.market.popular', 'Popular this week')}</div>
         <div className="grid grid-cols-2 gap-3">
           {rows.map(([title, price, r, sell, seller]) => (
             <div
@@ -167,23 +176,32 @@ export function B2cMarketplace() {
 }
 
 export function B2cFilters() {
-  const { show } = useProto();
-  const services = ['Oil change', 'Brakes', 'Tires', 'AC', 'Battery', 'Engine', 'Body & paint', 'Electrical'];
+  const { show, t } = useProto();
+  const services = [
+    t('disc.filters.svc.oil', 'Oil change'),
+    t('disc.filters.svc.brakes', 'Brakes'),
+    t('disc.filters.svc.tires', 'Tires'),
+    t('disc.filters.svc.ac', 'AC'),
+    t('disc.filters.svc.battery', 'Battery'),
+    t('disc.filters.svc.engine', 'Engine'),
+    t('disc.filters.svc.body', 'Body & paint'),
+    t('disc.filters.svc.elec', 'Electrical'),
+  ];
   return (
     <ScreenWrap id="b2c-filters">
       <ProtoStatusBar />
       <div className="screen-topbar">
-        <button type="button" className="funnel-back tap -ml-1" onClick={() => show('b2c-map')} aria-label="Close">
+        <button type="button" className="funnel-back tap -ml-1" onClick={() => show('b2c-map')} aria-label={t('disc.filters.close', 'Close')}>
           <ProtoIcon name="x" className="w-5 h-5" />
         </button>
-        <div className="font-semibold text-slate-900 dark:text-slate-100">Filters</div>
+        <div className="font-semibold text-slate-900 dark:text-slate-100">{t('disc.filters.title', 'Filters')}</div>
         <button type="button" className="text-sm text-teal-700 font-semibold tap py-2 px-1">
-          Reset
+          {t('disc.filters.reset', 'Reset')}
         </button>
       </div>
       <div className="flex-1 app-surface px-5 pt-4 pb-4 overflow-y-auto space-y-4 min-h-0">
         <div className="filters-section">
-          <div className="label mb-2 text-indigo-700">Service</div>
+          <div className="label mb-2 text-indigo-700">{t('disc.filters.service', 'Service')}</div>
           <div className="flex flex-wrap gap-2">
             {services.map((s, i) => (
               <span key={s} className={`chip ${i < 2 ? 'on' : ''}`}>
@@ -194,7 +212,7 @@ export function B2cFilters() {
         </div>
         <div className="filters-section">
           <div className="flex justify-between mb-2">
-            <div className="label text-cyan-800">Price range</div>
+            <div className="label text-cyan-800">{t('disc.filters.price', 'Price range')}</div>
             <div className="text-xs font-bold text-cyan-900 bg-cyan-50 px-2 py-0.5 rounded-lg">EGP 200–1500</div>
           </div>
           <div className="h-1.5 rounded-full bg-slate-200 relative">
@@ -210,7 +228,7 @@ export function B2cFilters() {
           </div>
         </div>
         <div className="filters-section">
-          <div className="label mb-2 text-amber-800">Minimum rating</div>
+          <div className="label mb-2 text-amber-800">{t('disc.filters.rating', 'Minimum rating')}</div>
           <div className="flex gap-2 flex-wrap">
             {[3, 3.5, 4, 4.5].map((r, i) => (
               <span key={r} className={`chip ${i === 2 ? 'on' : ''}`}>
@@ -221,7 +239,7 @@ export function B2cFilters() {
           </div>
         </div>
         <div className="filters-section">
-          <div className="label mb-2 text-violet-800">Distance</div>
+          <div className="label mb-2 text-violet-800">{t('disc.filters.distance', 'Distance')}</div>
           <div className="flex gap-2 flex-wrap">
             {['1 km', '5 km', '10 km', '25 km'].map((d, i) => (
               <span key={d} className={`chip ${i === 1 ? 'on' : ''}`}>
@@ -231,14 +249,14 @@ export function B2cFilters() {
           </div>
         </div>
         <div className="filters-section space-y-3">
-          <div className="label text-slate-600 dark:text-slate-400">Options</div>
+          <div className="label text-slate-600 dark:text-slate-400">{t('disc.filters.options', 'Options')}</div>
           {(
             [
-              ['Open now', true],
-              ['Verified only', true],
-              ['Female-friendly staff', false],
-              ['Home pickup available', false],
-              ['Accepts card', true],
+              [t('disc.filters.opt.open', 'Open now'), true],
+              [t('disc.filters.opt.verified', 'Verified only'), true],
+              [t('disc.filters.opt.female', 'Female-friendly staff'), false],
+              [t('disc.filters.opt.pickup', 'Home pickup available'), false],
+              [t('disc.filters.opt.card', 'Accepts card'), true],
             ] as const
           ).map(([label, on]) => (
             <div key={label} className="flex justify-between items-center py-0.5">
@@ -256,7 +274,7 @@ export function B2cFilters() {
       </div>
       <div className="cta-bar">
         <button type="button" className="btn-primary btn-primary-lg w-full tap shadow-md" onClick={() => show('b2c-map')}>
-          Show 17 centers
+          {t('disc.filters.show', 'Show 17 centers')}
         </button>
       </div>
       <ProtoHomeIndicator />
@@ -265,7 +283,14 @@ export function B2cFilters() {
 }
 
 export function B2cSearch() {
-  const { show } = useProto();
+  const { show, t } = useProto();
+  const stateLabel = (s: string) => {
+    if (s === 'Tow') return t('disc.search.badge_tow', 'Tow');
+    if (s === 'Open') return t('disc.search.state.open', 'Open');
+    if (s === 'Mobile') return t('disc.search.state.mobile', 'Mobile');
+    if (s === 'Closes 6pm') return t('disc.search.state.closes', 'Closes 6pm');
+    return s;
+  };
   const list = [
     ['AutoPro Heliopolis', '0.8 km', '4.8', '312', 'EGP 350–900', true, '11:30', 'Open'],
     ['QuickFix Nasr City', '1.6 km', '4.6', '188', 'EGP 250–1200', true, '12:15', 'Open'],
@@ -288,10 +313,10 @@ export function B2cSearch() {
           </div>
         </div>
         <div className="flex justify-between items-center mt-2">
-          <div className="text-xs text-slate-500 dark:text-slate-400">17 centers · sorted by distance</div>
+          <div className="text-xs text-slate-500 dark:text-slate-400">{t('disc.search.meta', '17 centers · sorted by distance')}</div>
           <div className="text-xs font-semibold text-teal-700 flex items-center gap-1 tap">
             <ProtoIcon name="arrow-up-down" className="w-3.5 h-3.5" />
-            Sort
+            {t('disc.search.sort', 'Sort')}
           </div>
         </div>
       </div>
@@ -325,10 +350,10 @@ export function B2cSearch() {
                 <div className="flex items-center gap-1.5">
                   <span className="font-semibold text-slate-900 dark:text-slate-100 truncate">{n}</span>
                   {v ? <ProtoIcon name="badge-check" className="w-4 h-4 text-teal-700 flex-shrink-0" /> : null}
-                  {state === 'Tow' ? <span className="badge b-blue">Tow</span> : null}
+                  {state === 'Tow' ? <span className="badge b-blue">{t('disc.search.badge_tow', 'Tow')}</span> : null}
                 </div>
                 <div className="text-xs text-slate-600 dark:text-slate-400 mt-0.5">
-                  {d} · {state}
+                  {d} · {stateLabel(state)}
                 </div>
                 <div className="flex items-center gap-2 mt-1 text-xs">
                   <span className="flex items-center gap-0.5 font-semibold text-slate-800 dark:text-slate-200">
@@ -340,11 +365,13 @@ export function B2cSearch() {
                   <span className="text-slate-600 dark:text-slate-400">{p}</span>
                 </div>
                 <div className="mt-2 flex items-center justify-between gap-2">
-                  <div className="text-xs text-teal-700 font-semibold">Next {next}</div>
+                  <div className="text-xs text-teal-700 font-semibold">
+                    {t('disc.search.next', 'Next')} {next}
+                  </div>
                   {idx === 0 ? (
-                    <span className="btn-primary py-2 px-3.5 text-xs rounded-xl flex-shrink-0">Book</span>
+                    <span className="btn-primary py-2 px-3.5 text-xs rounded-xl flex-shrink-0">{t('disc.search.book', 'Book')}</span>
                   ) : (
-                    <span className="btn-secondary py-2 px-3.5 text-xs flex-shrink-0">View</span>
+                    <span className="btn-secondary py-2 px-3.5 text-xs flex-shrink-0">{t('disc.search.view', 'View')}</span>
                   )}
                 </div>
               </div>
@@ -358,7 +385,7 @@ export function B2cSearch() {
 }
 
 export function B2cShop() {
-  const { show, setBookingReturnTarget } = useProto();
+  const { show, setBookingReturnTarget, t } = useProto();
   const goBook = () => {
     setBookingReturnTarget('b2c-shop');
     show('b2c-service');
@@ -392,7 +419,7 @@ export function B2cShop() {
               <ProtoIcon name="heart" className="w-4 h-4" />
             </div>
           </div>
-          <div className="absolute bottom-3 right-3 bg-black/50 text-white text-xs px-2 py-0.5 rounded">1/12</div>
+          <div className="absolute bottom-3 right-3 bg-black/50 text-white text-xs px-2 py-0.5 rounded">{t('disc.shop.photo_idx', '1/12')}</div>
         </div>
         <div className="px-5 -mt-6 relative z-10">
           <div className="bg-white dark:bg-slate-900 rounded-2xl p-4 shadow-lg border border-slate-200 dark:border-slate-600/80 ring-1 ring-black/[0.03]">
@@ -402,15 +429,15 @@ export function B2cShop() {
                   <div className="text-xl font-bold">AutoPro Heliopolis</div>
                   <ProtoIcon name="badge-check" className="w-5 h-5 text-teal-700" />
                 </div>
-                <div className="text-xs text-slate-500 dark:text-slate-400 mt-1">Authorized dealer · Independent workshop</div>
+                <div className="text-xs text-slate-500 dark:text-slate-400 mt-1">{t('disc.shop.subtitle', 'Authorized dealer · Independent workshop')}</div>
                 <div className="flex items-center gap-2 mt-2 text-xs">
                   <span className="flex items-center gap-0.5 font-semibold">
                     <ProtoIcon name="star" className="w-3 h-3 text-amber-500 fill-amber-500" />
                     4.8
                   </span>
-                  <span className="text-slate-400 dark:text-slate-500">(312 reviews)</span>
+                  <span className="text-slate-400 dark:text-slate-500">(312 {t('disc.shop.reviews', 'reviews')})</span>
                   <span className="text-slate-300">·</span>
-                  <span className="text-green-600 font-semibold">Open · closes 10pm</span>
+                  <span className="text-green-600 font-semibold">{t('disc.shop.open_until', 'Open · closes 10pm')}</span>
                 </div>
               </div>
               <div className="text-right">
@@ -421,21 +448,21 @@ export function B2cShop() {
             <div className="grid grid-cols-3 gap-2 mt-3">
               <button type="button" className="btn-ghost py-2.5 text-xs flex flex-col items-center">
                 <ProtoIcon name="phone" className="w-4 h-4 mb-1" />
-                Call
+                {t('disc.shop.call', 'Call')}
               </button>
               <button type="button" className="btn-ghost py-2.5 text-xs flex flex-col items-center">
                 <ProtoIcon name="navigation" className="w-4 h-4 mb-1" />
-                Directions
+                {t('disc.shop.directions', 'Directions')}
               </button>
               <button type="button" className="btn-ghost py-2.5 text-xs flex flex-col items-center">
                 <ProtoIcon name="message-circle" className="w-4 h-4 mb-1" />
-                Message
+                {t('disc.shop.message', 'Message')}
               </button>
             </div>
           </div>
         </div>
         <div className="px-5 pt-5">
-          <div className="label mb-2">Popular services</div>
+          <div className="label mb-2">{t('disc.shop.popular', 'Popular services')}</div>
           <div className="space-y-2">
             {services.map(([title, dur, price]) => (
               <button
@@ -457,7 +484,7 @@ export function B2cShop() {
           </div>
         </div>
         <div className="px-5 pt-5">
-          <div className="label mb-2">Photos</div>
+          <div className="label mb-2">{t('disc.shop.photos', 'Photos')}</div>
           <div className="flex gap-2 overflow-x-auto">
             {[0, 1, 2, 3].map((i) => (
               <div key={i} className="w-28 h-20 rounded-xl bg-slate-200 flex-shrink-0" />
@@ -466,8 +493,8 @@ export function B2cShop() {
         </div>
         <div className="px-5 pt-5">
           <div className="flex justify-between items-end mb-2">
-            <div className="label">Reviews · 4.8</div>
-            <div className="text-xs text-teal-700 font-semibold">See all</div>
+            <div className="label">{t('disc.shop.rev_title', 'Reviews · 4.8')}</div>
+            <div className="text-xs text-teal-700 font-semibold">{t('disc.shop.see_all', 'See all')}</div>
           </div>
           <div className="grid grid-cols-4 gap-2 mb-3">
             {(
@@ -490,7 +517,15 @@ export function B2cShop() {
                         : 'bg-violet-50 text-violet-900'
                 }`}
               >
-                <div className="text-[10px] font-semibold uppercase tracking-wide opacity-80">{l}</div>
+                <div className="text-[10px] font-semibold uppercase tracking-wide opacity-80">
+                  {l === 'Quality'
+                    ? t('disc.shop.rev.quality', 'Quality')
+                    : l === 'Price'
+                      ? t('disc.shop.rev.price', 'Price')
+                      : l === 'Speed'
+                        ? t('disc.shop.rev.speed', 'Speed')
+                        : t('disc.shop.rev.honesty', 'Honesty')}
+                </div>
                 <div className="font-bold">{v}</div>
               </div>
             ))}
@@ -508,16 +543,14 @@ export function B2cShop() {
                 <ProtoIcon key={i} name="star" className="w-3 h-3 text-amber-500 fill-amber-500" />
               ))}
             </div>
-            <div className="text-sm text-slate-700 dark:text-slate-300">
-              Fast, clean, honest pricing. Texted me when the car was ready.
-            </div>
+            <div className="text-sm text-slate-700 dark:text-slate-300">{t('disc.shop.rev.sample', 'Fast, clean, honest pricing. Texted me when the car was ready.')}</div>
           </div>
         </div>
         <div className="h-24" />
       </div>
       <div className="p-4 border-t border-slate-200 dark:border-slate-600/90 bg-white dark:bg-slate-900/95 backdrop-blur-sm shadow-[0_-8px_30px_rgba(15,23,42,.08)]">
         <button type="button" className="btn-primary w-full tap rounded-2xl py-3.5 shadow-md" onClick={goBook}>
-          Book service · from EGP 350
+          {t('disc.shop.cta', 'Book service · from EGP 350')}
         </button>
       </div>
       <ProtoHomeIndicator />
@@ -526,13 +559,13 @@ export function B2cShop() {
 }
 
 export function B2cTow() {
-  const { show, setBookingReturnTarget } = useProto();
+  const { show, setBookingReturnTarget, t } = useProto();
   const svcRows = [
-    ['layers', 'Flatbed', 'Cars & SUVs · low clearance OK', 'from EGP 450'],
-    ['battery-charging', 'Jump & lockout', 'Battery boost · unlock', 'from EGP 200'],
-    ['anchor', 'Winch recovery', 'Stuck / off-road add-on', 'Quote'],
-    ['droplet', 'Fuel delivery', '5L emergency top-up', 'EGP 120 + fuel'],
-  ] as const;
+    ['layers', t('disc.tow.svc.flatbed', 'Flatbed'), t('disc.tow.svc.flatbed_sub', 'Cars & SUVs · low clearance OK'), 'from EGP 450'],
+    ['battery-charging', t('disc.tow.svc.jump', 'Jump & lockout'), t('disc.tow.svc.jump_sub', 'Battery boost · unlock'), 'from EGP 200'],
+    ['anchor', t('disc.tow.svc.winch', 'Winch recovery'), t('disc.tow.svc.winch_sub', 'Stuck / off-road add-on'), t('disc.tow.quote', 'Quote')],
+    ['droplet', t('disc.tow.svc.fuel', 'Fuel delivery'), t('disc.tow.svc.fuel_sub', '5L emergency top-up'), 'EGP 120 + fuel'],
+  ];
   return (
     <ScreenWrap id="b2c-tow">
       <div className="flex-1 overflow-y-auto min-h-0 bg-slate-50 dark:bg-slate-800/90">
@@ -547,7 +580,7 @@ export function B2cTow() {
                 type="button"
                 className="w-10 h-10 rounded-full bg-white dark:bg-slate-900/95 shadow-md flex items-center justify-center tap ring-1 ring-white/40"
                 onClick={() => show('b2c-map')}
-                aria-label="Back"
+                aria-label={t('a11y.back', 'Back')}
               >
                 <ProtoIcon name="arrow-left" className="w-5 h-5 text-slate-800 dark:text-slate-200" />
               </button>
@@ -555,14 +588,14 @@ export function B2cTow() {
                 <button
                   type="button"
                   className="w-10 h-10 rounded-full bg-white dark:bg-slate-900/95 shadow-md flex items-center justify-center tap ring-1 ring-white/40"
-                  aria-label="Share"
+                  aria-label={t('a11y.share', 'Share')}
                 >
                   <ProtoIcon name="share-2" className="w-[18px] h-[18px] text-slate-800 dark:text-slate-200" />
                 </button>
                 <button
                   type="button"
                   className="w-10 h-10 rounded-full bg-white dark:bg-slate-900/95 shadow-md flex items-center justify-center tap ring-1 ring-white/40"
-                  aria-label="Save"
+                  aria-label={t('a11y.save', 'Save')}
                 >
                   <ProtoIcon name="heart" className="w-[18px] h-[18px] text-slate-800 dark:text-slate-200" />
                 </button>
@@ -577,7 +610,7 @@ export function B2cTow() {
                   <span className="tow-live-dot absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75" />
                   <span className="relative inline-flex h-2 w-2 rounded-full bg-emerald-400 ring-2 ring-white/30" />
                 </span>
-                Live dispatch · high demand
+                {t('disc.tow.live', 'Live dispatch · high demand')}
               </div>
             </div>
             <div className="absolute bottom-0 left-0 right-0 z-10 px-4 pb-3 pt-6 flex gap-2">
@@ -588,7 +621,7 @@ export function B2cTow() {
                   </div>
                   <div className="min-w-0">
                     <div className="text-[10px] font-semibold uppercase tracking-wide text-slate-500 dark:text-slate-400">
-                      Avg. arrival
+                      {t('disc.tow.avg_arrival', 'Avg. arrival')}
                     </div>
                     <div className="text-sm font-bold text-slate-900 dark:text-slate-100 leading-tight">12–18 min</div>
                   </div>
@@ -600,15 +633,19 @@ export function B2cTow() {
                     <ProtoIcon name="truck" className="w-4 h-4 text-slate-700 dark:text-slate-300" />
                   </div>
                   <div className="min-w-0">
-                    <div className="text-[10px] font-semibold uppercase tracking-wide text-slate-500 dark:text-slate-400">On shift</div>
-                    <div className="text-sm font-bold text-slate-900 dark:text-slate-100 leading-tight">4 trucks</div>
+                    <div className="text-[10px] font-semibold uppercase tracking-wide text-slate-500 dark:text-slate-400">
+                      {t('disc.tow.on_shift', 'On shift')}
+                    </div>
+                    <div className="text-sm font-bold text-slate-900 dark:text-slate-100 leading-tight">
+                      4 {t('disc.tow.trucks', 'trucks')}
+                    </div>
                   </div>
                 </div>
               </div>
             </div>
           </div>
           <div className="absolute bottom-14 right-4 z-20 rounded-full bg-black/45 text-white text-[11px] font-medium px-2.5 py-1 backdrop-blur-sm">
-            Photos · 1/6
+            {t('disc.tow.photos', 'Photos · 1/6')}
           </div>
         </div>
         <div className="px-4 -mt-7 relative z-20 pb-6">
@@ -627,16 +664,16 @@ export function B2cTow() {
                   </div>
                   <div className="text-right flex-shrink-0">
                     <div className="text-base font-bold text-slate-900 dark:text-slate-100">1.1 km</div>
-                    <div className="text-[11px] text-slate-500 dark:text-slate-400">straight line</div>
+                    <div className="text-[11px] text-slate-500 dark:text-slate-400">{t('disc.tow.straight', 'straight line')}</div>
                   </div>
                 </div>
                 <div className="flex flex-wrap gap-1.5 mt-2.5">
                   <span className="inline-flex items-center gap-1 rounded-full bg-teal-50 text-teal-900 border border-teal-100 px-2 py-0.5 text-[11px] font-semibold">
                     <ProtoIcon name="badge-check" className="w-3 h-3" />
-                    Verified
+                    {t('disc.tow.verified', 'Verified')}
                   </span>
                   <span className="inline-flex items-center gap-1 rounded-full bg-blue-50 text-blue-900 border border-blue-100 px-2 py-0.5 text-[11px] font-semibold">
-                    Tow partner
+                    {t('disc.tow.partner', 'Tow partner')}
                   </span>
                   <span className="inline-flex items-center gap-1 rounded-full bg-slate-100 dark:bg-slate-800/80 text-slate-700 dark:text-slate-300 border border-slate-200 dark:border-slate-600/80 px-2 py-0.5 text-[11px] font-semibold">
                     24/7
@@ -650,18 +687,20 @@ export function B2cTow() {
                   <ProtoIcon name="star" className="w-3.5 h-3.5 fill-amber-500" />
                   <span className="text-sm font-bold text-slate-900 dark:text-slate-100">4.7</span>
                 </div>
-                <div className="text-[10px] text-slate-500 dark:text-slate-400 mt-0.5">201 reviews</div>
+                <div className="text-[10px] text-slate-500 dark:text-slate-400 mt-0.5">
+                  201 {t('disc.tow.reviews_n', 'reviews')}
+                </div>
               </div>
               <div className="rounded-2xl bg-slate-50 dark:bg-slate-800/90 border border-slate-100 px-2 py-2.5 text-center">
                 <div className="text-sm font-bold text-slate-900 dark:text-slate-100 flex items-center justify-center gap-1">
                   <ProtoIcon name="zap" className="w-3.5 h-3.5 text-amber-500" />
                   ~15m
                 </div>
-                <div className="text-[10px] text-slate-500 dark:text-slate-400 mt-0.5">response</div>
+                <div className="text-[10px] text-slate-500 dark:text-slate-400 mt-0.5">{t('disc.tow.response', 'response')}</div>
               </div>
               <div className="rounded-2xl bg-slate-50 dark:bg-slate-800/90 border border-slate-100 px-2 py-2.5 text-center">
                 <div className="text-sm font-bold text-slate-900 dark:text-slate-100">15 km</div>
-                <div className="text-[10px] text-slate-500 dark:text-slate-400 mt-0.5">radius</div>
+                <div className="text-[10px] text-slate-500 dark:text-slate-400 mt-0.5">{t('disc.tow.radius', 'radius')}</div>
               </div>
             </div>
             <div className="grid grid-cols-3 gap-2 mt-3">
@@ -670,21 +709,21 @@ export function B2cTow() {
                 className="tap flex flex-col items-center justify-center rounded-2xl bg-blue-50 border border-blue-100 py-3 text-[11px] font-semibold text-blue-900"
               >
                 <ProtoIcon name="phone" className="w-[18px] h-[18px] mb-1 text-blue-700" />
-                Call
+                {t('disc.shop.call', 'Call')}
               </button>
               <button
                 type="button"
                 className="tap flex flex-col items-center justify-center rounded-2xl bg-slate-50 dark:bg-slate-800/90 border border-slate-200 dark:border-slate-600 py-3 text-[11px] font-semibold text-slate-800 dark:text-slate-200"
               >
                 <ProtoIcon name="navigation" className="w-[18px] h-[18px] mb-1 text-slate-600 dark:text-slate-400" />
-                Garage
+                {t('disc.tow.garage_btn', 'Garage')}
               </button>
               <button
                 type="button"
                 className="tap flex flex-col items-center justify-center rounded-2xl bg-slate-50 dark:bg-slate-800/90 border border-slate-200 dark:border-slate-600 py-3 text-[11px] font-semibold text-slate-800 dark:text-slate-200"
               >
                 <ProtoIcon name="message-circle" className="w-[18px] h-[18px] mb-1 text-slate-600 dark:text-slate-400" />
-                Chat
+                {t('disc.shop.message', 'Chat')}
               </button>
             </div>
           </div>
@@ -693,12 +732,10 @@ export function B2cTow() {
               <ProtoIcon name="alert-triangle" className="w-5 h-5 text-amber-700" />
             </div>
             <div className="min-w-0 flex-1">
-              <div className="text-sm font-bold text-amber-950">Unsafe to drive?</div>
-              <p className="text-xs text-amber-900/85 leading-relaxed mt-0.5">
-                Stay parked with hazards on. Call dispatch for priority routing — mention “roadside emergency”.
-              </p>
+              <div className="text-sm font-bold text-amber-950">{t('disc.tow.unsafe_title', 'Unsafe to drive?')}</div>
+              <p className="text-xs text-amber-900/85 leading-relaxed mt-0.5">{t('disc.tow.unsafe_body', 'Stay parked with hazards on. Call dispatch for priority routing — mention “roadside emergency”.')}</p>
               <button type="button" className="mt-2 text-xs font-bold text-amber-900 underline underline-offset-2 tap">
-                Call priority line
+                {t('disc.tow.priority_call', 'Call priority line')}
               </button>
             </div>
           </div>
@@ -707,17 +744,18 @@ export function B2cTow() {
               <ProtoIcon name="shield-check" className="w-5 h-5 text-blue-700" />
             </div>
             <div className="min-w-0">
-              <div className="text-sm font-bold text-slate-900 dark:text-slate-100">Licensed &amp; insured</div>
+              <div className="text-sm font-bold text-slate-900 dark:text-slate-100">{t('disc.tow.insured_title', 'Licensed & insured')}</div>
               <p className="text-xs text-slate-600 dark:text-slate-400 mt-1 leading-relaxed">
-                Commercial registration on file. Cargo cover up to{' '}
-                <span className="font-semibold text-slate-800 dark:text-slate-200">EGP 500k</span> per job.
+                {t('disc.tow.insured_body', 'Commercial registration on file. Cargo cover up to')}{' '}
+                <span className="font-semibold text-slate-800 dark:text-slate-200">EGP 500k</span>{' '}
+                {t('disc.tow.per_job', 'per job.')}
               </p>
             </div>
           </div>
           <div className="mt-5">
             <div className="flex items-end justify-between mb-2 px-0.5">
-              <div className="label mb-0">What they can do</div>
-              <span className="text-[11px] font-semibold text-blue-700 tap">Compare</span>
+              <div className="label mb-0">{t('disc.tow.can_do', 'What they can do')}</div>
+              <span className="text-[11px] font-semibold text-blue-700 tap">{t('disc.tow.compare', 'Compare')}</span>
             </div>
             <div className="space-y-2">
               {svcRows.map(([icon, title, sub, price]) => (
@@ -743,18 +781,16 @@ export function B2cTow() {
           </div>
           <div className="mt-5 rounded-2xl border border-slate-200 dark:border-slate-600/90 bg-white dark:bg-slate-900 p-4 shadow-sm">
             <div className="flex items-center justify-between gap-2 mb-3">
-              <div className="label mb-0">Fleet availability</div>
-              <span className="text-xs font-bold text-blue-700">4 of 6 active</span>
+              <div className="label mb-0">{t('disc.tow.fleet', 'Fleet availability')}</div>
+              <span className="text-xs font-bold text-blue-700">{t('disc.tow.fleet_active', '4 of 6 active')}</span>
             </div>
             <div className="tow-fleet-bar">
               <span className="tow-fleet-bar-fill" style={{ width: '66.67%' }} />
             </div>
-            <p className="text-xs text-slate-500 dark:text-slate-400 mt-2 leading-relaxed">
-              Busy nights can add a few minutes — you’ll see live ETA after you request.
-            </p>
+            <p className="text-xs text-slate-500 dark:text-slate-400 mt-2 leading-relaxed">{t('disc.tow.fleet_note', 'Busy nights can add a few minutes — you’ll see live ETA after you request.')}</p>
           </div>
           <div className="mt-5 rounded-2xl border border-slate-200 dark:border-slate-600/90 bg-white dark:bg-slate-900 p-4 shadow-sm">
-            <div className="label mb-3">Pricing snapshot</div>
+            <div className="label mb-3">{t('disc.tow.pricing', 'Pricing snapshot')}</div>
             <div className="space-y-2 mb-4">
               {(
                 [
@@ -775,21 +811,19 @@ export function B2cTow() {
             <div className="rounded-xl bg-blue-50 border border-blue-100 px-3 py-3">
               <div className="flex justify-between items-start gap-2">
                 <div>
-                  <div className="text-[11px] font-semibold uppercase tracking-wide text-blue-800/80">Example estimate</div>
-                  <div className="text-xs text-slate-600 dark:text-slate-400 mt-1">8 km tow · weekday · standard car</div>
+                  <div className="text-[11px] font-semibold uppercase tracking-wide text-blue-800/80">{t('disc.tow.ex_est', 'Example estimate')}</div>
+                  <div className="text-xs text-slate-600 dark:text-slate-400 mt-1">{t('disc.tow.ex_note', '8 km tow · weekday · standard car')}</div>
                 </div>
                 <div className="text-lg font-extrabold text-blue-900">~EGP 520</div>
               </div>
-              <p className="text-[11px] text-slate-500 dark:text-slate-400 mt-2 leading-relaxed">
-                Final price confirmed before dispatch. Surge possible in storms.
-              </p>
+              <p className="text-[11px] text-slate-500 dark:text-slate-400 mt-2 leading-relaxed">{t('disc.tow.final_note', 'Final price confirmed before dispatch. Surge possible in storms.')}</p>
             </div>
           </div>
           <div className="mt-5">
             <div className="flex justify-between items-center mb-2 px-0.5">
-              <div className="label mb-0">Reviews · 4.7</div>
+              <div className="label mb-0">{t('disc.tow.rev_title', 'Reviews · 4.7')}</div>
               <button type="button" className="text-xs font-bold text-blue-700 tap py-1">
-                See all
+                {t('disc.shop.see_all', 'See all')}
               </button>
             </div>
             <div className="grid grid-cols-4 gap-1.5 mb-3">
@@ -813,7 +847,15 @@ export function B2cTow() {
                           : 'bg-violet-50 text-violet-900'
                   }`}
                 >
-                  <div className="text-[9px] font-semibold uppercase tracking-wide opacity-80">{l}</div>
+                  <div className="text-[9px] font-semibold uppercase tracking-wide opacity-80">
+                    {l === 'Response'
+                      ? t('disc.tow.rev_response', 'Response')
+                      : l === 'Price'
+                        ? t('disc.shop.rev.price', 'Price')
+                        : l === 'Care'
+                          ? t('disc.tow.rev_care', 'Care')
+                          : t('disc.tow.rev_safety', 'Safety')}
+                  </div>
                   <div className="font-bold text-sm">{v}</div>
                 </div>
               ))}
@@ -833,9 +875,7 @@ export function B2cTow() {
                   ))}
                 </div>
               </div>
-              <p className="text-sm text-slate-700 dark:text-slate-300 leading-relaxed">
-                Arrived in 12 minutes, driver was careful with my lowered car. Fair price.
-              </p>
+              <p className="text-sm text-slate-700 dark:text-slate-300 leading-relaxed">{t('disc.tow.rev_sample', 'Arrived in 12 minutes, driver was careful with my lowered car. Fair price.')}</p>
             </div>
           </div>
           <div className="h-20" />
@@ -850,7 +890,7 @@ export function B2cTow() {
             show('b2c-service');
           }}
         >
-          Request tow · from EGP 400
+          {t('disc.tow.request', 'Request tow · from EGP 400')}
         </button>
         <div className="flex items-center justify-center gap-4 mt-3 text-xs font-semibold text-slate-600 dark:text-slate-400">
           <button type="button" className="tap flex items-center gap-1.5 py-1">
@@ -859,7 +899,7 @@ export function B2cTow() {
           </button>
           <span className="text-slate-300">·</span>
           <button type="button" className="tap py-1 text-blue-700">
-            Share live location
+            {t('disc.tow.share_loc', 'Share live location')}
           </button>
         </div>
       </div>

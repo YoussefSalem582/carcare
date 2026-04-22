@@ -2,7 +2,7 @@ import { useProto } from '../../context/ProtoContext';
 import { ProtoIcon } from './Icon';
 
 export function B2cMapMainColumn() {
-  const { show } = useProto();
+  const { show, t } = useProto();
   return (
     <>
       <div className="map-search-header px-4 pt-2 pb-0 bg-white dark:bg-slate-900 relative z-30">
@@ -11,7 +11,7 @@ export function B2cMapMainColumn() {
             <ProtoIcon name="search" className="w-4 h-4 text-slate-400 dark:text-slate-500 flex-shrink-0" />
             <input
               className="flex-1 bg-transparent text-sm outline-none placeholder:text-slate-400 dark:text-slate-500"
-              placeholder="Oil change, brakes, AC…"
+              placeholder={t('map.search_ph', 'Oil change, brakes, AC…')}
             />
             <ProtoIcon name="mic" className="w-4 h-4 text-slate-400 dark:text-slate-500 flex-shrink-0 tap" />
           </div>
@@ -28,27 +28,27 @@ export function B2cMapMainColumn() {
           <div className="chip-scroll-row no-scrollbar">
             <span className="chip on flex-shrink-0">
               <ProtoIcon name="badge-check" className="w-3.5 h-3.5" />
-              Verified
+              {t('map.chip.verified', 'Verified')}
             </span>
             <span className="chip flex-shrink-0">
               <ProtoIcon name="clock" className="w-3.5 h-3.5" />
-              Open now
+              {t('map.chip.open_now', 'Open now')}
             </span>
             <span className="chip flex-shrink-0">
               <ProtoIcon name="star" className="w-3.5 h-3.5" />
-              4★+
+              {t('map.chip.star', '4★+')}
             </span>
             <span className="chip flex-shrink-0">
               <ProtoIcon name="map-pin" className="w-3.5 h-3.5" />
-              &lt;5 km
+              {t('map.chip.km', '<5 km')}
             </span>
             <span className="chip bg-orange-500 text-white border-orange-500 flex-shrink-0">
               <ProtoIcon name="zap" className="w-3.5 h-3.5" />
-              Emergency
+              {t('map.chip.emergency', 'Emergency')}
             </span>
             <span className="chip flex-shrink-0">
               <ProtoIcon name="truck" className="w-3.5 h-3.5" />
-              Tow truck
+              {t('map.chip.tow', 'Tow truck')}
             </span>
           </div>
         </div>
@@ -144,14 +144,14 @@ export function B2cMapMainColumn() {
           <div className="px-4 pt-3 pb-2 flex justify-between items-end">
             <div>
               <div className="text-[17px] font-bold text-slate-900 dark:text-slate-100 tracking-tight">
-                Nearest to you
+                {t('map.sheet.title', 'Nearest to you')}
               </div>
               <div className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
-                Sorted by distance · live availability
+                {t('map.sheet.sub', 'Sorted by distance · live availability')}
               </div>
             </div>
             <span className="text-[11px] font-semibold text-teal-800 bg-teal-50 border border-teal-100 px-2.5 py-1 rounded-full">
-              17 centers
+              {t('map.sheet.badge', '17 centers')}
             </span>
           </div>
           <div className="px-4 pb-3 space-y-2.5 overflow-y-auto" style={{ maxHeight: 218 }}>
@@ -169,7 +169,8 @@ export function B2cMapMainColumn() {
                   <ProtoIcon name="badge-check" className="w-4 h-4 text-teal-700 flex-shrink-0" />
                 </div>
                 <div className="text-xs text-slate-600 dark:text-slate-400 mt-1">
-                  0.8 km · <span className="text-emerald-600 font-medium">Open</span> · Next slot{' '}
+                  0.8 km · <span className="text-emerald-600 font-medium">{t('map.sheet.open', 'Open')}</span> ·{' '}
+                  {t('map.sheet.next_slot', 'Next slot')}{' '}
                   <span className="font-semibold text-slate-700 dark:text-slate-300">11:30</span>
                 </div>
                 <div className="flex items-center gap-2 mt-1.5 text-xs">
@@ -182,7 +183,7 @@ export function B2cMapMainColumn() {
                   <span className="text-slate-600 dark:text-slate-400 font-medium">EGP 350–900</span>
                 </div>
               </div>
-              <span className="btn-primary py-2.5 px-4 text-xs rounded-xl shadow-sm">Book</span>
+              <span className="btn-primary py-2.5 px-4 text-xs rounded-xl shadow-sm">{t('map.sheet.book', 'Book')}</span>
             </button>
             <div className="listing-card flex items-center gap-3 p-3.5 rounded-2xl border border-slate-200 dark:border-slate-600 bg-white dark:bg-slate-900 shadow-sm">
               <div className="w-12 h-12 rounded-xl bg-slate-100 dark:bg-slate-800/80 flex items-center justify-center">
@@ -194,7 +195,8 @@ export function B2cMapMainColumn() {
                   <ProtoIcon name="badge-check" className="w-4 h-4 text-teal-700 flex-shrink-0" />
                 </div>
                 <div className="text-xs text-slate-600 dark:text-slate-400 mt-1">
-                  1.6 km · <span className="text-emerald-600 font-medium">Open</span> · Next slot{' '}
+                  1.6 km · <span className="text-emerald-600 font-medium">{t('map.sheet.open', 'Open')}</span> ·{' '}
+                  {t('map.sheet.next_slot', 'Next slot')}{' '}
                   <span className="font-semibold text-slate-700 dark:text-slate-300">12:15</span>
                 </div>
                 <div className="flex items-center gap-2 mt-1.5 text-xs">
@@ -207,14 +209,14 @@ export function B2cMapMainColumn() {
                   <span className="text-slate-600 dark:text-slate-400 font-medium">EGP 250–1200</span>
                 </div>
               </div>
-              <span className="btn-secondary py-2.5 px-4 text-xs">View</span>
+              <span className="btn-secondary py-2.5 px-4 text-xs">{t('map.sheet.view', 'View')}</span>
             </div>
             <button
               type="button"
               className="w-full py-2.5 text-xs font-semibold text-teal-700 tap rounded-xl border border-dashed border-teal-200/80 bg-teal-50/30"
               onClick={() => show('b2c-search')}
             >
-              + 15 more centers · see full list
+              {t('map.sheet.more', '+ 15 more centers · see full list')}
             </button>
           </div>
         </div>

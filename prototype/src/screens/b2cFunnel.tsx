@@ -1,6 +1,7 @@
 import type { FC, ReactNode } from 'react';
 import { useProto } from '../context/ProtoContext';
 import { ProtoFunnelProgress, ProtoHomeIndicator, ProtoStatusBar } from '../components/proto/Chrome';
+import { BrandLogo } from '../components/proto/BrandLogo';
 import { ProtoIcon } from '../components/proto/Icon';
 
 function ScreenWrap({ id, children }: { id: string; children: ReactNode }) {
@@ -13,24 +14,30 @@ function ScreenWrap({ id, children }: { id: string; children: ReactNode }) {
 
 export function B2cSplash() {
   const { show, t } = useProto();
+  const goNext = () => show('b2c-lang');
   return (
     <ScreenWrap id="b2c-splash">
       <ProtoStatusBar trailing="icons" />
-      <ProtoFunnelProgress step={1} total={6} />
-      <div className="flex-1 flex flex-col items-center justify-center px-8 text-center funnel-hero-b2c">
-        <div className="preauth-splash-mark">
-          <ProtoIcon name="wrench" className="w-11 h-11" />
+      <div
+        className="splash-minimal splash-minimal--b2c funnel-hero-b2c flex-1 flex flex-col min-h-0"
+        role="button"
+        tabIndex={0}
+        onClick={goNext}
+        onKeyDown={(e) => {
+          if (e.key === 'Enter' || e.key === ' ') {
+            e.preventDefault();
+            goNext();
+          }
+        }}
+        aria-label={t('a11y.splash.continue', 'Continue')}
+      >
+        <div className="flex-1 flex flex-col items-center justify-center px-8 sm:px-10 text-center gap-5 min-h-0">
+          <BrandLogo className="splash-minimal-logo" alt="" />
+          <div className="flex flex-col items-center gap-2 max-w-md">
+            <h1 className="splash-minimal-title splash-minimal-title--b2c">{t('b2c.splash.title', 'CarCare')}</h1>
+            <p className="splash-minimal-tagline splash-minimal-tagline--b2c">{t('b2c.splash.tagline', 'Verified workshops near you. Book maintenance in minutes.')}</p>
+          </div>
         </div>
-        <h1 className="preauth-splash-title">{t('b2c.splash.title', 'CarCare')}</h1>
-        <p className="preauth-splash-tagline mx-auto">
-          {t('b2c.splash.tagline', 'Verified workshops near you. Book maintenance in minutes.')}
-        </p>
-        <button type="button" className="preauth-splash-cta tap" onClick={() => show('b2c-lang')}>
-          {t('b2c.splash.cta', 'Get started')}
-        </button>
-        <button type="button" className="preauth-secondary-text tap" onClick={() => show('b2c-auth')}>
-          {t('b2c.splash.have_account', 'I already have an account')}
-        </button>
       </div>
       <ProtoHomeIndicator />
     </ScreenWrap>

@@ -1,5 +1,6 @@
 import type { FC, ReactNode } from 'react';
 import { ProtoFunnelProgress, ProtoHomeIndicator, ProtoStatusBar } from '../components/proto/Chrome';
+import { BrandLogo } from '../components/proto/BrandLogo';
 import { ProtoIcon } from '../components/proto/Icon';
 import { B2bTabBar, B2bTopbarMobile, OnboardStepper } from '../components/proto/TabBars';
 import { useProto } from '../context/ProtoContext';
@@ -14,24 +15,30 @@ function ScreenWrap({ id, children }: { id: string; children: ReactNode }) {
 
 export function B2bSplash() {
   const { show, t } = useProto();
+  const goNext = () => show('b2b-lang');
   return (
     <ScreenWrap id="b2b-splash">
       <ProtoStatusBar />
-      <ProtoFunnelProgress step={1} total={6} />
-      <div className="flex-1 flex flex-col items-center justify-center px-8 text-center funnel-hero-b2b">
-        <div className="preauth-splash-b2b-mark">
-          <ProtoIcon name="wrench" className="w-11 h-11" />
+      <div
+        className="splash-minimal splash-minimal--b2b funnel-hero-b2b flex-1 flex flex-col min-h-0"
+        role="button"
+        tabIndex={0}
+        onClick={goNext}
+        onKeyDown={(e) => {
+          if (e.key === 'Enter' || e.key === ' ') {
+            e.preventDefault();
+            goNext();
+          }
+        }}
+        aria-label={t('a11y.splash.continue', 'Continue')}
+      >
+        <div className="flex-1 flex flex-col items-center justify-center px-8 sm:px-10 text-center gap-5 min-h-0">
+          <BrandLogo className="splash-minimal-logo splash-minimal-logo--b2b" alt="" />
+          <div className="flex flex-col items-center gap-2 max-w-md">
+            <h1 className="splash-minimal-title splash-minimal-title--b2b">{t('b2b.splash.title', 'CarCare Business')}</h1>
+            <p className="splash-minimal-tagline splash-minimal-tagline--b2b">{t('b2b.splash.tagline', 'Take bookings, manage your catalog, get paid.')}</p>
+          </div>
         </div>
-        <h1 className="preauth-splash-b2b-title">{t('b2b.splash.title', 'CarCare Business')}</h1>
-        <p className="preauth-splash-b2b-tagline mx-auto">
-          {t('b2b.splash.tagline', 'Take bookings, manage your catalog, get paid.')}
-        </p>
-        <button type="button" className="preauth-splash-b2b-cta tap" onClick={() => show('b2b-lang')}>
-          {t('b2c.splash.cta', 'Get started')}
-        </button>
-        <button type="button" className="preauth-splash-b2b-secondary tap" onClick={() => show('b2b-auth')}>
-          {t('b2b.splash.have_account', 'I already have an account')}
-        </button>
       </div>
       <ProtoHomeIndicator />
     </ScreenWrap>
@@ -269,8 +276,8 @@ export function B2bSignup() {
       <div className="flex-1 overflow-y-auto min-h-0 bg-slate-100 dark:bg-slate-900/50">
         <div className="preauth-signup-hero funnel-hero-b2b">
           <div className="flex items-center gap-3 mb-5">
-            <div className="w-10 h-10 rounded-xl bg-white dark:bg-slate-900/15 border border-white/25 flex items-center justify-center">
-              <ProtoIcon name="wrench" className="w-5 h-5 text-white" />
+            <div className="w-10 h-10 rounded-xl bg-white/95 border border-white/35 flex items-center justify-center overflow-hidden p-1">
+              <BrandLogo className="w-full h-full object-contain" alt="" />
             </div>
             <span className="font-bold text-white text-[15px]">{t('b2b.signup.brand', 'CarCare for Business')}</span>
           </div>
@@ -335,66 +342,67 @@ export function B2bSignup() {
 }
 
 export function B2bOnboard1() {
-  const { show } = useProto();
+  const { show, t } = useProto();
   return (
     <ScreenWrap id="b2b-onboard-1">
       <ProtoStatusBar />
       <div className="flex-1 flex flex-col min-h-0 app-surface">
-        <B2bTopbarMobile title="Welcome, Omar" />
+        <B2bTopbarMobile title={t('b2b.top.welcome', 'Welcome, Omar')} />
         <div className="flex-1 overflow-y-auto p-4 min-h-0">
           <OnboardStepper active={0} />
           <div className="onboard-card-proto p-4">
-            <div className="text-lg font-bold text-slate-900 dark:text-slate-100">Business information</div>
-            <div className="text-sm text-slate-600 dark:text-slate-400 mt-0.5">Used for verification and on your public listing.</div>
+            <div className="text-lg font-bold text-slate-900 dark:text-slate-100">{t('b2b.on1.title', 'Business information')}</div>
+            <div className="text-sm text-slate-600 dark:text-slate-400 mt-0.5">{t('b2b.on1.lead', 'Used for verification and on your public listing.')}</div>
             <div className="mt-4 space-y-3">
               <div>
-                <div className="label mb-1.5">Legal name</div>
+                <div className="label mb-1.5">{t('b2b.on1.legal', 'Legal name')}</div>
                 <input className="proto-input w-full px-3.5 py-2.5 text-sm" defaultValue="AutoPro Automotive Services LLC" autoComplete="off" />
               </div>
               <div>
-                <div className="label mb-1.5">Trade name (shown to users)</div>
+                <div className="label mb-1.5">{t('b2b.on1.trade', 'Trade name (shown to users)')}</div>
                 <input className="proto-input w-full px-3.5 py-2.5 text-sm" defaultValue="AutoPro Heliopolis" autoComplete="off" />
               </div>
               <div>
-                <div className="label mb-1.5">Tax ID</div>
+                <div className="label mb-1.5">{t('b2b.on1.tax', 'Tax ID')}</div>
                 <input className="proto-input w-full px-3.5 py-2.5 text-sm" defaultValue="415-228-9910" autoComplete="off" />
               </div>
               <div>
-                <div className="label mb-1.5">Commercial registration #</div>
+                <div className="label mb-1.5">{t('b2b.on1.cr', 'Commercial registration #')}</div>
                 <input className="proto-input w-full px-3.5 py-2.5 text-sm" defaultValue="CR-88421" autoComplete="off" />
               </div>
               <div>
-                <div className="label mb-1.5">Address</div>
+                <div className="label mb-1.5">{t('b2b.on1.address', 'Address')}</div>
                 <input className="proto-input w-full px-3.5 py-2.5 text-sm" defaultValue="12 Baghdad St, Heliopolis, Cairo" autoComplete="off" />
               </div>
               <div>
-                <div className="label mb-1.5">City</div>
+                <div className="label mb-1.5">{t('b2b.on1.city', 'City')}</div>
                 <input className="proto-input w-full px-3.5 py-2.5 text-sm" defaultValue="Cairo" autoComplete="off" />
               </div>
               <div>
-                <div className="label mb-1.5">Pin on map</div>
+                <div className="label mb-1.5">{t('b2b.on1.pin', 'Pin on map')}</div>
                 <div className="proto-input px-3.5 py-2.5 text-sm flex justify-between items-center">
                   <span>30.0980°N · 31.3411°E</span>
-                  <span className="text-teal-700 font-semibold tap">Adjust</span>
+                  <span className="text-teal-700 font-semibold tap">{t('b2b.on1.adjust', 'Adjust')}</span>
                 </div>
               </div>
               <div>
-                <div className="label mb-1.5">Business type</div>
+                <div className="label mb-1.5">{t('b2b.on1.biztype', 'Business type')}</div>
                 <div className="proto-input px-3.5 py-2.5 text-sm flex justify-between items-center">
-                  Independent workshop <ProtoIcon name="chevron-down" className="w-4 h-4 text-slate-400 dark:text-slate-500" />
+                  {t('b2b.on1.independent', 'Independent workshop')}{' '}
+                  <ProtoIcon name="chevron-down" className="w-4 h-4 text-slate-400 dark:text-slate-500" />
                 </div>
               </div>
               <div>
-                <div className="label mb-1.5">Year founded</div>
+                <div className="label mb-1.5">{t('b2b.on1.founded', 'Year founded')}</div>
                 <input className="proto-input w-full px-3.5 py-2.5 text-sm" defaultValue="2014" autoComplete="off" />
               </div>
             </div>
             <div className="mt-6 flex flex-col gap-2">
               <button type="button" className="btn-ghost tap w-full border border-slate-200 dark:border-slate-600 bg-white dark:bg-slate-900">
-                Save draft
+                {t('b2b.on1.draft', 'Save draft')}
               </button>
               <button type="button" className="btn-primary tap shadow-md" onClick={() => show('b2b-onboard-3')}>
-                Continue <ProtoIcon name="arrow-right" className="w-4 h-4" />
+                {t('b2b.on1.cont', 'Continue')} <ProtoIcon name="arrow-right" className="w-4 h-4" />
               </button>
             </div>
           </div>
@@ -406,28 +414,29 @@ export function B2bOnboard1() {
 }
 
 export function B2bOnboard3() {
-  const { show } = useProto();
+  const { show, t } = useProto();
+  const fixed = t('b2b.cat.fixed', 'Fixed');
   const svcs = [
-    ['Oil change (standard)', '45 min', 'Fixed', '350'],
-    ['Brake pads — front', '1.5 h', 'Fixed', '650'],
-    ['AC recharge', '1 h', 'Fixed', '450'],
-  ] as const;
+    [t('b2b.on3.s1', 'Oil change (standard)'), t('b2b.on3.s1.dur', '45 min'), fixed, '350'],
+    [t('b2b.on3.s2', 'Brake pads — front'), t('b2b.on3.s2.dur', '1.5 h'), fixed, '650'],
+    [t('b2b.on3.s3', 'AC recharge'), t('b2b.on3.s3.dur', '1 h'), fixed, '450'],
+  ];
   return (
     <ScreenWrap id="b2b-onboard-3">
       <ProtoStatusBar />
       <div className="flex-1 flex flex-col min-h-0 app-surface">
-        <B2bTopbarMobile title="Welcome, Omar" />
+        <B2bTopbarMobile title={t('b2b.top.welcome', 'Welcome, Omar')} />
         <div className="flex-1 overflow-y-auto p-4 min-h-0">
           <OnboardStepper active={1} />
           <div className="onboard-card-proto p-4">
-            <div className="text-lg font-bold text-slate-900 dark:text-slate-100">Your service catalog</div>
-            <div className="text-sm text-slate-600 dark:text-slate-400 mt-0.5">Start with presets — you can edit any time.</div>
+            <div className="text-lg font-bold text-slate-900 dark:text-slate-100">{t('b2b.cat.title', 'Your service catalog')}</div>
+            <div className="text-sm text-slate-600 dark:text-slate-400 mt-0.5">{t('b2b.cat.lead', 'Start with presets — you can edit any time.')}</div>
             <button
               type="button"
               className="btn-ghost py-2 px-3 text-xs w-full mt-3 flex items-center justify-center gap-1 border border-violet-200 bg-violet-50/50 text-violet-900"
             >
               <ProtoIcon name="wand-2" className="w-3.5 h-3.5" />
-              Add 12 common services
+              {t('b2b.cat.presets', 'Add 12 common services')}
             </button>
             <div className="mt-4 space-y-2">
               {svcs.map(([s, d, typ, p]) => (
@@ -450,7 +459,7 @@ export function B2bOnboard3() {
             </div>
             <button type="button" className="mt-3 text-sm text-teal-700 font-semibold flex items-center gap-1 w-full justify-center tap py-2">
               <ProtoIcon name="plus" className="w-4 h-4" />
-              Add custom service
+              {t('b2b.cat.custom', 'Add custom service')}
             </button>
             <div className="mt-6 flex flex-col gap-2">
               <button
@@ -458,10 +467,10 @@ export function B2bOnboard3() {
                 className="btn-ghost tap border border-slate-200 dark:border-slate-600 bg-white dark:bg-slate-900"
                 onClick={() => show('b2b-onboard-1')}
               >
-                <ProtoIcon name="arrow-left" className="w-4 h-4" /> Back
+                <ProtoIcon name="arrow-left" className="w-4 h-4" /> {t('b2b.cat.back', 'Back')}
               </button>
               <button type="button" className="btn-primary tap shadow-md" onClick={() => show('b2b-pending')}>
-                Submit for verification <ProtoIcon name="arrow-right" className="w-4 h-4" />
+                {t('b2b.cat.submit', 'Submit for verification')} <ProtoIcon name="arrow-right" className="w-4 h-4" />
               </button>
             </div>
           </div>
@@ -473,27 +482,25 @@ export function B2bOnboard3() {
 }
 
 export function B2bPending() {
-  const { show } = useProto();
+  const { show, t } = useProto();
   const rows = [
-    ['Business information', 'done'],
-    ['Service catalog', 'done'],
-    ['Account checks', 'review'],
-    ['List on map', 'pending'],
-  ] as const;
+    [t('b2b.pend.row1', 'Business information'), 'done'],
+    [t('b2b.pend.row2', 'Service catalog'), 'done'],
+    [t('b2b.pend.row3', 'Account checks'), 'review'],
+    [t('b2b.pend.row4', 'List on map'), 'pending'],
+  ];
   return (
     <ScreenWrap id="b2b-pending">
       <ProtoStatusBar />
       <div className="flex-1 flex flex-col min-h-0 app-surface">
-        <B2bTopbarMobile title="Welcome, Omar" />
+        <B2bTopbarMobile title={t('b2b.top.welcome', 'Welcome, Omar')} />
         <div className="flex-1 overflow-y-auto p-4 flex items-start justify-center min-h-0">
           <div className="onboard-card-proto p-5 w-full text-center max-w-md">
             <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-amber-200 to-orange-200 flex items-center justify-center mx-auto shadow-md border border-amber-300/50">
               <ProtoIcon name="shield-check" className="w-7 h-7 text-amber-900" />
             </div>
-            <div className="text-xl font-bold mt-3">Verification in progress</div>
-            <div className="text-sm text-slate-500 dark:text-slate-400 mt-2">
-              We’re reviewing your business and catalog. Typical turnaround is 24–48 hours.
-            </div>
+            <div className="text-xl font-bold mt-3">{t('b2b.pend.title', 'Verification in progress')}</div>
+            <div className="text-sm text-slate-500 dark:text-slate-400 mt-2">{t('b2b.pend.lead', 'We’re reviewing your business and catalog. Typical turnaround is 24–48 hours.')}</div>
             <div className="mt-5 text-left space-y-1.5">
               {rows.map(([rowTitle, s]) => (
                 <div key={rowTitle} className="flex items-center gap-2 p-1.5">
@@ -506,16 +513,16 @@ export function B2bPending() {
                   </div>
                   <div className="flex-1 text-xs font-medium">{rowTitle}</div>
                   <div className="text-[10px] text-slate-500 dark:text-slate-400">
-                    {s === 'done' ? 'Done' : s === 'review' ? 'In review' : 'Wait'}
+                    {s === 'done' ? t('b2b.pend.done', 'Done') : s === 'review' ? t('b2b.pend.review', 'In review') : t('b2b.pend.wait', 'Wait')}
                   </div>
                 </div>
               ))}
             </div>
             <div className="mt-4 p-3 rounded-xl callout-success text-xs text-emerald-950 text-left border border-emerald-200/60">
-              <b>While you wait</b> — add photos and your team. You can open the dashboard anytime.
+              <b>{t('b2b.pend.note_title', 'While you wait')}</b> — {t('b2b.pend.note_body', 'add photos and your team. You can open the dashboard anytime.')}
             </div>
             <button type="button" className="btn-primary w-full mt-4 tap shadow-md" onClick={() => show('b2b-dashboard')}>
-              Explore dashboard
+              {t('b2b.pend.explore', 'Explore dashboard')}
             </button>
           </div>
         </div>
@@ -526,45 +533,53 @@ export function B2bPending() {
 }
 
 export function B2bDashboard() {
-  const { show } = useProto();
+  const { show, t } = useProto();
   const lineUp = [
-    ['11:00', 'Youssef S.', 'Oil (std)', 'New', 'b-blue', true],
-    ['10:00', 'Karim H.', 'Brake pads', 'In progress', 'b-amber', true],
-    ['09:00', 'Layla M.', 'Oil+filter', 'Done', 'b-green', true],
+    ['11:00', 'Youssef S.', 'Oil (std)', 'new', 'b-blue', true],
+    ['10:00', 'Karim H.', 'Brake pads', 'in_progress', 'b-amber', true],
+    ['09:00', 'Layla M.', 'Oil+filter', 'done', 'b-green', true],
   ] as const;
+  const lineupStatus = (k: string) =>
+    k === 'new'
+      ? t('b2b.ops.new', 'New')
+      : k === 'in_progress'
+        ? t('b2b.ops.in_progress', 'In progress')
+        : t('b2b.ops.done', 'Done');
   return (
     <ScreenWrap id="b2b-dashboard">
       <ProtoStatusBar />
       <div className="flex-1 flex flex-col min-h-0 app-surface">
-        <B2bTopbarMobile title="AutoPro · Today" />
+        <B2bTopbarMobile title={t('b2b.top.today', 'AutoPro · Today')} />
         <div className="flex-1 overflow-y-auto p-3 space-y-3 min-h-0">
           <div className="grid grid-cols-2 gap-2">
             <div className="kpi-tile kpi-tile--teal p-3 pl-4">
-              <div className="text-[10px] text-slate-500 dark:text-slate-400 font-semibold uppercase tracking-wide">Bookings</div>
+              <div className="text-[10px] text-slate-500 dark:text-slate-400 font-semibold uppercase tracking-wide">{t('b2b.dash.kpi.book', 'Bookings')}</div>
               <div className="text-2xl font-bold text-slate-900 dark:text-slate-100">7</div>
-              <div className="text-[10px] text-emerald-600 font-semibold">+2 vs yesterday</div>
+              <div className="text-[10px] text-emerald-600 font-semibold">{t('b2b.dash.kpi.vs_y', '+2 vs yesterday')}</div>
             </div>
             <div className="kpi-tile kpi-tile--violet p-3 pl-4">
-              <div className="text-[10px] text-slate-500 dark:text-slate-400 font-semibold uppercase tracking-wide">Revenue</div>
+              <div className="text-[10px] text-slate-500 dark:text-slate-400 font-semibold uppercase tracking-wide">{t('b2b.dash.kpi.rev', 'Revenue')}</div>
               <div className="text-2xl font-bold text-slate-900 dark:text-slate-100">3.4k</div>
-              <div className="text-[10px] text-violet-600 font-medium">EGP</div>
+              <div className="text-[10px] text-violet-600 font-medium">{t('b2b.dash.kpi.egp', 'EGP')}</div>
             </div>
             <div className="kpi-tile kpi-tile--amber p-3 pl-4">
-              <div className="text-[10px] text-slate-500 dark:text-slate-400 font-semibold uppercase tracking-wide">Rating</div>
+              <div className="text-[10px] text-slate-500 dark:text-slate-400 font-semibold uppercase tracking-wide">{t('b2b.dash.kpi.rating', 'Rating')}</div>
               <div className="text-2xl font-bold text-slate-900 dark:text-slate-100">4.8</div>
-              <div className="text-[10px] text-amber-700">62 rev.</div>
+              <div className="text-[10px] text-amber-700">
+                62 {t('b2b.dash.kpi.rev_suffix', 'rev.')}
+              </div>
             </div>
             <div className="kpi-tile kpi-tile--emerald p-3 pl-4">
-              <div className="text-[10px] text-slate-500 dark:text-slate-400 font-semibold uppercase tracking-wide">Accept</div>
+              <div className="text-[10px] text-slate-500 dark:text-slate-400 font-semibold uppercase tracking-wide">{t('b2b.dash.kpi.accept', 'Accept')}</div>
               <div className="text-2xl font-bold text-slate-900 dark:text-slate-100">96%</div>
-              <div className="text-[10px] text-emerald-600 font-semibold">OK</div>
+              <div className="text-[10px] text-emerald-600 font-semibold">{t('b2b.dash.kpi.ok', 'OK')}</div>
             </div>
           </div>
           <div className="app-panel p-3">
             <div className="flex justify-between items-center mb-2">
-              <div className="font-bold text-sm">Today’s line-up</div>
+              <div className="font-bold text-sm">{t('b2b.dash.lineup', 'Today’s line-up')}</div>
               <span className="text-xs text-slate-500 dark:text-slate-400 flex items-center gap-1">
-                <span className="dot bg-red-500" />1 new
+                <span className="dot bg-red-500" />1 {t('b2b.dash.new', 'new')}
               </span>
             </div>
             {lineUp.map(([time, cust, svc, label, badge, act]) => (
@@ -581,15 +596,15 @@ export function B2bDashboard() {
                   <div className="text-sm font-semibold">{cust}</div>
                   <div className="text-xs text-slate-500 dark:text-slate-400">{svc}</div>
                 </div>
-                <span className={`badge ${badge} text-[10px]`}>{label}</span>
+                <span className={`badge ${badge} text-[10px]`}>{lineupStatus(label)}</span>
               </div>
             ))}
             <div className="text-center text-xs text-teal-700 font-semibold pt-1 tap" onClick={() => show('b2b-bookings')}>
-              Full calendar
+              {t('b2b.dash.full_cal', 'Full calendar')}
             </div>
           </div>
           <div className="app-panel p-3">
-            <div className="font-bold text-sm mb-2">Mechanics</div>
+            <div className="font-bold text-sm mb-2">{t('b2b.dash.mech', 'Mechanics')}</div>
             {(
               [
                 ['Ahmed', 2, 3],
@@ -611,9 +626,9 @@ export function B2bDashboard() {
             ))}
           </div>
           <div className="rounded-xl p-3 text-xs bg-gradient-to-r from-amber-50 to-orange-50 border border-amber-200/70 shadow-sm">
-            <b className="text-amber-950">3 reviews</b> need a reply.{' '}
+            3 {t('b2b.dash.rev_banner', 'reviews')} {t('b2b.dash.rev_need', 'need a reply.')}{' '}
             <span className="text-teal-800 font-semibold tap" onClick={() => show('b2b-reviews')}>
-              Open
+              {t('b2b.dash.open', 'Open')}
             </span>
           </div>
         </div>
@@ -625,28 +640,34 @@ export function B2bDashboard() {
 }
 
 export function B2bBookings() {
-  const { show } = useProto();
+  const { show, t } = useProto();
   const days = ['S13', 'M14', 'T15', 'W16', 'T17', 'T18', 'F19'];
   const list = [
-    ['11:00', 'Youssef S.', 'Oil (std)', 'b-blue', 'New'],
-    ['10:00', 'Karim H.', 'Brake pads', 'b-amber', 'In progress'],
-    ['09:00', 'Layla M.', 'Oil+filter', 'b-green', 'Done'],
+    ['11:00', 'Youssef S.', 'Oil (std)', 'b-blue', 'new'],
+    ['10:00', 'Karim H.', 'Brake pads', 'b-amber', 'in_progress'],
+    ['09:00', 'Layla M.', 'Oil+filter', 'b-green', 'done'],
   ] as const;
+  const listStatus = (k: string) =>
+    k === 'new'
+      ? t('b2b.ops.new', 'New')
+      : k === 'in_progress'
+        ? t('b2b.ops.in_progress', 'In progress')
+        : t('b2b.ops.done', 'Done');
   return (
     <ScreenWrap id="b2b-bookings">
       <ProtoStatusBar />
       <div className="flex-1 flex flex-col min-h-0 app-surface">
-        <B2bTopbarMobile title="Bookings" />
+        <B2bTopbarMobile title={t('b2b.cal.title', 'Bookings')} />
         <div className="px-3 pt-2 flex items-center justify-between">
           <div className="rounded-xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-600 p-0.5 flex text-xs font-semibold shadow-sm">
-            <span className="px-2.5 py-1 rounded-lg bg-gradient-to-r from-teal-600 to-cyan-600 text-white shadow-sm">Week</span>
-            <span className="px-2.5 py-1 rounded-lg text-slate-500 dark:text-slate-400">Day</span>
+            <span className="px-2.5 py-1 rounded-lg bg-gradient-to-r from-teal-600 to-cyan-600 text-white shadow-sm">{t('b2b.cal.week', 'Week')}</span>
+            <span className="px-2.5 py-1 rounded-lg text-slate-500 dark:text-slate-400">{t('b2b.cal.day', 'Day')}</span>
           </div>
           <div className="flex items-center gap-1">
             <button type="button" className="w-8 h-8 rounded-lg bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-600 flex items-center justify-center">
               <ProtoIcon name="chevron-left" className="w-4 h-4" />
             </button>
-            <div className="text-xs font-semibold">Apr 13 – 19</div>
+            <div className="text-xs font-semibold">{t('b2b.cal.range', 'Apr 13 – 19')}</div>
             <button type="button" className="w-8 h-8 rounded-lg bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-600 flex items-center justify-center">
               <ProtoIcon name="chevron-right" className="w-4 h-4" />
             </button>
@@ -670,7 +691,7 @@ export function B2bBookings() {
             </div>
           </div>
           <button type="button" className="btn-primary w-full text-xs py-2.5 mb-3">
-            + Manual booking
+            {t('b2b.cal.manual', '+ Manual booking')}
           </button>
           <div className="space-y-2">
             {list.map(([time, cust, svc, badge, l]) => (
@@ -687,22 +708,22 @@ export function B2bBookings() {
                   <div className="text-sm font-semibold">{cust}</div>
                   <div className="text-xs text-slate-500 dark:text-slate-400">{svc}</div>
                 </div>
-                <span className={`badge ${badge} text-[10px] self-start`}>{l}</span>
+                <span className={`badge ${badge} text-[10px] self-start`}>{listStatus(l)}</span>
               </div>
             ))}
           </div>
           <div className="mt-3 text-[10px] text-slate-500 dark:text-slate-400 flex flex-wrap gap-2">
             <span className="flex items-center gap-0.5">
               <span className="dot bg-blue-500" />
-              New
+              {t('b2b.cal.legend.new', 'New')}
             </span>
             <span className="flex items-center gap-0.5">
               <span className="dot bg-amber-500" />
-              Active
+              {t('b2b.cal.legend.active', 'Active')}
             </span>
             <span className="flex items-center gap-0.5">
               <span className="dot bg-green-500" />
-              Done
+              {t('b2b.cal.legend.done', 'Done')}
             </span>
           </div>
         </div>
@@ -714,7 +735,7 @@ export function B2bBookings() {
 }
 
 export function B2bBooking() {
-  const { show } = useProto();
+  const { show, t } = useProto();
   const mechs = [
     ['Ahmed', 2, 3, 0],
     ['Hassan', 3, 3, 1],
@@ -737,49 +758,49 @@ export function B2bBooking() {
         <div className="flex-1 overflow-y-auto p-3 space-y-3">
           <div className="app-panel p-4 ring-1 ring-indigo-500/10">
             <div className="flex items-center gap-2 flex-wrap">
-              <span className="badge b-indigo">New · 14m</span>
-              <span className="text-xs text-slate-500 dark:text-slate-400">Sat 18 Apr · 11:00</span>
+              <span className="badge b-indigo">{t('b2b.booking.badge', 'New · 14m')}</span>
+              <span className="text-xs text-slate-500 dark:text-slate-400">{t('b2b.booking.when', 'Sat 18 Apr · 11:00')}</span>
             </div>
-            <div className="text-xl font-bold mt-2">Oil change (standard)</div>
-            <div className="text-sm text-slate-500 dark:text-slate-400">Corolla 2019 · 82,450 km</div>
+            <div className="text-xl font-bold mt-2">{t('b2b.on3.s1', 'Oil change (standard)')}</div>
+            <div className="text-sm text-slate-500 dark:text-slate-400">{t('b2b.booking.vehicle', 'Corolla 2019 · 82,450 km')}</div>
             <div className="mt-2 flex justify-between">
-              <span className="text-xs text-slate-500 dark:text-slate-400">Quote</span>
+              <span className="text-xs text-slate-500 dark:text-slate-400">{t('b2b.booking.quote', 'Quote')}</span>
               <span className="text-lg font-bold">EGP 350</span>
             </div>
             <div className="flex flex-col gap-2 mt-3">
               <button type="button" className="btn-accent w-full shadow-md shadow-orange-500/20">
-                Accept booking
+                {t('b2b.booking.accept', 'Accept booking')}
               </button>
               <button type="button" className="btn-ghost w-full text-sm border border-slate-200 dark:border-slate-600 bg-white dark:bg-slate-900">
-                Propose new time
+                {t('b2b.booking.propose', 'Propose new time')}
               </button>
               <button type="button" className="btn-ghost w-full text-sm text-red-600 bg-red-50 border border-red-100">
-                Reject
+                {t('b2b.booking.reject', 'Reject')}
               </button>
             </div>
           </div>
           <div className="app-panel p-4">
-            <div className="label mb-2">Customer</div>
+            <div className="label mb-2">{t('b2b.booking.customer', 'Customer')}</div>
             <div className="flex items-center gap-2">
               <div className="w-10 h-10 rounded-full bg-gradient-to-br from-teal-100 to-cyan-100 text-teal-900 font-bold flex items-center justify-center border border-teal-200/60">
                 YS
               </div>
               <div>
                 <div className="font-semibold text-sm">Youssef Salem</div>
-                <div className="text-[10px] text-slate-500 dark:text-slate-400">4 bookings</div>
+                <div className="text-[10px] text-slate-500 dark:text-slate-400">{t('b2b.booking.bookings_count', '4 bookings')}</div>
               </div>
             </div>
             <div className="grid grid-cols-2 gap-2 mt-3">
               <button type="button" className="btn-ghost text-xs py-2">
-                <ProtoIcon name="phone" className="w-3.5 h-3.5 inline" /> Call
+                <ProtoIcon name="phone" className="w-3.5 h-3.5 inline" /> {t('b2b.booking.call', 'Call')}
               </button>
               <button type="button" className="btn-ghost text-xs py-2">
-                <ProtoIcon name="message-circle" className="w-3.5 h-3.5 inline" /> Message
+                <ProtoIcon name="message-circle" className="w-3.5 h-3.5 inline" /> {t('b2b.booking.message', 'Message')}
               </button>
             </div>
           </div>
           <div className="app-panel p-4">
-            <div className="label mb-2">Assign mechanic</div>
+            <div className="label mb-2">{t('b2b.booking.assign', 'Assign mechanic')}</div>
             {mechs.map(([n, b, cap, ix]) => (
               <div
                 key={n}
@@ -790,7 +811,7 @@ export function B2bBooking() {
                 <div>
                   <div className="text-sm font-semibold">{n}</div>
                   <div className="text-xs text-slate-500 dark:text-slate-400">
-                    {b}/{cap} slots
+                    {b}/{cap} {t('b2b.booking.slots', 'slots')}
                   </div>
                 </div>
                 {ix === 2 ? (
@@ -802,17 +823,18 @@ export function B2bBooking() {
             ))}
           </div>
           <div className="app-panel p-4">
-            <div className="label mb-2">Invoice (draft)</div>
+            <div className="label mb-2">{t('b2b.booking.invoice', 'Invoice (draft)')}</div>
             <div className="text-sm flex justify-between py-1">
-              <span>Oil (std)</span>
+              <span>{t('b2b.booking.line_oil', 'Oil (std)')}</span>
               <span>EGP 350</span>
             </div>
             <div className="text-xs text-slate-400 dark:text-slate-500 flex justify-between py-1">
-              Commission 10%<span>−35</span>
+              {t('b2b.booking.comm', 'Commission 10%')}
+              <span>−35</span>
             </div>
             <div className="divider my-2" />
             <div className="font-bold flex justify-between">
-              Your payout <span>EGP 315</span>
+              {t('b2b.booking.payout_label', 'Your payout')} <span>EGP 315</span>
             </div>
           </div>
         </div>
@@ -823,33 +845,34 @@ export function B2bBooking() {
 }
 
 export function B2bCatalog() {
-  const { show } = useProto();
-  const rows = [
-    ['Oil (standard)', 'EGP 350', 'Fixed', '62', true],
-    ['Brake pads', 'EGP 650', 'Fixed', '22', true],
-    ['AC recharge', 'EGP 450', 'Fixed', '34', true],
-  ] as const;
+  const { show, t } = useProto();
+  const fixed = t('b2b.cat.fixed', 'Fixed');
+  const rows: [string, string, string, string, boolean][] = [
+    ['Oil (standard)', 'EGP 350', fixed, '62', true],
+    ['Brake pads', 'EGP 650', fixed, '22', true],
+    ['AC recharge', 'EGP 450', fixed, '34', true],
+  ];
   return (
     <ScreenWrap id="b2b-catalog">
       <ProtoStatusBar />
       <div className="flex-1 flex flex-col min-h-0 app-surface">
-        <B2bTopbarMobile title="Catalog" />
+        <B2bTopbarMobile title={t('b2b.cat.nav', 'Catalog')} />
         <div className="px-3 flex gap-2 overflow-x-auto no-scrollbar py-2">
-          <span className="chip on flex-shrink-0">All</span>
-          <span className="chip flex-shrink-0">Oil</span>
-          <span className="chip flex-shrink-0">Brakes</span>
-          <span className="chip flex-shrink-0">AC</span>
+          <span className="chip on flex-shrink-0">{t('b2b.cat.chip.all', 'All')}</span>
+          <span className="chip flex-shrink-0">{t('b2b.cat.chip.oil', 'Oil')}</span>
+          <span className="chip flex-shrink-0">{t('b2b.cat.chip.brakes', 'Brakes')}</span>
+          <span className="chip flex-shrink-0">{t('b2b.cat.chip.ac', 'AC')}</span>
         </div>
         <div className="flex-1 overflow-y-auto p-3 space-y-2">
           <div className="flex gap-2">
             <button type="button" className="btn-ghost text-xs flex-1 py-2">
-              Import
+              {t('b2b.cat.import', 'Import')}
             </button>
             <button type="button" className="btn-primary text-xs flex-1 py-2">
-              + Service
+              {t('b2b.cat.add_svc', '+ Service')}
             </button>
           </div>
-          {rows.map(([s, p, t, b, live]) => (
+          {rows.map(([s, p, priceType, b, live]) => (
             <div
               key={s}
               className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-600/90 rounded-xl p-3 flex justify-between items-start shadow-sm ring-1 ring-violet-500/5"
@@ -857,7 +880,8 @@ export function B2bCatalog() {
               <div>
                 <div className="text-sm font-semibold">{s}</div>
                 <div className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
-                  <span className="badge b-slate">{t}</span> {b}/mo
+                  <span className="badge b-slate">{priceType}</span> {b}
+                  {t('b2b.cat.per_mo', '/mo')}
                 </div>
                 <div className="text-sm font-bold mt-1">{p}</div>
               </div>
@@ -875,7 +899,7 @@ export function B2bCatalog() {
 }
 
 export function B2bReviews() {
-  const { show } = useProto();
+  const { show, t } = useProto();
   const reviews = [
     ['Mohamed H.', 'MH', 5, 'Great service & honest pricing.', 'responded'],
     ['Sara A.', 'SA', 4, 'Good, slight wait.', 'pending'],
@@ -892,19 +916,19 @@ export function B2bReviews() {
           >
             <ProtoIcon name="arrow-left" className="w-5 h-5" />
           </button>
-          <div className="font-semibold text-sm">Reviews</div>
+          <div className="font-semibold text-sm">{t('b2b.rev.title', 'Reviews')}</div>
         </div>
         <div className="flex-1 overflow-y-auto p-3 space-y-3">
           <div className="kpi-tile kpi-tile--amber p-3 pl-4">
             <div className="text-3xl font-bold text-slate-900 dark:text-slate-100">
-              4.8 <span className="text-sm text-slate-500 dark:text-slate-400 font-normal">312 reviews</span>
+              4.8 <span className="text-sm text-slate-500 dark:text-slate-400 font-normal">{t('b2b.rev.reviews_n', '312 reviews')}</span>
             </div>
-            <div className="text-xs text-amber-800 font-semibold mt-1">24 need reply</div>
+            <div className="text-xs text-amber-800 font-semibold mt-1">{t('b2b.rev.need_n', '24 need reply')}</div>
           </div>
           <div className="flex gap-2 overflow-x-auto no-scrollbar">
-            <span className="chip on flex-shrink-0">All</span>
-            <span className="chip flex-shrink-0">Pending</span>
-            <span className="chip flex-shrink-0">5★</span>
+            <span className="chip on flex-shrink-0">{t('b2b.rev.chip.all', 'All')}</span>
+            <span className="chip flex-shrink-0">{t('b2b.rev.chip.pending', 'Pending')}</span>
+            <span className="chip flex-shrink-0">{t('b2b.rev.chip.5', '5★')}</span>
           </div>
           <div className="app-panel divide-y divide-slate-100 overflow-hidden p-0">
             {reviews.map(([n, ini, r, txt, state]) => (
@@ -916,7 +940,7 @@ export function B2bReviews() {
                   <div className="flex-1 min-w-0">
                     <div className="flex justify-between items-start">
                       <span className="text-sm font-semibold">{n}</span>
-                      {state === 'pending' ? <span className="badge b-amber text-[9px]">Reply</span> : null}
+                      {state === 'pending' ? <span className="badge b-amber text-[9px]">{t('b2b.rev.reply', 'Reply')}</span> : null}
                     </div>
                     <div className="flex gap-0.5 mt-0.5">
                       {[1, 2, 3, 4, 5].map((i) => (
@@ -941,7 +965,7 @@ export function B2bReviews() {
 }
 
 export function B2bPayouts() {
-  const { show } = useProto();
+  const { show, t } = useProto();
   const recent = [
     ['11 Apr', 'EGP 7,578', 'paid'],
     ['4 Apr', 'EGP 8,892', 'paid'],
@@ -960,37 +984,39 @@ export function B2bPayouts() {
             <ProtoIcon name="arrow-left" className="w-5 h-5" />
           </button>
           <div className="font-semibold text-sm pl-1">
-            Payouts <span className="badge b-amber text-[9px] ml-1">P2</span>
+            {t('b2b.pay.title', 'Payouts')} <span className="badge b-amber text-[9px] ml-1">P2</span>
           </div>
         </div>
         <div className="flex-1 overflow-y-auto p-3 space-y-3">
           <div className="kpi-tile kpi-tile--teal p-3 pl-4 text-center">
-            <div className="text-xs text-slate-500 dark:text-slate-400">Available</div>
+            <div className="text-xs text-slate-500 dark:text-slate-400">{t('b2b.pay.available', 'Available')}</div>
             <div className="text-2xl font-bold">EGP 12,840</div>
             <button type="button" className="btn-primary w-full text-xs py-2 mt-2">
-              Request payout
+              {t('b2b.pay.request', 'Request payout')}
             </button>
           </div>
           <div className="grid grid-cols-2 gap-2">
             <div className="kpi-tile kpi-tile--violet p-2 pl-3 text-center text-xs">
-              Gross (mo)
+              {t('b2b.pay.gross_mo', 'Gross (mo)')}
               <div className="font-bold text-sm mt-0.5 text-slate-900 dark:text-slate-100">42,310</div>
             </div>
             <div className="kpi-tile kpi-tile--amber p-2 pl-3 text-center text-xs">
-              Comm. 10%
+              {t('b2b.pay.comm_pct', 'Comm. 10%')}
               <div className="font-bold text-sm mt-0.5 text-slate-900 dark:text-slate-100">4,231</div>
             </div>
           </div>
-          <div className="text-xs text-slate-500 dark:text-slate-400">Recent</div>
+          <div className="text-xs text-slate-500 dark:text-slate-400">{t('b2b.pay.recent', 'Recent')}</div>
           {recent.map(([d, pay, s]) => (
             <div key={d} className="app-panel p-3 flex justify-between text-sm">
               <div>
                 <div className="font-semibold">{d}</div>
-                <div className="text-xs text-slate-500 dark:text-slate-400">Payout to bank</div>
+                <div className="text-xs text-slate-500 dark:text-slate-400">{t('b2b.pay.to_bank', 'Payout to bank')}</div>
               </div>
               <div className="text-right">
                 <div className="font-bold">{pay}</div>
-                <span className={`badge ${s === 'paid' ? 'b-green' : 'b-amber'} text-[9px]`}>{s}</span>
+                <span className={`badge ${s === 'paid' ? 'b-green' : 'b-amber'} text-[9px]`}>
+                  {s === 'paid' ? t('b2b.pay.status.paid', 'paid') : s}
+                </span>
               </div>
             </div>
           ))}
@@ -1002,14 +1028,14 @@ export function B2bPayouts() {
 }
 
 export function B2bMore() {
-  const { show } = useProto();
+  const { show, t } = useProto();
   return (
     <ScreenWrap id="b2b-more">
       <ProtoStatusBar />
       <div className="flex-1 flex flex-col min-h-0 app-surface">
-        <B2bTopbarMobile title="More" />
+        <B2bTopbarMobile title={t('b2b.more.title', 'More')} />
         <div className="flex-1 overflow-y-auto p-3">
-          <div className="text-xs text-slate-500 dark:text-slate-400 mb-2">Account</div>
+          <div className="text-xs text-slate-500 dark:text-slate-400 mb-2">{t('b2b.more.account', 'Account')}</div>
           <div className="app-panel divide-y divide-slate-100 overflow-hidden p-0 shadow-md">
             <button
               type="button"
@@ -1017,7 +1043,7 @@ export function B2bMore() {
               onClick={() => show('b2b-reviews')}
             >
               <span className="flex items-center gap-2 text-sm font-medium">
-                <ProtoIcon name="star" className="w-4 h-4 text-amber-500" /> Reviews
+                <ProtoIcon name="star" className="w-4 h-4 text-amber-500" /> {t('b2b.more.reviews', 'Reviews')}
               </span>
               <ProtoIcon name="chevron-right" className="w-4 h-4 text-slate-400 dark:text-slate-500" />
             </button>
@@ -1027,19 +1053,19 @@ export function B2bMore() {
               onClick={() => show('b2b-payouts')}
             >
               <span className="flex items-center gap-2 text-sm font-medium">
-                <ProtoIcon name="wallet" className="w-4 h-4 text-teal-600" /> Payouts
+                <ProtoIcon name="wallet" className="w-4 h-4 text-teal-600" /> {t('b2b.more.payouts', 'Payouts')}
               </span>
               <span className="badge b-amber text-[9px]">P2</span>
             </button>
             <div className="p-3 flex items-center justify-between text-slate-400 dark:text-slate-500">
               <span className="flex items-center gap-2 text-sm">
-                <ProtoIcon name="users" className="w-4 h-4" /> Team
+                <ProtoIcon name="users" className="w-4 h-4" /> {t('b2b.more.team', 'Team')}
               </span>
-              <span className="text-xs">Soon</span>
+              <span className="text-xs">{t('b2b.more.soon', 'Soon')}</span>
             </div>
             <div className="p-3 flex items-center justify-between text-slate-400 dark:text-slate-500">
               <span className="flex items-center gap-2 text-sm">
-                <ProtoIcon name="settings" className="w-4 h-4" /> Settings
+                <ProtoIcon name="settings" className="w-4 h-4" /> {t('b2b.more.settings', 'Settings')}
               </span>
               <ProtoIcon name="chevron-right" className="w-4 h-4" />
             </div>
