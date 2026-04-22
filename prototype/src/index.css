@@ -1,2 +1,6 @@
 @import 'tailwindcss';
+
+/* Match app toggle (ProtoContext sets class + data-theme on <html>), not only OS preference */
+@custom-variant dark (&:where(.dark, .dark *));
+
 @import '../css/prototype.css';

@@ -1072,7 +1072,7 @@ button:focus-visible { outline: 2px solid rgba(15, 118, 110, 0.5); outline-offse
   padding: 0.35rem 0.45rem;
   background: var(--surface-2);
   border-radius: 6px;
-  border: 1px solid #e2e8f0;
+  border: 1px solid var(--hairline);
 }
 .proto-tech-block {
   max-width: 100%;
@@ -1102,9 +1102,9 @@ button:focus-visible { outline: 2px solid rgba(15, 118, 110, 0.5); outline-offse
   overflow-x: hidden;
   padding: 1.1rem 1.15rem 1.25rem;
   background: var(--elevated);
-  border: 1px solid #e2e8f0;
+  border: 1px solid var(--hairline);
   border-radius: 1.25rem;
-  box-shadow: 0 10px 40px -12px rgba(15, 23, 42, 0.15);
+  box-shadow: 0 10px 40px -12px var(--shadow-ink);
   position: sticky;
   top: 1rem;
   -webkit-overflow-scrolling: touch;
