@@ -83,7 +83,7 @@ function Shell() {
             type="button"
             id="protoThemeToggle"
             className="inline-flex items-center justify-center w-10 h-10 rounded-xl border border-slate-200/90 dark:border-slate-700 bg-white/90 dark:bg-slate-900/90 shadow-sm tap"
-            aria-label="Toggle theme"
+            aria-label={t('a11y.theme_toggle', 'Toggle light or dark theme')}
             onClick={toggleTheme}
           >
             <ProtoIcon name="sun" className="w-5 h-5 dark:hidden text-amber-500" />

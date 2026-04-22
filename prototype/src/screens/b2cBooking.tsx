@@ -52,7 +52,9 @@ export function B2cService() {
             <label
               key={rowTitle}
               className={`flex items-center gap-3 p-3 rounded-xl border tap ${
-                on ? 'border-teal-500 bg-teal-50' : 'border-slate-200 dark:border-slate-600'
+                on
+                  ? 'border-teal-500 bg-teal-50 dark:bg-teal-950/35 dark:border-teal-500'
+                  : 'border-slate-200 dark:border-slate-600'
               }`}
             >
               <div
@@ -163,7 +165,7 @@ export function B2cSlot() {
           ))}
         </div>
         <div className="mt-5 p-3 rounded-xl bg-gradient-to-r from-amber-50 to-orange-50 border border-amber-200/80 flex gap-2 items-start shadow-sm">
-          <ProtoIcon name="timer" className="w-4 h-4 text-amber-700 mt-0.5" />
+          <ProtoIcon name="timer" className="w-4 h-4 text-amber-700 dark:text-amber-400 mt-0.5" />
           <div className="text-xs text-amber-950">
             <b>{t('book.slot.hold', 'Slot held for 10:00')}</b> · {t('book.slot.hold_sub', 'expires in 9m 42s. Complete payment to confirm.')}
           </div>
@@ -195,7 +197,7 @@ export function B2cPayment() {
         <div className="app-panel p-4">
           <div className="flex items-center gap-3">
             <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-teal-100 to-cyan-100 flex items-center justify-center">
-              <ProtoIcon name="wrench" className="w-6 h-6 text-teal-700" />
+              <ProtoIcon name="wrench" className="w-6 h-6 text-teal-700 dark:text-teal-400" />
             </div>
             <div className="flex-1">
               <div className="font-semibold text-sm">{t('book.pay.center', 'AutoPro Heliopolis')}</div>
@@ -229,7 +231,7 @@ export function B2cPayment() {
             <div className="w-5 h-5 rounded-full border-2 border-teal-600 flex items-center justify-center">
               <div className="w-2.5 h-2.5 rounded-full bg-teal-600" />
             </div>
-            <ProtoIcon name="credit-card" className="w-5 h-5 text-indigo-600" />
+            <ProtoIcon name="credit-card" className="w-5 h-5 text-indigo-600 dark:text-indigo-400" />
             <div className="flex-1">
               <div className="text-sm font-semibold">Visa •• 4242</div>
               <div className="text-xs text-slate-500 dark:text-slate-400">{t('book.pay.card_sub', 'Expires 08/27')}</div>
@@ -237,7 +239,7 @@ export function B2cPayment() {
           </label>
           <label className="flex items-center gap-3 p-3 rounded-xl border border-slate-200 dark:border-slate-600 bg-white dark:bg-slate-900 tap">
             <div className="w-5 h-5 rounded-full border-2 border-slate-300 dark:border-slate-600" />
-            <ProtoIcon name="banknote" className="w-5 h-5 text-emerald-600" />
+            <ProtoIcon name="banknote" className="w-5 h-5 text-emerald-600 dark:text-emerald-400" />
             <div className="flex-1">
               <div className="text-sm font-semibold">{t('book.pay.cash', 'Cash on service')}</div>
               <div className="text-xs text-slate-500 dark:text-slate-400">{t('book.pay.cash_sub', 'Pay at the center')}</div>
@@ -245,7 +247,7 @@ export function B2cPayment() {
           </label>
           <label className="flex items-center gap-3 p-3 rounded-xl border border-slate-200 dark:border-slate-600 bg-white dark:bg-slate-900 tap">
             <div className="w-5 h-5 rounded-full border-2 border-slate-300 dark:border-slate-600" />
-            <ProtoIcon name="wallet" className="w-5 h-5 text-violet-600" />
+            <ProtoIcon name="wallet" className="w-5 h-5 text-violet-600 dark:text-violet-400" />
             <div className="flex-1">
               <div className="text-sm font-semibold">{t('book.pay.vf', 'Vodafone Cash')}</div>
               <div className="text-xs text-slate-500 dark:text-slate-400">+20 100 555 0142</div>
@@ -253,10 +255,10 @@ export function B2cPayment() {
           </label>
         </div>
         <div className="mt-5 callout-info flex items-start gap-2 text-xs text-slate-600 dark:text-slate-400 p-3">
-          <ProtoIcon name="shield-check" className="w-4 h-4 text-blue-600 mt-0.5 flex-shrink-0" />
+          <ProtoIcon name="shield-check" className="w-4 h-4 text-blue-600 dark:text-blue-400 mt-0.5 flex-shrink-0" />
           <div>
             {t('book.pay.refund', 'If the service can’t be completed as described, CarCare refunds within 48h.')}{' '}
-            <span className="text-teal-700 font-semibold">{t('book.pay.learn', 'Learn more')}</span>
+            <span className="text-teal-700 dark:text-teal-400 font-semibold">{t('book.pay.learn', 'Learn more')}</span>
           </div>
         </div>
       </div>
@@ -347,17 +349,17 @@ export function B2cBookings() {
   return (
     <ScreenWrap id="b2c-bookings">
       <ProtoStatusBar />
-      <div className="px-5 pt-3 pb-3 flex items-center justify-between bg-white dark:bg-slate-900/90 border-b border-slate-100">
+      <div className="px-5 pt-3 pb-3 flex items-center justify-between bg-white dark:bg-slate-900/90 border-b border-slate-100 dark:border-slate-700/80">
         <div className="font-bold text-xl tracking-tight text-slate-900 dark:text-slate-100">{t('book.list.title', 'Bookings')}</div>
         <button
           type="button"
           className="w-10 h-10 rounded-xl bg-gradient-to-br from-slate-100 to-indigo-50 border border-slate-200 dark:border-slate-600/80 flex items-center justify-center tap"
         >
-          <ProtoIcon name="search" className="w-4 h-4 text-indigo-600" />
+          <ProtoIcon name="search" className="w-4 h-4 text-indigo-600 dark:text-indigo-400" />
         </button>
       </div>
       <div className="px-5 flex gap-6 border-b border-slate-200 dark:border-slate-600 text-sm font-semibold bg-white dark:bg-slate-900">
-        <div className="pb-3 border-b-2 border-teal-600 text-teal-700">{t('book.list.upcoming', 'Upcoming')}</div>
+        <div className="pb-3 border-b-2 border-teal-600 text-teal-700 dark:text-teal-400">{t('book.list.upcoming', 'Upcoming')}</div>
         <div className="pb-3 text-slate-500 dark:text-slate-400">{t('book.list.progress', 'In progress')}</div>
         <div className="pb-3 text-slate-500 dark:text-slate-400">{t('book.list.past', 'Past')}</div>
       </div>
@@ -371,7 +373,7 @@ export function B2cBookings() {
         >
           <div className="flex justify-between items-start">
             <div>
-              <div className="text-xs text-teal-700 font-bold uppercase tracking-wide mb-1">{t('book.list.today', 'Today · 11:00')}</div>
+              <div className="text-xs text-teal-700 dark:text-teal-400 font-bold uppercase tracking-wide mb-1">{t('book.list.today', 'Today · 11:00')}</div>
               <div className="font-semibold">Oil change — Toyota Corolla</div>
               <div className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">AutoPro Heliopolis · 0.8 km</div>
             </div>
@@ -409,7 +411,7 @@ export function B2cBookings() {
               <div className="font-semibold">AC recharge — Toyota Corolla</div>
               <div className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">QuickFix Nasr City · EGP 450</div>
             </div>
-            <button type="button" className="text-xs font-semibold text-teal-700 tap" onClick={() => show('b2c-review')}>
+            <button type="button" className="text-xs font-semibold text-teal-700 dark:text-teal-400 tap" onClick={() => show('b2c-review')}>
               {t('book.list.review', 'Review')}
             </button>
           </div>
@@ -482,7 +484,7 @@ export function B2cProgress() {
         <div className="label mt-3 mb-2">{t('book.progress.shop', 'Shop')}</div>
         <div className="app-panel p-3 flex items-center gap-3">
           <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-teal-100 to-cyan-50 flex items-center justify-center">
-            <ProtoIcon name="wrench" className="w-6 h-6 text-teal-700" />
+            <ProtoIcon name="wrench" className="w-6 h-6 text-teal-700 dark:text-teal-400" />
           </div>
           <div className="flex-1">
             <div className="font-semibold text-sm">AutoPro Heliopolis</div>

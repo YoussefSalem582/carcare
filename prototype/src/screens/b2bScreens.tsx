@@ -585,7 +585,7 @@ export function B2bDashboard() {
             {lineUp.map(([time, cust, svc, label, badge, act]) => (
               <div
                 key={time + cust}
-                className="tap border border-slate-100 rounded-xl p-2.5 mb-2 flex justify-between items-center bg-gradient-to-r from-white to-slate-50/80 hover:border-teal-200/60"
+                className="tap border border-slate-100 dark:border-slate-600/90 rounded-xl p-2.5 mb-2 flex justify-between items-center bg-gradient-to-r from-white to-slate-50/80 dark:from-slate-900 dark:to-slate-800/95 hover:border-teal-200/60 dark:hover:border-teal-500/35"
                 onClick={act ? () => show('b2b-booking') : undefined}
                 onKeyDown={act ? (e) => e.key === 'Enter' && show('b2b-booking') : undefined}
                 role={act ? 'button' : undefined}
@@ -805,7 +805,9 @@ export function B2bBooking() {
               <div
                 key={n}
                 className={`flex items-center justify-between p-2 rounded-xl border ${
-                  ix === 2 ? 'border-teal-500 bg-teal-50' : 'border-slate-200 dark:border-slate-600'
+                  ix === 2
+                    ? 'border-teal-500 bg-teal-50 dark:bg-teal-950/40 dark:border-teal-500'
+                    : 'border-slate-200 dark:border-slate-600'
                 } mb-2 last:mb-0`}
               >
                 <div>
@@ -1049,7 +1051,7 @@ export function B2bMore() {
             </button>
             <button
               type="button"
-              className="w-full p-3 flex items-center justify-between text-left tap hover:bg-teal-50/50"
+              className="w-full p-3 flex items-center justify-between text-left tap hover:bg-teal-50/50 dark:hover:bg-teal-950/25"
               onClick={() => show('b2b-payouts')}
             >
               <span className="flex items-center gap-2 text-sm font-medium">

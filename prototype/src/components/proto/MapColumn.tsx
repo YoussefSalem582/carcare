@@ -10,7 +10,7 @@ export function B2cMapMainColumn() {
           <div className="flex-1 rounded-2xl border border-slate-200 dark:border-slate-600/90 bg-white dark:bg-slate-900 px-3.5 py-3 flex items-center gap-2 shadow-sm">
             <ProtoIcon name="search" className="w-4 h-4 text-slate-400 dark:text-slate-500 flex-shrink-0" />
             <input
-              className="flex-1 bg-transparent text-sm outline-none placeholder:text-slate-400 dark:text-slate-500"
+              className="flex-1 bg-transparent text-sm text-slate-900 dark:text-slate-100 outline-none placeholder:text-slate-400 dark:placeholder:text-slate-500"
               placeholder={t('map.search_ph', 'Oil change, brakes, AC…')}
             />
             <ProtoIcon name="mic" className="w-4 h-4 text-slate-400 dark:text-slate-500 flex-shrink-0 tap" />
@@ -128,7 +128,7 @@ export function B2cMapMainColumn() {
           className="absolute right-3 map-fab rounded-full bg-white dark:bg-slate-900 flex items-center justify-center tap"
           style={{ bottom: 300 }}
         >
-          <ProtoIcon name="locate-fixed" className="w-[18px] h-[18px] text-teal-700" />
+          <ProtoIcon name="locate-fixed" className="w-[18px] h-[18px] text-teal-700 dark:text-teal-400" />
         </button>
         <button
           type="button"
@@ -150,7 +150,7 @@ export function B2cMapMainColumn() {
                 {t('map.sheet.sub', 'Sorted by distance · live availability')}
               </div>
             </div>
-            <span className="text-[11px] font-semibold text-teal-800 bg-teal-50 border border-teal-100 px-2.5 py-1 rounded-full">
+            <span className="text-[11px] font-semibold text-teal-800 dark:text-teal-100 bg-teal-50 dark:bg-teal-950/45 border border-teal-100 dark:border-teal-800/60 px-2.5 py-1 rounded-full">
               {t('map.sheet.badge', '17 centers')}
             </span>
           </div>
@@ -166,7 +166,7 @@ export function B2cMapMainColumn() {
               <div className="flex-1 min-w-0">
                 <div className="flex items-center gap-1.5">
                   <span className="font-semibold text-slate-900 dark:text-slate-100 truncate">AutoPro Heliopolis</span>
-                  <ProtoIcon name="badge-check" className="w-4 h-4 text-teal-700 flex-shrink-0" />
+                  <ProtoIcon name="badge-check" className="w-4 h-4 text-teal-700 dark:text-teal-400 flex-shrink-0" />
                 </div>
                 <div className="text-xs text-slate-600 dark:text-slate-400 mt-1">
                   0.8 km · <span className="text-emerald-600 font-medium">{t('map.sheet.open', 'Open')}</span> ·{' '}
@@ -192,7 +192,7 @@ export function B2cMapMainColumn() {
               <div className="flex-1 min-w-0">
                 <div className="flex items-center gap-1.5">
                   <span className="font-semibold text-slate-900 dark:text-slate-100 truncate">QuickFix Nasr City</span>
-                  <ProtoIcon name="badge-check" className="w-4 h-4 text-teal-700 flex-shrink-0" />
+                  <ProtoIcon name="badge-check" className="w-4 h-4 text-teal-700 dark:text-teal-400 flex-shrink-0" />
                 </div>
                 <div className="text-xs text-slate-600 dark:text-slate-400 mt-1">
                   1.6 km · <span className="text-emerald-600 font-medium">{t('map.sheet.open', 'Open')}</span> ·{' '}
@@ -213,7 +213,7 @@ export function B2cMapMainColumn() {
             </div>
             <button
               type="button"
-              className="w-full py-2.5 text-xs font-semibold text-teal-700 tap rounded-xl border border-dashed border-teal-200/80 bg-teal-50/30"
+              className="w-full py-2.5 text-xs font-semibold text-teal-700 dark:text-teal-300 tap rounded-xl border border-dashed border-teal-200/80 dark:border-teal-700/60 bg-teal-50/30 dark:bg-teal-950/30"
               onClick={() => show('b2c-search')}
             >
               {t('map.sheet.more', '+ 15 more centers · see full list')}

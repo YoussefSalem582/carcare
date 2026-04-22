@@ -43,6 +43,7 @@ export const STRINGS_AR_EG = {
   'a11y.share': 'مشاركة',
   'a11y.save': 'حفظ',
   'a11y.splash.continue': 'متابعة',
+  'a11y.theme_toggle': 'تبديل الوضع الفاتح أو الداكن',
   'common.continue': 'متابعة',
   'common.skip': 'تخطي',
   'common.email': 'البريد الإلكتروني',

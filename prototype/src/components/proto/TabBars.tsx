@@ -36,7 +36,7 @@ export function B2cTabBar({ active }: { active: string }) {
 export function B2bTopbarMobile({ title }: { title: string }) {
   return (
     <div className="b2b-topbar h-12 flex items-center px-4 justify-between flex-shrink-0">
-      <div className="font-semibold text-sm truncate max-w-[200px]">{title}</div>
+      <div className="font-semibold text-sm truncate max-w-[200px] text-slate-900 dark:text-slate-100">{title}</div>
       <div className="flex items-center gap-1">
         <button
           type="button"

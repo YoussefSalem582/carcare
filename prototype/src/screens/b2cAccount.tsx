@@ -17,7 +17,7 @@ export function B2cGarage() {
   return (
     <ScreenWrap id="b2c-garage">
       <ProtoStatusBar />
-      <div className="px-5 pt-3 pb-2 flex items-center justify-between bg-white dark:bg-slate-900 border-b border-slate-100">
+      <div className="px-5 pt-3 pb-2 flex items-center justify-between bg-white dark:bg-slate-900 border-b border-slate-100 dark:border-slate-700/80">
         <div className="font-bold text-xl tracking-tight text-slate-900 dark:text-slate-100">{t('acct.garage.title', 'My garage')}</div>
         <button
           type="button"
@@ -69,7 +69,7 @@ export function B2cGarage() {
         </div>
         <button
           type="button"
-          className="tap w-full p-4 rounded-2xl border-2 border-dashed border-teal-300/80 text-teal-800 bg-teal-50/40 text-sm font-semibold flex items-center justify-center gap-2"
+          className="tap w-full p-4 rounded-2xl border-2 border-dashed border-teal-300/80 dark:border-teal-600/50 text-teal-800 dark:text-teal-200 bg-teal-50/40 dark:bg-teal-950/35 text-sm font-semibold flex items-center justify-center gap-2"
         >
           <ProtoIcon name="plus" className="w-4 h-4" />
           {t('acct.garage.add', 'Add another car')}
@@ -182,7 +182,7 @@ export function B2cDashboard() {
   return (
     <ScreenWrap id="b2c-dashboard">
       <ProtoStatusBar />
-      <div className="px-5 pt-3 pb-2 flex items-center justify-between bg-gradient-to-r from-white via-teal-50/30 to-indigo-50/40 border-b border-slate-100">
+      <div className="px-5 pt-3 pb-2 flex items-center justify-between bg-gradient-to-r from-white via-teal-50/30 to-indigo-50/40 dark:from-slate-900 dark:via-slate-900 dark:to-slate-800 border-b border-slate-100 dark:border-slate-700/80">
         <div>
           <div className="text-sm text-slate-600 dark:text-slate-400">{t('acct.dash.greet', 'Good morning,')}</div>
           <div className="font-bold text-xl tracking-tight text-slate-900 dark:text-slate-100">Youssef</div>
@@ -286,7 +286,7 @@ export function B2cReminder() {
       </div>
       <div className="flex-1 overflow-y-auto px-5 pt-4 app-surface min-h-0">
         <div className="callout-success p-4 flex items-start gap-3 mb-4 border border-emerald-200/60">
-          <ProtoIcon name="sparkles" className="w-5 h-5 text-emerald-700 mt-0.5" />
+          <ProtoIcon name="sparkles" className="w-5 h-5 text-emerald-700 dark:text-emerald-400 mt-0.5" />
           <div className="text-sm text-emerald-950">
             <b>{t('acct.remind.rec_title', 'Recommended for you')}</b>
             <br />
@@ -297,7 +297,9 @@ export function B2cReminder() {
           <div
             key={n}
             className={`tap p-3 rounded-2xl border mb-2 ${
-              i === 0 ? 'border-teal-500 bg-teal-50' : 'border-slate-200 dark:border-slate-600'
+              i === 0
+                ? 'border-teal-500 bg-teal-50 dark:bg-teal-950/40 dark:border-teal-500'
+                : 'border-slate-200 dark:border-slate-600'
             }`}
             onClick={() => show('b2c-shop')}
             onKeyDown={(e) => e.key === 'Enter' && show('b2c-shop')}
@@ -309,7 +311,7 @@ export function B2cReminder() {
               <div className="flex-1">
                 <div className="flex items-center gap-1 font-semibold text-sm">
                   {n}
-                  {i < 2 ? <ProtoIcon name="badge-check" className="w-4 h-4 text-teal-700" /> : null}
+                  {i < 2 ? <ProtoIcon name="badge-check" className="w-4 h-4 text-teal-700 dark:text-teal-400" /> : null}
                 </div>
                 <div className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
                   {d} · <ProtoIcon name="star" className="w-3 h-3 text-amber-500 fill-amber-500 inline -mt-0.5" />
@@ -358,7 +360,7 @@ export function B2cExpenses() {
           <div className="text-xs opacity-70 mt-1">{t('acct.exp.across', 'Across 14 services · 2 cars')}</div>
         </div>
         <div className="grid grid-cols-2 gap-3 mt-3">
-          <div className="p-3 rounded-xl border border-teal-100 bg-teal-50/80">
+          <div className="p-3 rounded-xl border border-teal-100 dark:border-teal-800/60 bg-teal-50/80 dark:bg-teal-950/40">
             <div className="text-xs text-teal-800 font-medium">{t('acct.exp.maintenance', 'Maintenance')}</div>
             <div className="font-bold text-teal-950">EGP 4,200</div>
           </div>
