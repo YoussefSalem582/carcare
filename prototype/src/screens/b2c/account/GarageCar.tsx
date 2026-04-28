@@ -29,8 +29,8 @@ export function B2cGarage() {
           <div className="flex justify-between items-start">
             <div>
               <div className="text-xs uppercase tracking-wider opacity-80">{t('acct.garage.primary', 'Primary')}</div>
-              <div className="text-xl font-bold mt-0.5">Toyota Corolla</div>
-              <div className="text-sm opacity-80">2019 · 82,450 km · س ب ج 7421</div>
+              <div className="text-xl font-bold mt-0.5">{t('demo.garage.corolla_title', 'Toyota Corolla')}</div>
+              <div className="text-sm opacity-80">{t('demo.garage.meta_line', '2019 · 82,450 km · س ب ج 7421')}</div>
             </div>
             <ProtoIcon name="car" className="w-10 h-10 opacity-70" />
           </div>
@@ -38,23 +38,23 @@ export function B2cGarage() {
           <div className="grid grid-cols-3 gap-2 text-xs">
             <div>
               <div className="opacity-70">{t('acct.garage.last', 'Last service')}</div>
-              <div className="font-semibold mt-0.5">29 Mar · AC</div>
+              <div className="font-semibold mt-0.5">{t('demo.garage.last_detail', '29 Mar · AC')}</div>
             </div>
             <div>
               <div className="opacity-70">{t('acct.garage.next', 'Next due')}</div>
-              <div className="font-semibold mt-0.5">Oil · 1.2k km</div>
+              <div className="font-semibold mt-0.5">{t('demo.garage.next_detail', 'Oil · 1.2k km')}</div>
             </div>
             <div>
               <div className="opacity-70">{t('acct.garage.spent', 'Spent YTD')}</div>
-              <div className="font-semibold mt-0.5">EGP 2,430</div>
+              <div className="font-semibold mt-0.5">{t('demo.garage.spent_ytd', 'EGP 2,430')}</div>
             </div>
           </div>
         </div>
         <div className="tap p-4 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-600/90 shadow-sm ring-1 ring-indigo-500/5">
           <div className="flex justify-between items-start">
             <div>
-              <div className="font-semibold">Hyundai Tucson</div>
-              <div className="text-sm text-slate-500 dark:text-slate-400">2022 · 24,100 km</div>
+              <div className="font-semibold">{t('demo.garage.tucson_title', 'Hyundai Tucson')}</div>
+              <div className="text-sm text-slate-500 dark:text-slate-400">{t('demo.garage.tucson_meta', '2022 · 24,100 km')}</div>
             </div>
             <ProtoIcon name="chevron-right" className="w-5 h-5 text-slate-400 dark:text-slate-500" />
           </div>
@@ -75,17 +75,41 @@ export function B2cGarage() {
 
 export function B2cCardetail() {
   const { show, t } = useProto();
-  const hist = [
-    ['29 Mar', 'AC recharge', 'QuickFix Nasr City', 'EGP 450', true],
-    ['8 Feb', 'Oil + filter', 'AutoPro Heliopolis', 'EGP 520', true],
-    ['12 Dec', 'Front brake pads', 'Toyota Authorized', 'EGP 950', true],
-    ['3 Nov', 'Tire rotation', 'Cairo Motors (manual entry)', 'EGP 120', false],
-  ] as const;
+  const hist: [string, string, string, string, boolean][] = [
+    [
+      t('demo.card.hist1_date', '29 Mar'),
+      t('demo.card.hist1_svc', 'AC recharge'),
+      t('demo.card.hist1_shop', 'QuickFix Nasr City'),
+      t('demo.card.hist1_price', 'EGP 450'),
+      true,
+    ],
+    [
+      t('demo.card.hist2_date', '8 Feb'),
+      t('demo.card.hist2_svc', 'Oil + filter'),
+      t('demo.card.hist2_shop', 'AutoPro Heliopolis'),
+      t('demo.card.hist2_price', 'EGP 520'),
+      true,
+    ],
+    [
+      t('demo.card.hist3_date', '12 Dec'),
+      t('demo.card.hist3_svc', 'Front brake pads'),
+      t('demo.card.hist3_shop', 'Toyota Authorized'),
+      t('demo.card.hist3_price', 'EGP 950'),
+      true,
+    ],
+    [
+      t('demo.card.hist4_date', '3 Nov'),
+      t('demo.card.hist4_svc', 'Tire rotation'),
+      t('demo.card.hist4_shop', 'Cairo Motors (manual entry)'),
+      t('demo.card.hist4_price', 'EGP 120'),
+      false,
+    ],
+  ];
   const stats = [
-    [t('acct.card.stat.mileage', 'Mileage'), '82,450 km', 'cyan'],
+    [t('acct.card.stat.mileage', 'Mileage'), t('demo.card.stat_km', '82,450 km'), 'cyan'],
     [t('acct.card.stat.bookings', 'Bookings'), '14', 'violet'],
-    [t('acct.card.stat.spent', 'Spent'), 'EGP 7,820', 'amber'],
-  ] as const;
+    [t('acct.card.stat.spent', 'Spent'), t('demo.card.stat_spent', 'EGP 7,820'), 'amber'],
+  ];
   return (
     <ScreenWrap id="b2c-cardetail">
       <ProtoStatusBar />
@@ -131,9 +155,9 @@ export function B2cCardetail() {
         </div>
         <div className="label mt-5 mb-2">{t('acct.card.history', 'Service history')}</div>
         <div className="space-y-3">
-          {hist.map(([d, s, shop, p, auto]) => (
+          {hist.map(([d, s, shop, p, auto], i) => (
             <div
-              key={d + s}
+              key={i}
               className="p-3 rounded-xl border border-slate-200 dark:border-slate-600/90 bg-white dark:bg-slate-900 shadow-sm"
             >
               <div className="flex justify-between items-start">

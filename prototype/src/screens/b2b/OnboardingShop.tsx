@@ -20,32 +20,48 @@ export function B2bOnboard1() {
             <div className="mt-4 space-y-3">
               <div>
                 <div className="label mb-1.5">{t('b2b.on1.legal', 'Legal name')}</div>
-                <input className="proto-input w-full px-3.5 py-2.5 text-sm" defaultValue="AutoPro Automotive Services LLC" autoComplete="off" />
+                <input
+                  className="proto-input w-full px-3.5 py-2.5 text-sm"
+                  defaultValue={t('demo.onboard.legal_name', 'AutoPro Automotive Services LLC')}
+                  autoComplete="off"
+                />
               </div>
               <div>
                 <div className="label mb-1.5">{t('b2b.on1.trade', 'Trade name (shown to users)')}</div>
-                <input className="proto-input w-full px-3.5 py-2.5 text-sm" defaultValue="AutoPro Heliopolis" autoComplete="off" />
+                <input
+                  className="proto-input w-full px-3.5 py-2.5 text-sm"
+                  defaultValue={t('demo.shop.name', 'AutoPro Heliopolis')}
+                  autoComplete="off"
+                />
               </div>
               <div>
                 <div className="label mb-1.5">{t('b2b.on1.tax', 'Tax ID')}</div>
-                <input className="proto-input w-full px-3.5 py-2.5 text-sm" defaultValue="415-228-9910" autoComplete="off" />
+                <input
+                  className="proto-input w-full px-3.5 py-2.5 text-sm"
+                  defaultValue={t('demo.onboard.tax_id', '415-228-9910')}
+                  autoComplete="off"
+                />
               </div>
               <div>
                 <div className="label mb-1.5">{t('b2b.on1.cr', 'Commercial registration #')}</div>
-                <input className="proto-input w-full px-3.5 py-2.5 text-sm" defaultValue="CR-88421" autoComplete="off" />
+                <input className="proto-input w-full px-3.5 py-2.5 text-sm" defaultValue={t('demo.onboard.cr', 'CR-88421')} autoComplete="off" />
               </div>
               <div>
                 <div className="label mb-1.5">{t('b2b.on1.address', 'Address')}</div>
-                <input className="proto-input w-full px-3.5 py-2.5 text-sm" defaultValue="12 Baghdad St, Heliopolis, Cairo" autoComplete="off" />
+                <input
+                  className="proto-input w-full px-3.5 py-2.5 text-sm"
+                  defaultValue={t('demo.onboard.address_line', '12 Baghdad St, Heliopolis, Cairo')}
+                  autoComplete="off"
+                />
               </div>
               <div>
                 <div className="label mb-1.5">{t('b2b.on1.city', 'City')}</div>
-                <input className="proto-input w-full px-3.5 py-2.5 text-sm" defaultValue="Cairo" autoComplete="off" />
+                <input className="proto-input w-full px-3.5 py-2.5 text-sm" defaultValue={t('demo.onboard.city', 'Cairo')} autoComplete="off" />
               </div>
               <div>
                 <div className="label mb-1.5">{t('b2b.on1.pin', 'Pin on map')}</div>
                 <div className="proto-input px-3.5 py-2.5 text-sm flex justify-between items-center">
-                  <span>30.0980°N · 31.3411°E</span>
+                  <span>{t('demo.onboard.coords', '30.0980°N · 31.3411°E')}</span>
                   <span className="text-teal-700 font-semibold tap">{t('b2b.on1.adjust', 'Adjust')}</span>
                 </div>
               </div>
@@ -58,7 +74,7 @@ export function B2bOnboard1() {
               </div>
               <div>
                 <div className="label mb-1.5">{t('b2b.on1.founded', 'Year founded')}</div>
-                <input className="proto-input w-full px-3.5 py-2.5 text-sm" defaultValue="2014" autoComplete="off" />
+                <input className="proto-input w-full px-3.5 py-2.5 text-sm" defaultValue={t('demo.onboard.year', '2014')} autoComplete="off" />
               </div>
             </div>
             <div className="mt-6 flex flex-col gap-2">

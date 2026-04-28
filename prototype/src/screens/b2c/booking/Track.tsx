@@ -34,8 +34,10 @@ export function B2cBookings() {
           <div className="flex justify-between items-start">
             <div>
               <div className="text-xs text-teal-700 dark:text-teal-400 font-bold uppercase tracking-wide mb-1">{t('book.list.today', 'Today · 11:00')}</div>
-              <div className="font-semibold">Oil change — Toyota Corolla</div>
-              <div className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">AutoPro Heliopolis · 0.8 km</div>
+              <div className="font-semibold">{t('demo.track.job_oil_corolla', 'Oil change — Toyota Corolla')}</div>
+              <div className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
+                {t('demo.track.meta_autopro_km', 'AutoPro Heliopolis · 0.8 km')}
+              </div>
             </div>
             <span className="badge b-indigo">{t('book.list.badge.confirmed', 'Confirmed')}</span>
           </div>
@@ -53,10 +55,12 @@ export function B2cBookings() {
           <div className="flex justify-between items-start">
             <div>
               <div className="text-xs text-slate-500 dark:text-slate-400 font-bold uppercase tracking-wide mb-1">
-                Tue 21 Apr · 16:00
+                {t('demo.track.when_tue', 'Tue 21 Apr · 16:00')}
               </div>
-              <div className="font-semibold">Brake inspection — Hyundai Tucson</div>
-              <div className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">Toyota Authorized · 2.4 km</div>
+              <div className="font-semibold">{t('demo.track.job_brake_tucson', 'Brake inspection — Hyundai Tucson')}</div>
+              <div className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
+                {t('demo.track.meta_toyota_km', 'Toyota Authorized · 2.4 km')}
+              </div>
             </div>
             <span className="badge b-amber">{t('book.list.badge.await', 'Awaiting shop')}</span>
           </div>
@@ -66,10 +70,12 @@ export function B2cBookings() {
           <div className="flex justify-between items-start">
             <div>
               <div className="text-xs text-slate-500 dark:text-slate-400 font-bold uppercase tracking-wide mb-1">
-                29 Mar · Completed
+                {t('demo.track.past_when_done', '29 Mar · Completed')}
               </div>
-              <div className="font-semibold">AC recharge — Toyota Corolla</div>
-              <div className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">QuickFix Nasr City · EGP 450</div>
+              <div className="font-semibold">{t('demo.track.job_ac_corolla', 'AC recharge — Toyota Corolla')}</div>
+              <div className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
+                {t('demo.track.meta_quickfix_pay', 'QuickFix Nasr City · EGP 450')}
+              </div>
             </div>
             <button type="button" className="text-xs font-semibold text-teal-700 dark:text-teal-400 tap" onClick={() => show('b2c-review')}>
               {t('book.list.review', 'Review')}
@@ -86,10 +92,10 @@ export function B2cBookings() {
 export function B2cProgress() {
   const { show, t } = useProto();
   const steps = [
-    [t('book.progress.step1', 'Booking confirmed'), '11:02 AM', true],
-    [t('book.progress.step2', 'Checked in at center'), '11:15 AM', true],
-    [t('book.progress.step3', 'In progress'), '11:22 AM', 'active'],
-    [t('book.progress.step4', 'Ready for pickup'), '~ 12:00 PM', false],
+    [t('book.progress.step1', 'Booking confirmed'), t('demo.track.step_t1', '11:02 AM'), true],
+    [t('book.progress.step2', 'Checked in at center'), t('demo.track.step_t2', '11:15 AM'), true],
+    [t('book.progress.step3', 'In progress'), t('demo.track.step_t3', '11:22 AM'), 'active'],
+    [t('book.progress.step4', 'Ready for pickup'), t('demo.track.step_t4', '~ 12:00 PM'), false],
     [t('book.progress.step5', 'Invoiced & paid'), '', false],
   ] as const;
   return (
@@ -147,8 +153,10 @@ export function B2cProgress() {
             <ProtoIcon name="wrench" className="w-6 h-6 text-teal-700 dark:text-teal-400" />
           </div>
           <div className="flex-1">
-            <div className="font-semibold text-sm">AutoPro Heliopolis</div>
-            <div className="text-xs text-slate-500 dark:text-slate-400">Booking #CC-4A1F9</div>
+            <div className="font-semibold text-sm">{t('demo.search.r1_name', 'AutoPro Heliopolis')}</div>
+            <div className="text-xs text-slate-500 dark:text-slate-400">
+              {t('demo.track.booking_ref', 'Booking #CC-4A1F9')}
+            </div>
           </div>
           <button type="button" className="w-10 h-10 rounded-full bg-gradient-to-br from-teal-600 to-emerald-600 flex items-center justify-center text-white tap shadow-md">
             <ProtoIcon name="phone" className="w-4 h-4" />
@@ -160,17 +168,17 @@ export function B2cProgress() {
         <div className="label mt-5 mb-2">{t('book.progress.invoice', 'Invoice (so far)')}</div>
         <div className="app-panel p-4 space-y-1 text-sm">
           <div className="flex justify-between">
-            <span>Oil change (standard)</span>
-            <span>EGP 350</span>
+            <span>{t('demo.track.inv_line_oil', 'Oil change (standard)')}</span>
+            <span>{t('demo.track.price_350', 'EGP 350')}</span>
           </div>
           <div className="flex justify-between text-slate-400 dark:text-slate-500 italic">
             <span>{t('book.progress.addon', '+ Cabin filter (pending approval)')}</span>
-            <span>EGP 180</span>
+            <span>{t('demo.track.price_180', 'EGP 180')}</span>
           </div>
           <div className="divider my-2" />
           <div className="flex justify-between font-bold">
             <span>{t('book.pay.total', 'Total')}</span>
-            <span>EGP 350</span>
+            <span>{t('demo.track.price_350', 'EGP 350')}</span>
           </div>
         </div>
         <button type="button" className="mt-4 w-full py-3 rounded-xl text-sm font-semibold border border-slate-200 dark:border-slate-600 tap">
@@ -204,8 +212,10 @@ export function B2cReview() {
       <div className="flex-1 app-surface px-5 pt-4 overflow-y-auto min-h-0">
         <div className="text-center pt-4">
           <div className="w-16 h-16 rounded-2xl bg-slate-200 mx-auto mb-3" />
-          <div className="font-bold text-lg">AutoPro Heliopolis</div>
-          <div className="text-xs text-slate-500 dark:text-slate-400">AC recharge · 29 Mar</div>
+          <div className="font-bold text-lg">{t('demo.search.r1_name', 'AutoPro Heliopolis')}</div>
+          <div className="text-xs text-slate-500 dark:text-slate-400">
+            {t('demo.track.review_ctx', 'AC recharge · 29 Mar')}
+          </div>
         </div>
         <div className="flex justify-center gap-2 mt-5">
           {[1, 1, 1, 1, 0].map((on, i) => (

@@ -165,22 +165,24 @@ export function B2cMapMainColumn() {
               </div>
               <div className="flex-1 min-w-0">
                 <div className="flex items-center gap-1.5">
-                  <span className="font-semibold text-slate-900 dark:text-slate-100 truncate">AutoPro Heliopolis</span>
+                  <span className="font-semibold text-slate-900 dark:text-slate-100 truncate">
+                    {t('demo.search.r1_name', 'AutoPro Heliopolis')}
+                  </span>
                   <ProtoIcon name="badge-check" className="w-4 h-4 text-teal-700 dark:text-teal-400 flex-shrink-0" />
                 </div>
                 <div className="text-xs text-slate-600 dark:text-slate-400 mt-1">
-                  0.8 km · <span className="text-emerald-600 font-medium">{t('map.sheet.open', 'Open')}</span> ·{' '}
+                  {t('demo.search.r1_dist', '0.8 km')} · <span className="text-emerald-600 font-medium">{t('map.sheet.open', 'Open')}</span> ·{' '}
                   {t('map.sheet.next_slot', 'Next slot')}{' '}
-                  <span className="font-semibold text-slate-700 dark:text-slate-300">11:30</span>
+                  <span className="font-semibold text-slate-700 dark:text-slate-300">{t('demo.search.r1_next', '11:30')}</span>
                 </div>
                 <div className="flex items-center gap-2 mt-1.5 text-xs">
                   <span className="flex items-center gap-0.5 font-semibold text-slate-800 dark:text-slate-200">
                     <ProtoIcon name="star" className="w-3 h-3 text-amber-500 fill-amber-500" />
-                    4.8
+                    {t('demo.search.r1_stars', '4.8')}
                   </span>
-                  <span className="text-slate-400 dark:text-slate-500">(312)</span>
+                  <span className="text-slate-400 dark:text-slate-500">({t('demo.search.r1_rev_n', '312')})</span>
                   <span className="text-slate-300">·</span>
-                  <span className="text-slate-600 dark:text-slate-400 font-medium">EGP 350–900</span>
+                  <span className="text-slate-600 dark:text-slate-400 font-medium">{t('demo.search.r1_price', 'EGP 350–900')}</span>
                 </div>
               </div>
               <span className="btn-primary py-2.5 px-4 text-xs rounded-xl shadow-sm">{t('map.sheet.book', 'Book')}</span>
@@ -191,22 +193,24 @@ export function B2cMapMainColumn() {
               </div>
               <div className="flex-1 min-w-0">
                 <div className="flex items-center gap-1.5">
-                  <span className="font-semibold text-slate-900 dark:text-slate-100 truncate">QuickFix Nasr City</span>
+                  <span className="font-semibold text-slate-900 dark:text-slate-100 truncate">
+                    {t('demo.search.r2_name', 'QuickFix Nasr City')}
+                  </span>
                   <ProtoIcon name="badge-check" className="w-4 h-4 text-teal-700 dark:text-teal-400 flex-shrink-0" />
                 </div>
                 <div className="text-xs text-slate-600 dark:text-slate-400 mt-1">
-                  1.6 km · <span className="text-emerald-600 font-medium">{t('map.sheet.open', 'Open')}</span> ·{' '}
+                  {t('demo.search.r2_dist', '1.6 km')} · <span className="text-emerald-600 font-medium">{t('map.sheet.open', 'Open')}</span> ·{' '}
                   {t('map.sheet.next_slot', 'Next slot')}{' '}
-                  <span className="font-semibold text-slate-700 dark:text-slate-300">12:15</span>
+                  <span className="font-semibold text-slate-700 dark:text-slate-300">{t('demo.search.r2_next', '12:15')}</span>
                 </div>
                 <div className="flex items-center gap-2 mt-1.5 text-xs">
                   <span className="flex items-center gap-0.5 font-semibold text-slate-800 dark:text-slate-200">
                     <ProtoIcon name="star" className="w-3 h-3 text-amber-500 fill-amber-500" />
-                    4.6
+                    {t('demo.search.r2_stars', '4.6')}
                   </span>
-                  <span className="text-slate-400 dark:text-slate-500">(188)</span>
+                  <span className="text-slate-400 dark:text-slate-500">({t('demo.search.r2_rev_n', '188')})</span>
                   <span className="text-slate-300">·</span>
-                  <span className="text-slate-600 dark:text-slate-400 font-medium">EGP 250–1200</span>
+                  <span className="text-slate-600 dark:text-slate-400 font-medium">{t('demo.search.r2_price', 'EGP 250–1200')}</span>
                 </div>
               </div>
               <span className="btn-secondary py-2.5 px-4 text-xs">{t('map.sheet.view', 'View')}</span>

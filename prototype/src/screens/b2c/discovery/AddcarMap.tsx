@@ -43,23 +43,24 @@ export function B2cAddcar() {
           <div>
             <div className="label mb-1.5">{t('disc.addcar.brand', 'Brand')}</div>
             <div className="proto-input px-3.5 py-3 text-sm flex justify-between items-center">
-              Toyota <ProtoIcon name="chevron-down" className="w-4 h-4 text-slate-400 dark:text-slate-500" />
+              {t('demo.addcar.brand_demo', 'Toyota')}{' '}
+              <ProtoIcon name="chevron-down" className="w-4 h-4 text-slate-400 dark:text-slate-500" />
             </div>
           </div>
           <div className="grid grid-cols-2 gap-3">
             <div>
               <div className="label mb-1.5">{t('disc.addcar.model', 'Model')}</div>
-              <div className="proto-input px-3.5 py-3 text-sm">Corolla</div>
+              <div className="proto-input px-3.5 py-3 text-sm">{t('demo.addcar.make_demo', 'Corolla')}</div>
             </div>
             <div>
               <div className="label mb-1.5">{t('disc.addcar.year', 'Year')}</div>
-              <div className="proto-input px-3.5 py-3 text-sm">2019</div>
+              <div className="proto-input px-3.5 py-3 text-sm">{t('demo.addcar.year_demo', '2019')}</div>
             </div>
           </div>
           <div className="grid grid-cols-2 gap-3">
             <div>
               <div className="label mb-1.5">{t('disc.addcar.mileage', 'Mileage (km)')}</div>
-              <div className="proto-input px-3.5 py-3 text-sm">82,450</div>
+              <div className="proto-input px-3.5 py-3 text-sm">{t('demo.addcar.mileage_demo', '82,450')}</div>
             </div>
             <div>
               <div className="label mb-1.5">

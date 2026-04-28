@@ -1,4 +1,5 @@
 import { ProtoIcon } from './Icon';
+import { useProto } from '../../context/ProtoContext';
 
 export function ProtoStatusBarIcons() {
   return (
@@ -11,8 +12,9 @@ export function ProtoStatusBarIcons() {
 }
 
 export function ProtoStatusBar(opts?: { time?: string; trailing?: 'icons' | 'empty' | string }) {
+  const { t } = useProto();
   const o = opts ?? {};
-  const time = o.time ?? '9:41';
+  const time = o.time ?? t('demo.status.time', '9:41');
   const right =
     o.trailing === 'icons' ? (
       <ProtoStatusBarIcons />

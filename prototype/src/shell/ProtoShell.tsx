@@ -8,13 +8,14 @@ import { PHONE_SCREENS } from '../screens/phoneRegistry';
 import type { ScreenRow, Surface } from '../types';
 
 function PhoneStage() {
-  const { surface, currentScreen } = useProto();
+  const { surface, currentScreen, t } = useProto();
   if (surface === 'flutterGuide') return null;
   const Cmp = PHONE_SCREENS[currentScreen];
   if (!Cmp) {
     return (
       <div className="p-4 text-sm text-slate-600 dark:text-slate-400">
-        Missing screen component: <span className="font-mono">{currentScreen}</span>
+        {t('shell.missing_screen', 'Missing screen component:')}{' '}
+        <span className="font-mono">{currentScreen}</span>
       </div>
     );
   }
@@ -124,7 +125,7 @@ export function ProtoShell() {
               type="button"
               id="protoLocaleEn"
               className={`px-2.5 py-1.5 rounded-lg text-xs font-semibold ${locale === 'en' ? 'tab-active' : 'text-slate-600 dark:text-slate-400'}`}
-              title="English"
+              title={t('shell.locale_en_title', 'English')}
               onClick={() => setLocale('en')}
             >
               EN
@@ -133,7 +134,7 @@ export function ProtoShell() {
               type="button"
               id="protoLocaleAr"
               className={`px-2.5 py-1.5 rounded-lg text-xs font-semibold ${locale === 'ar-EG' ? 'tab-active' : 'text-slate-600 dark:text-slate-400'}`}
-              title="العربية (مصر)"
+              title={t('shell.locale_ar_title', 'العربية (مصر)')}
               onClick={() => setLocale('ar-EG')}
             >
               عربي
@@ -220,7 +221,7 @@ export function ProtoShell() {
               <aside
                 id={asideId}
                 className="ftg-handbook-aside proto-detail-aside dark:border-slate-700"
-                aria-label="Screen spec"
+                aria-label={t('a11y.spec_aside', 'Screen spec')}
               >
                 <SpecAside surface={srf} screenId={currentScreen} />
               </aside>
@@ -235,7 +236,7 @@ export function ProtoShell() {
             <aside
               id="ftgHandbookAside"
               className="ftg-handbook-aside proto-detail-aside ftg-guide-full mx-auto dark:border-slate-700"
-              aria-label="Flutter Team Guide — technical handbook"
+              aria-label={t('a11y.ftg_handbook_aside', 'Flutter Team Guide — technical handbook')}
             >
               {surface === 'flutterGuide' ? (
                 <>

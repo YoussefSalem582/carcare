@@ -7,10 +7,38 @@ import { ScreenWrap } from '../../shared/ScreenWrap';
 export function B2cService() {
   const { show, t, bookingReturnTarget } = useProto();
   const rows = [
-    ['Oil change (standard)', '5W-30 semi-synthetic · 4L', '45 min', 'EGP 350', 'fixed', true],
-    ['Oil change (premium)', '5W-30 full synthetic · 4L', '45 min', 'EGP 620', 'fixed', false],
-    ['Oil + filter combo', 'Standard oil + OEM filter', '1 h', 'EGP 450', 'fixed', false],
-    ['Brake inspection', 'Free with any service', '15 min', 'Free', 'range', false],
+    [
+      t('demo.flow.svc_std_title', 'Oil change (standard)'),
+      t('demo.flow.svc_std_sub', '5W-30 semi-synthetic · 4L'),
+      t('demo.flow.svc_std_dur', '45 min'),
+      t('demo.flow.price_350', 'EGP 350'),
+      'fixed',
+      true,
+    ],
+    [
+      t('demo.flow.svc_prem_title', 'Oil change (premium)'),
+      t('demo.flow.svc_prem_sub', '5W-30 full synthetic · 4L'),
+      t('demo.flow.svc_std_dur', '45 min'),
+      t('demo.flow.price_620', 'EGP 620'),
+      'fixed',
+      false,
+    ],
+    [
+      t('demo.flow.svc_combo_title', 'Oil + filter combo'),
+      t('demo.flow.svc_combo_sub', 'Standard oil + OEM filter'),
+      t('demo.flow.svc_combo_dur', '1 h'),
+      t('demo.flow.price_450', 'EGP 450'),
+      'fixed',
+      false,
+    ],
+    [
+      t('demo.flow.svc_insp_title', 'Brake inspection'),
+      t('demo.flow.svc_insp_sub', 'Free with any service'),
+      t('demo.flow.svc_insp_dur', '15 min'),
+      t('demo.flow.price_free', 'Free'),
+      'range',
+      false,
+    ],
   ] as const;
   return (
     <ScreenWrap id="b2c-service">
@@ -27,11 +55,11 @@ export function B2cService() {
         <div className="flex gap-2 mb-5 overflow-x-auto">
           <div className="chip on whitespace-nowrap">
             <ProtoIcon name="car" className="w-3.5 h-3.5" />
-            Toyota Corolla 2019
+            {t('demo.flow.car_corolla_2019', 'Toyota Corolla 2019')}
           </div>
           <div className="chip whitespace-nowrap">
             <ProtoIcon name="car" className="w-3.5 h-3.5" />
-            Hyundai Tucson 2022
+            {t('demo.flow.car_tucson_2022', 'Hyundai Tucson 2022')}
           </div>
           <div className="chip whitespace-nowrap">
             <ProtoIcon name="plus" className="w-3.5 h-3.5" />
@@ -40,9 +68,9 @@ export function B2cService() {
         </div>
         <div className="label mb-2">{t('book.services', 'Services')}</div>
         <div className="space-y-2">
-          {rows.map(([rowTitle, d, dur, p, typ, on]) => (
+          {rows.map(([rowTitle, d, dur, p, typ, on], idx) => (
             <label
-              key={rowTitle}
+              key={idx}
               className={`flex items-center gap-3 p-3 rounded-xl border tap ${
                 on
                   ? 'border-teal-500 bg-teal-50 dark:bg-teal-950/35 dark:border-teal-500'
@@ -78,7 +106,7 @@ export function B2cService() {
             <div className="text-xs text-slate-500 dark:text-slate-400">{t('book.cabin_sub', 'OEM · +10 min')}</div>
           </div>
           <div className="flex items-center gap-2">
-            <div className="text-sm font-semibold">+EGP 180</div>
+            <div className="text-sm font-semibold">{t('demo.flow.addon_180', '+EGP 180')}</div>
             <div className="w-6 h-6 rounded-md border border-slate-300 dark:border-slate-600 flex items-center justify-center">
               <ProtoIcon name="plus" className="w-3.5 h-3.5" />
             </div>
@@ -97,9 +125,31 @@ export function B2cService() {
 
 export function B2cSlot() {
   const { show, t } = useProto();
-  const days = ['Sat 18', 'Sun 19', 'Mon 20', 'Tue 21', 'Wed 22', 'Thu 23', 'Fri 24'];
-  const morning = ['09:00', '09:30', '10:00', '10:30', '11:00', '11:30'];
-  const afternoon = ['12:00', '12:30', '13:00', '14:00', '14:30', '15:00'];
+  const days = [
+    t('demo.slot.d1', 'Sat 18'),
+    t('demo.slot.d2', 'Sun 19'),
+    t('demo.slot.d3', 'Mon 20'),
+    t('demo.slot.d4', 'Tue 21'),
+    t('demo.slot.d5', 'Wed 22'),
+    t('demo.slot.d6', 'Thu 23'),
+    t('demo.slot.d7', 'Fri 24'),
+  ];
+  const morning = [
+    t('demo.slot.t0900', '09:00'),
+    t('demo.slot.t0930', '09:30'),
+    t('demo.slot.t1000', '10:00'),
+    t('demo.slot.t1030', '10:30'),
+    t('demo.slot.t1100', '11:00'),
+    t('demo.slot.t1130', '11:30'),
+  ];
+  const afternoon = [
+    t('demo.slot.t1200', '12:00'),
+    t('demo.slot.t1230', '12:30'),
+    t('demo.slot.t1300', '13:00'),
+    t('demo.slot.t1400', '14:00'),
+    t('demo.slot.t1430', '14:30'),
+    t('demo.slot.t1500', '15:00'),
+  ];
   return (
     <ScreenWrap id="b2c-slot">
       <ProtoStatusBar />
@@ -199,22 +249,22 @@ export function B2cPayment() {
           <div className="divider my-3" />
           <div className="space-y-1.5 text-sm">
             <div className="flex justify-between">
-              <span>Oil change (standard)</span>
-              <span>EGP 350</span>
+              <span>{t('demo.pay.line_oil', 'Oil change (standard)')}</span>
+              <span>{t('demo.flow.price_350', 'EGP 350')}</span>
             </div>
             <div className="flex justify-between text-slate-500 dark:text-slate-400">
               <span>{t('book.pay.fee', 'Service fee')}</span>
-              <span>EGP 15</span>
+              <span>{t('demo.pay.fee_15', 'EGP 15')}</span>
             </div>
             <div className="flex justify-between text-green-700">
               <span>{t('book.pay.promo', 'Promo FIRST50')}</span>
-              <span>−EGP 50</span>
+              <span>{t('demo.pay.discount_50', '−EGP 50')}</span>
             </div>
           </div>
           <div className="divider my-3" />
           <div className="flex justify-between font-bold">
             <span>{t('book.pay.total', 'Total')}</span>
-            <span>EGP 315</span>
+            <span>{t('demo.pay.total_315', 'EGP 315')}</span>
           </div>
         </div>
         <div className="label mt-5 mb-2">{t('book.pay.method', 'Payment method')}</div>
@@ -225,7 +275,7 @@ export function B2cPayment() {
             </div>
             <ProtoIcon name="credit-card" className="w-5 h-5 text-indigo-600 dark:text-indigo-400" />
             <div className="flex-1">
-              <div className="text-sm font-semibold">Visa •• 4242</div>
+              <div className="text-sm font-semibold">{t('demo.pay.card_mask', 'Visa •• 4242')}</div>
               <div className="text-xs text-slate-500 dark:text-slate-400">{t('book.pay.card_sub', 'Expires 08/27')}</div>
             </div>
           </label>
@@ -242,7 +292,7 @@ export function B2cPayment() {
             <ProtoIcon name="wallet" className="w-5 h-5 text-violet-600 dark:text-violet-400" />
             <div className="flex-1">
               <div className="text-sm font-semibold">{t('book.pay.vf', 'Vodafone Cash')}</div>
-              <div className="text-xs text-slate-500 dark:text-slate-400">+20 100 555 0142</div>
+              <div className="text-xs text-slate-500 dark:text-slate-400">{t('demo.pay.vf_phone', '+20 100 555 0142')}</div>
             </div>
           </label>
         </div>
@@ -282,25 +332,25 @@ export function B2cConfirmed() {
         <div className="mt-6 w-full app-panel p-4 text-left">
           <div className="flex justify-between text-xs text-slate-500 dark:text-slate-400">
             <span>{t('book.confirmed.id', 'Booking ID')}</span>
-            <span>#CC-4A1F9</span>
+            <span>{t('demo.track.booking_id', '#CC-4A1F9')}</span>
           </div>
           <div className="divider my-2" />
           <div className="space-y-2 text-sm">
             <div className="flex items-center gap-2">
               <ProtoIcon name="calendar" className="w-4 h-4 text-slate-500 dark:text-slate-400" />
-              <span>Sat 18 Apr · 11:00 AM</span>
+              <span>{t('demo.confirmed.when_detail', 'Sat 18 Apr · 11:00 AM')}</span>
             </div>
             <div className="flex items-center gap-2">
               <ProtoIcon name="map-pin" className="w-4 h-4 text-slate-500 dark:text-slate-400" />
-              <span>AutoPro, 12 Baghdad St, Heliopolis</span>
+              <span>{t('demo.confirmed.address', 'AutoPro, 12 Baghdad St, Heliopolis')}</span>
             </div>
             <div className="flex items-center gap-2">
               <ProtoIcon name="car" className="w-4 h-4 text-slate-500 dark:text-slate-400" />
-              <span>Toyota Corolla 2019</span>
+              <span>{t('demo.confirmed.car_line', 'Toyota Corolla 2019')}</span>
             </div>
             <div className="flex items-center gap-2">
               <ProtoIcon name="wrench" className="w-4 h-4 text-slate-500 dark:text-slate-400" />
-              <span>Oil change (standard)</span>
+              <span>{t('demo.pay.line_oil', 'Oil change (standard)')}</span>
             </div>
           </div>
         </div>

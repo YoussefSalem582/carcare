@@ -7,12 +7,36 @@ import { ScreenWrap } from '../../shared/ScreenWrap';
 
 export function B2cMarketplace() {
   const { t } = useProto();
-  const rows = [
-    ['Bosch cabin filter', 'EGP 185', '4.7', '1.2k sold', 'Cairo Parts'],
-    ['Michelin 205/55 R16', 'EGP 2,890', '4.8', 'In stock', 'Elite Tires'],
-    ['AGM battery 60Ah', 'EGP 3,200', '4.6', '2–3d ship', 'AutoBatt'],
-    ['Castrol 5W-30 (4L)', 'EGP 450', '4.8', 'EGP 50 delivery', 'Lubrico'],
-  ] as const;
+  const rows: [string, string, string, string, string][] = [
+    [
+      t('demo.market.p1_title', 'Bosch cabin filter'),
+      t('demo.market.p1_price', 'EGP 185'),
+      t('demo.market.p1_star', '4.7'),
+      t('demo.market.p1_extra', '1.2k sold'),
+      t('demo.market.p1_seller', 'Cairo Parts'),
+    ],
+    [
+      t('demo.market.p2_title', 'Michelin 205/55 R16'),
+      t('demo.market.p2_price', 'EGP 2,890'),
+      t('demo.market.p2_star', '4.8'),
+      t('demo.market.p2_extra', 'In stock'),
+      t('demo.market.p2_seller', 'Elite Tires'),
+    ],
+    [
+      t('demo.market.p3_title', 'AGM battery 60Ah'),
+      t('demo.market.p3_price', 'EGP 3,200'),
+      t('demo.market.p3_star', '4.6'),
+      t('demo.market.p3_extra', '2–3d ship'),
+      t('demo.market.p3_seller', 'AutoBatt'),
+    ],
+    [
+      t('demo.market.p4_title', 'Castrol 5W-30 (4L)'),
+      t('demo.market.p4_price', 'EGP 450'),
+      t('demo.market.p4_star', '4.8'),
+      t('demo.market.p4_extra', 'EGP 50 delivery'),
+      t('demo.market.p4_seller', 'Lubrico'),
+    ],
+  ];
   return (
     <ScreenWrap id="b2c-marketplace">
       <ProtoStatusBar />
@@ -30,7 +54,7 @@ export function B2cMarketplace() {
           <div className="relative w-10 h-10 rounded-2xl bg-slate-100 dark:bg-slate-800/80 flex items-center justify-center tap">
             <ProtoIcon name="shopping-bag" className="w-5 h-5 text-slate-600 dark:text-slate-400" />
             <span className="absolute -top-0.5 -right-0.5 w-4 h-4 rounded-full bg-orange-500 text-white text-[9px] font-bold flex items-center justify-center">
-              2
+              {t('demo.market.cart_badge', '2')}
             </span>
           </div>
         </div>
@@ -49,8 +73,8 @@ export function B2cMarketplace() {
           <div className="font-bold mt-0.5">{t('disc.market.deal_title', 'Bosch oil filter + 4L 5W-30')}</div>
           <div className="flex items-end justify-between mt-2">
             <div>
-              <span className="text-lg font-bold">EGP 620</span>
-              <span className="text-xs line-through opacity-80 ml-2">EGP 780</span>
+              <span className="text-lg font-bold">{t('demo.market.promo_now', 'EGP 620')}</span>
+              <span className="text-xs line-through opacity-80 ml-2">{t('demo.market.promo_was', 'EGP 780')}</span>
             </div>
             <button type="button" className="px-3 py-1.5 rounded-xl bg-white dark:bg-slate-900/20 text-xs font-semibold">
               {t('disc.market.add', 'Add')}
@@ -122,7 +146,9 @@ export function B2cFilters() {
         <div className="filters-section">
           <div className="flex justify-between mb-2">
             <div className="label text-cyan-800 dark:text-cyan-300">{t('disc.filters.price', 'Price range')}</div>
-            <div className="text-xs font-bold text-cyan-900 dark:text-cyan-100 bg-cyan-50 dark:bg-cyan-950/45 px-2 py-0.5 rounded-lg">EGP 200–1500</div>
+            <div className="text-xs font-bold text-cyan-900 dark:text-cyan-100 bg-cyan-50 dark:bg-cyan-950/45 px-2 py-0.5 rounded-lg">
+              {t('demo.filters.price_chip', 'EGP 200–1500')}
+            </div>
           </div>
           <div className="h-1.5 rounded-full bg-slate-200 dark:bg-slate-700 relative">
             <div className="absolute h-1.5 rounded-full bg-gradient-to-r from-teal-500 to-cyan-500" style={{ left: '10%', right: '30%' }} />
@@ -150,7 +176,12 @@ export function B2cFilters() {
         <div className="filters-section">
           <div className="label mb-2 text-violet-800 dark:text-violet-300">{t('disc.filters.distance', 'Distance')}</div>
           <div className="flex gap-2 flex-wrap">
-            {['1 km', '5 km', '10 km', '25 km'].map((d, i) => (
+            {[
+              t('demo.filters.dist_1', '1 km'),
+              t('demo.filters.dist_5', '5 km'),
+              t('demo.filters.dist_10', '10 km'),
+              t('demo.filters.dist_25', '25 km'),
+            ].map((d, i) => (
               <span key={d} className={`chip ${i === 1 ? 'on' : ''}`}>
                 {d}
               </span>
@@ -200,14 +231,68 @@ export function B2cSearch() {
     if (s === 'Closes 6pm') return t('disc.search.state.closes', 'Closes 6pm');
     return s;
   };
-  const list = [
-    ['AutoPro Heliopolis', '0.8 km', '4.8', '312', 'EGP 350–900', true, '11:30', 'Open'],
-    ['QuickFix Nasr City', '1.6 km', '4.6', '188', 'EGP 250–1200', true, '12:15', 'Open'],
-    ['City Tow 24/7 – Heliopolis', '1.1 km', '4.7', '201', 'from EGP 400', true, '~15 min', 'Tow'],
-    ['Toyota Authorized – El Nozha', '2.4 km', '4.9', '421', 'EGP 450–1800', true, '14:00', 'Open'],
-    ['Cairo Motors Workshop', '3.1 km', '4.3', '94', 'EGP 200–700', false, 'Tomorrow 09:00', 'Closes 6pm'],
-    ['Mobile Mechanic — Khaled', ' on-demand', '4.7', '66', 'EGP 300–600', false, 'Now', 'Mobile'],
-  ] as const;
+  const list: [string, string, string, string, string, boolean, string, string][] = [
+    [
+      t('demo.search.r1_name', 'AutoPro Heliopolis'),
+      t('demo.search.r1_dist', '0.8 km'),
+      t('demo.search.r1_stars', '4.8'),
+      t('demo.search.r1_rev_n', '312'),
+      t('demo.search.r1_price', 'EGP 350–900'),
+      true,
+      t('demo.search.r1_next', '11:30'),
+      'Open',
+    ],
+    [
+      t('demo.search.r2_name', 'QuickFix Nasr City'),
+      t('demo.search.r2_dist', '1.6 km'),
+      t('demo.search.r2_stars', '4.6'),
+      t('demo.search.r2_rev_n', '188'),
+      t('demo.search.r2_price', 'EGP 250–1200'),
+      true,
+      t('demo.search.r2_next', '12:15'),
+      'Open',
+    ],
+    [
+      t('demo.search.r3_name', 'City Tow 24/7 – Heliopolis'),
+      t('demo.search.r3_dist', '1.1 km'),
+      t('demo.tow.stars_avg', '4.7'),
+      t('demo.tow.rev_total_n', '201'),
+      t('demo.search.r3_price', 'from EGP 400'),
+      true,
+      t('demo.search.r3_next', '~15 min'),
+      'Tow',
+    ],
+    [
+      t('demo.search.r4_name', 'Toyota Authorized – El Nozha'),
+      t('demo.search.r4_dist', '2.4 km'),
+      t('demo.search.r4_stars', '4.9'),
+      t('demo.search.r4_rev_n', '421'),
+      t('demo.search.r4_price', 'EGP 450–1800'),
+      true,
+      t('demo.search.r4_next', '14:00'),
+      'Open',
+    ],
+    [
+      t('demo.search.r5_name', 'Cairo Motors Workshop'),
+      t('demo.search.r5_dist', '3.1 km'),
+      t('demo.search.r5_stars', '4.3'),
+      t('demo.search.r5_rev_n', '94'),
+      t('demo.search.r5_price', 'EGP 200–700'),
+      false,
+      t('demo.search.r5_next', 'Tomorrow 09:00'),
+      'Closes 6pm',
+    ],
+    [
+      t('demo.search.r6_name', 'Mobile Mechanic — Khaled'),
+      t('demo.search.r6_dist', ' on-demand'),
+      t('demo.search.r6_stars', '4.7'),
+      t('demo.search.r6_rev_n', '66'),
+      t('demo.search.r6_price', 'EGP 300–600'),
+      false,
+      t('demo.search.r6_next', 'Now'),
+      'Mobile',
+    ],
+  ];
   return (
     <ScreenWrap id="b2c-search">
       <ProtoStatusBar />
@@ -220,7 +305,7 @@ export function B2cSearch() {
             <ProtoIcon name="search" className="w-4 h-4 text-slate-400 dark:text-slate-500" />
             <input
               className="flex-1 bg-transparent text-sm text-slate-900 dark:text-slate-100 outline-none placeholder:text-slate-400 dark:placeholder:text-slate-500"
-              defaultValue="Oil change"
+              defaultValue={t('demo.search.query_oil', 'Oil change')}
             />
           </div>
         </div>

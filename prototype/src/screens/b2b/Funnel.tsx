@@ -227,11 +227,11 @@ export function B2bLogin() {
           <div className="preauth-form-fields">
             <div>
               <div className="label mb-2">{t('b2b.login.work_email', 'Work email')}</div>
-              <input type="email" className="proto-input px-3.5 py-3.5 text-sm" defaultValue="omar@autopro.eg" autoComplete="off" />
+              <input type="email" className="proto-input px-3.5 py-3.5 text-sm" defaultValue={t('demo.funnel.email_b2b', 'omar@autopro.eg')} autoComplete="off" />
             </div>
             <div>
               <div className="label mb-2">{t('common.password', 'Password')}</div>
-              <input type="password" className="proto-input px-3.5 py-3.5 text-sm" defaultValue="••••••••••" autoComplete="off" />
+              <input type="password" className="proto-input px-3.5 py-3.5 text-sm" defaultValue={t('demo.input.password_masked', '••••••••••')} autoComplete="off" />
             </div>
             <button type="button" className="text-right text-xs font-semibold text-teal-700 dark:text-teal-400 tap w-full" style={{ marginTop: -6 }}>
               {t('b2c.login.forgot', 'Forgot password?')}
@@ -297,23 +297,23 @@ export function B2bSignup() {
           <div className="space-y-3">
             <div>
               <div className="label mb-1.5">{t('b2b.signup.biz_name', 'Business name')}</div>
-              <input className="proto-input w-full px-3.5 py-2.5 text-sm" defaultValue="AutoPro Heliopolis" autoComplete="off" />
+              <input className="proto-input w-full px-3.5 py-2.5 text-sm" defaultValue={t('demo.funnel.biz_name_sample', 'AutoPro Heliopolis')} autoComplete="off" />
             </div>
             <div>
               <div className="label mb-1.5">{t('b2b.signup.owner_name', 'Owner name')}</div>
-              <input className="proto-input w-full px-3.5 py-2.5 text-sm" defaultValue="Omar Saleh" autoComplete="off" />
+              <input className="proto-input w-full px-3.5 py-2.5 text-sm" defaultValue={t('demo.funnel.owner_b2b', 'Omar Saleh')} autoComplete="off" />
             </div>
             <div>
               <div className="label mb-1.5">{t('b2b.login.work_email', 'Work email')}</div>
-              <input type="email" className="proto-input w-full px-3.5 py-2.5 text-sm" defaultValue="omar@autopro.eg" autoComplete="off" />
+              <input type="email" className="proto-input w-full px-3.5 py-2.5 text-sm" defaultValue={t('demo.funnel.email_b2b', 'omar@autopro.eg')} autoComplete="off" />
             </div>
             <div>
               <div className="label mb-1.5">{t('common.password', 'Password')}</div>
-              <input type="password" className="proto-input w-full px-3.5 py-2.5 text-sm" defaultValue="••••••••••" autoComplete="off" />
+              <input type="password" className="proto-input w-full px-3.5 py-2.5 text-sm" defaultValue={t('demo.input.password_masked', '••••••••••')} autoComplete="off" />
             </div>
             <div>
               <div className="label mb-1.5">{t('b2c.register.confirm', 'Confirm password')}</div>
-              <input type="password" className="proto-input w-full px-3.5 py-2.5 text-sm" defaultValue="••••••••••" autoComplete="off" />
+              <input type="password" className="proto-input w-full px-3.5 py-2.5 text-sm" defaultValue={t('demo.input.password_masked', '••••••••••')} autoComplete="off" />
             </div>
           </div>
           <button type="button" className="btn-primary btn-primary-lg w-full mt-5 tap" onClick={() => show('b2b-onboard-1')}>
