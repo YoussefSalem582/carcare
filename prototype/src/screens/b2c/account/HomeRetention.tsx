@@ -31,7 +31,7 @@ export function B2cDashboard() {
           </div>
           <button
             type="button"
-            className="mt-3 w-full py-2.5 rounded-xl bg-white dark:bg-slate-900/20 backdrop-blur text-sm font-semibold tap"
+            className="mt-3 w-full py-2.5 rounded-xl bg-white dark:bg-slate-900/20 backdrop-blur text-sm font-semibold tap text-slate-900 dark:text-white"
             onClick={() => show('b2c-reminder')}
           >
             {t('acct.dash.recs', 'See recommendations')}
@@ -40,32 +40,38 @@ export function B2cDashboard() {
         <div className="app-panel p-4">
           <div className="label mb-2">{t('acct.dash.health', 'Car health')}</div>
           <div className="flex items-end gap-2 mb-3">
-            <div className="text-3xl font-bold text-teal-700">{t('demo.dash.health_score', '82')}</div>
+            <div className="text-3xl font-bold text-teal-700 dark:text-teal-300">{t('demo.dash.health_score', '82')}</div>
             <div className="text-xs text-slate-500 dark:text-slate-400 pb-1">{t('acct.dash.good', '/ 100 · Good')}</div>
           </div>
           <div className="h-2 rounded-full bg-slate-100 dark:bg-slate-800/80 overflow-hidden ring-1 ring-slate-200/80">
             <div className="h-full bg-gradient-to-r from-teal-500 via-emerald-500 to-cyan-500" style={{ width: '82%' }} />
           </div>
           <div className="mt-3 grid grid-cols-3 gap-2 text-xs text-center">
-            <div className="p-2 rounded-xl bg-emerald-50 text-emerald-900 font-medium border border-emerald-100">{t('acct.dash.eng_ok', 'Engine: OK')}</div>
-            <div className="p-2 rounded-xl bg-amber-50 text-amber-900 font-medium border border-amber-100">{t('acct.dash.oil_due', 'Oil: Due')}</div>
-            <div className="p-2 rounded-xl bg-cyan-50 text-cyan-900 font-medium border border-cyan-100">{t('acct.dash.tires_ok', 'Tires: OK')}</div>
+            <div className="p-2 rounded-xl bg-emerald-50 dark:bg-emerald-950/45 text-emerald-900 dark:text-emerald-100 font-medium border border-emerald-100 dark:border-emerald-800/55">
+              {t('acct.dash.eng_ok', 'Engine: OK')}
+            </div>
+            <div className="p-2 rounded-xl bg-amber-50 dark:bg-amber-950/45 text-amber-900 dark:text-amber-100 font-medium border border-amber-100 dark:border-amber-800/55">
+              {t('acct.dash.oil_due', 'Oil: Due')}
+            </div>
+            <div className="p-2 rounded-xl bg-cyan-50 dark:bg-cyan-950/45 text-cyan-900 dark:text-cyan-100 font-medium border border-cyan-100 dark:border-cyan-800/55">
+              {t('acct.dash.tires_ok', 'Tires: OK')}
+            </div>
           </div>
         </div>
         <div className="app-panel p-4">
           <div className="flex justify-between mb-3">
             <div className="label">{t('acct.dash.upcoming', 'Upcoming')}</div>
-            <button type="button" className="text-xs text-teal-700 font-semibold tap" onClick={() => show('b2c-bookings')}>
+            <button type="button" className="text-xs text-teal-700 dark:text-teal-400 font-semibold tap" onClick={() => show('b2c-bookings')}>
               {t('acct.dash.see_all', 'See all')}
             </button>
           </div>
           <div className="flex items-center gap-3">
-            <div className="w-11 h-11 rounded-xl bg-gradient-to-br from-teal-100 to-cyan-100 text-teal-800 border border-teal-200/60 flex flex-col items-center justify-center shadow-sm">
+            <div className="w-11 h-11 rounded-xl bg-gradient-to-br from-teal-100 to-cyan-100 dark:from-teal-950/70 dark:to-cyan-950/60 text-teal-800 dark:text-teal-100 border border-teal-200/60 dark:border-teal-700/50 flex flex-col items-center justify-center shadow-sm">
               <div className="text-[10px] font-bold">{t('demo.dash.cal_month_apr', 'APR')}</div>
               <div className="text-sm font-bold -mt-0.5">{t('demo.dash.cal_day_n', '18')}</div>
             </div>
             <div className="flex-1">
-              <div className="font-semibold text-sm">{t('acct.dash.booking_line', 'Oil change · AutoPro')}</div>
+              <div className="font-semibold text-sm text-slate-900 dark:text-slate-100">{t('acct.dash.booking_line', 'Oil change · AutoPro')}</div>
               <div className="text-xs text-slate-500 dark:text-slate-400">{t('acct.dash.today', 'Today · 11:00')}</div>
             </div>
             <span className="badge b-indigo">{t('book.list.badge.confirmed', 'Confirmed')}</span>
@@ -75,15 +81,15 @@ export function B2cDashboard() {
           <div className="label mb-2">{t('acct.dash.month', 'This month')}</div>
           <div className="flex gap-3">
             <div className="flex-1">
-              <div className="text-2xl font-bold">{t('demo.dash.spent_month', 'EGP 970')}</div>
+              <div className="text-2xl font-bold text-slate-900 dark:text-slate-100">{t('demo.dash.spent_month', 'EGP 970')}</div>
               <div className="text-xs text-slate-500 dark:text-slate-400">{t('acct.dash.spent', 'Spent')}</div>
             </div>
             <div className="flex-1">
-              <div className="text-2xl font-bold">{t('demo.dash.month_svc_n', '2')}</div>
+              <div className="text-2xl font-bold text-slate-900 dark:text-slate-100">{t('demo.dash.month_svc_n', '2')}</div>
               <div className="text-xs text-slate-500 dark:text-slate-400">{t('acct.dash.services', 'Services')}</div>
             </div>
             <div className="flex-1">
-              <div className="text-2xl font-bold">{t('demo.dash.streak_n', '28')}</div>
+              <div className="text-2xl font-bold text-slate-900 dark:text-slate-100">{t('demo.dash.streak_n', '28')}</div>
               <div className="text-xs text-slate-500 dark:text-slate-400">{t('acct.dash.streak', 'Days streak')}</div>
             </div>
           </div>
@@ -135,12 +141,14 @@ export function B2cReminder() {
         <div className="w-10" />
       </div>
       <div className="flex-1 overflow-y-auto px-5 pt-4 app-surface min-h-0">
-        <div className="callout-success p-4 flex items-start gap-3 mb-4 border border-emerald-200/60">
+        <div className="callout-success p-4 flex items-start gap-3 mb-4 border border-emerald-200/60 dark:border-emerald-700/45">
           <ProtoIcon name="sparkles" className="w-5 h-5 text-emerald-700 dark:text-emerald-400 mt-0.5" />
-          <div className="text-sm text-emerald-950">
+          <div className="text-sm text-emerald-950 dark:text-emerald-100">
             <b>{t('acct.remind.rec_title', 'Recommended for you')}</b>
             <br />
-            <span className="text-xs text-emerald-900/80">{t('acct.remind.rec_sub', 'Based on your car, location, and last oil change (8 Feb).')}</span>
+            <span className="text-xs text-emerald-900/80 dark:text-emerald-200/85">
+              {t('acct.remind.rec_sub', 'Based on your car, location, and last oil change (8 Feb).')}
+            </span>
           </div>
         </div>
         {recs.map(([n, d, r, p, s, i]) => (
@@ -157,9 +165,9 @@ export function B2cReminder() {
             tabIndex={0}
           >
             <div className="flex items-center gap-3">
-              <div className="w-11 h-11 rounded-xl bg-slate-200" />
+              <div className="w-11 h-11 rounded-xl bg-slate-200 dark:bg-slate-700" />
               <div className="flex-1">
-                <div className="flex items-center gap-1 font-semibold text-sm">
+                <div className="flex items-center gap-1 font-semibold text-sm text-slate-900 dark:text-slate-100">
                   {n}
                   {i < 2 ? <ProtoIcon name="badge-check" className="w-4 h-4 text-teal-700 dark:text-teal-400" /> : null}
                 </div>
@@ -169,8 +177,10 @@ export function B2cReminder() {
                 </div>
               </div>
               <div className="text-right">
-                <div className="font-bold text-sm">{p}</div>
-                {i === 0 ? <div className="text-[10px] font-bold text-teal-700 uppercase">{t('acct.remind.best', 'Best')}</div> : null}
+                <div className="font-bold text-sm text-slate-900 dark:text-slate-100">{p}</div>
+                {i === 0 ? (
+                  <div className="text-[10px] font-bold text-teal-700 dark:text-teal-400 uppercase">{t('acct.remind.best', 'Best')}</div>
+                ) : null}
               </div>
             </div>
           </div>
@@ -180,7 +190,7 @@ export function B2cReminder() {
         </button>
         <div className="text-xs text-center text-slate-500 dark:text-slate-400 mt-2">
           {t('acct.remind.or', 'Or')}{' '}
-          <button type="button" className="text-teal-700 font-semibold tap" onClick={() => show('b2c-map')}>
+          <button type="button" className="text-teal-700 dark:text-teal-400 font-semibold tap" onClick={() => show('b2c-map')}>
             {t('acct.remind.map', 'see all on map')}
           </button>
         </div>
@@ -211,25 +221,25 @@ export function B2cExpenses() {
         </div>
         <div className="grid grid-cols-2 gap-3 mt-3">
           <div className="p-3 rounded-xl border border-teal-100 dark:border-teal-800/60 bg-teal-50/80 dark:bg-teal-950/40">
-            <div className="text-xs text-teal-800 font-medium">{t('acct.exp.maintenance', 'Maintenance')}</div>
-            <div className="font-bold text-teal-950">{t('demo.exp.maint', 'EGP 4,200')}</div>
+            <div className="text-xs text-teal-800 dark:text-teal-200 font-medium">{t('acct.exp.maintenance', 'Maintenance')}</div>
+            <div className="font-bold text-teal-950 dark:text-teal-100">{t('demo.exp.maint', 'EGP 4,200')}</div>
           </div>
-          <div className="p-3 rounded-xl border border-amber-100 bg-amber-50/80">
-            <div className="text-xs text-amber-800 font-medium">{t('acct.exp.fuel', 'Fuel')}</div>
-            <div className="font-bold text-amber-950">{t('demo.exp.fuel_amt', 'EGP 3,120')}</div>
+          <div className="p-3 rounded-xl border border-amber-100 dark:border-amber-800/60 bg-amber-50/80 dark:bg-amber-950/40">
+            <div className="text-xs text-amber-800 dark:text-amber-200 font-medium">{t('acct.exp.fuel', 'Fuel')}</div>
+            <div className="font-bold text-amber-950 dark:text-amber-100">{t('demo.exp.fuel_amt', 'EGP 3,120')}</div>
           </div>
-          <div className="p-3 rounded-xl border border-violet-100 bg-violet-50/80">
-            <div className="text-xs text-violet-800 font-medium">{t('acct.exp.insurance', 'Insurance')}</div>
-            <div className="font-bold text-violet-950">{t('demo.exp.ins_amt', 'EGP 500')}</div>
+          <div className="p-3 rounded-xl border border-violet-100 dark:border-violet-800/60 bg-violet-50/80 dark:bg-violet-950/40">
+            <div className="text-xs text-violet-800 dark:text-violet-200 font-medium">{t('acct.exp.insurance', 'Insurance')}</div>
+            <div className="font-bold text-violet-950 dark:text-violet-100">{t('demo.exp.ins_amt', 'EGP 500')}</div>
           </div>
           <div className="p-3 rounded-xl border border-slate-200 dark:border-slate-600 bg-white dark:bg-slate-900">
             <div className="text-xs text-slate-500 dark:text-slate-400">{t('acct.exp.other', 'Other')}</div>
-            <div className="font-bold">{t('demo.exp.other_amt', 'EGP 0')}</div>
+            <div className="font-bold text-slate-900 dark:text-slate-100">{t('demo.exp.other_amt', 'EGP 0')}</div>
           </div>
         </div>
         <div className="label mt-5 mb-2">{t('acct.exp.cpk', 'Cost per km')}</div>
-        <div className="p-4 rounded-xl border border-slate-200 dark:border-slate-600">
-          <div className="text-2xl font-bold">{t('demo.exp.cpk', 'EGP 0.84')}</div>
+        <div className="p-4 rounded-xl border border-slate-200 dark:border-slate-600 bg-white/50 dark:bg-slate-900/40">
+          <div className="text-2xl font-bold text-slate-900 dark:text-slate-100">{t('demo.exp.cpk', 'EGP 0.84')}</div>
           <div className="text-xs text-slate-500 dark:text-slate-400">{t('acct.exp.rolling', 'Corolla · rolling 3 months')}</div>
           <div className="h-20 mt-2 bg-slate-50 dark:bg-slate-800/90 rounded flex items-end gap-1 p-1">
             {bars.map((h, i) => (
@@ -241,7 +251,7 @@ export function B2cExpenses() {
             ))}
           </div>
         </div>
-        <div className="p-4 rounded-xl bg-amber-50 border border-amber-100 mt-4 text-xs text-amber-900">
+        <div className="p-4 rounded-xl bg-amber-50 dark:bg-amber-950/40 border border-amber-100 dark:border-amber-800/60 mt-4 text-xs text-amber-900 dark:text-amber-100">
           <b>{t('acct.exp.devnote_label', 'Dev note:')}</b>{' '}
           {t('acct.exp.devnote', 'This is a Phase 2 feature included here for spec completeness. Ship Phase 1 without it.')}
         </div>

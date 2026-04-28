@@ -30,8 +30,8 @@ export function B2cAddcar() {
         </h2>
         <p className="text-sm text-slate-600 dark:text-slate-400 mt-1.5">{t('disc.addcar.lead', 'We’ll auto-log services you book through CarCare.')}</p>
         <button type="button" className="callout-violet mt-6 w-full text-left p-4 flex items-center gap-3 tap">
-          <div className="w-11 h-11 rounded-xl flex items-center justify-center bg-white dark:bg-slate-900 shadow-sm border border-violet-100">
-            <ProtoIcon name="scan-line" className="w-5 h-5 text-violet-600" />
+          <div className="w-11 h-11 rounded-xl flex items-center justify-center bg-white dark:bg-slate-900 shadow-sm border border-violet-100 dark:border-violet-800/55">
+            <ProtoIcon name="scan-line" className="w-5 h-5 text-violet-600 dark:text-violet-400" />
           </div>
           <div className="flex-1 min-w-0">
             <div className="text-sm font-semibold text-slate-900 dark:text-slate-100">{t('disc.addcar.vin_title', 'Scan VIN with camera')}</div>

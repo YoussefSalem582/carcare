@@ -53,7 +53,7 @@ export function B2cGarage() {
         <div className="tap p-4 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-600/90 shadow-sm ring-1 ring-indigo-500/5">
           <div className="flex justify-between items-start">
             <div>
-              <div className="font-semibold">{t('demo.garage.tucson_title', 'Hyundai Tucson')}</div>
+              <div className="font-semibold text-slate-900 dark:text-slate-100">{t('demo.garage.tucson_title', 'Hyundai Tucson')}</div>
               <div className="text-sm text-slate-500 dark:text-slate-400">{t('demo.garage.tucson_meta', '2022 · 24,100 km')}</div>
             </div>
             <ProtoIcon name="chevron-right" className="w-5 h-5 text-slate-400 dark:text-slate-500" />
@@ -118,7 +118,7 @@ export function B2cCardetail() {
           <ProtoIcon name="arrow-left" className="w-5 h-5" />
         </button>
         <div className="font-semibold text-slate-900 dark:text-slate-100 truncate">{t('acct.card.title_bar', 'Toyota Corolla 2019')}</div>
-        <button type="button" className="tap w-10 h-10 rounded-xl bg-violet-50 text-violet-700 flex items-center justify-center">
+        <button type="button" className="tap w-10 h-10 rounded-xl bg-violet-50 dark:bg-violet-950/45 text-violet-700 dark:text-violet-300 flex items-center justify-center">
           <ProtoIcon name="pencil" className="w-5 h-5" />
         </button>
       </div>
@@ -129,10 +129,10 @@ export function B2cCardetail() {
               key={l}
               className={`p-3 rounded-xl text-center ${
                 tone === 'cyan'
-                  ? 'bg-cyan-50 text-cyan-900'
+                  ? 'bg-cyan-50 dark:bg-cyan-950/45 text-cyan-900 dark:text-cyan-100'
                   : tone === 'violet'
-                    ? 'bg-violet-50 text-violet-900'
-                    : 'bg-amber-50 text-amber-900'
+                    ? 'bg-violet-50 dark:bg-violet-950/45 text-violet-900 dark:text-violet-100'
+                    : 'bg-amber-50 dark:bg-amber-950/45 text-amber-900 dark:text-amber-100'
               }`}
             >
               <div className="text-[10px] font-semibold uppercase tracking-wide opacity-80">{l}</div>
@@ -141,15 +141,15 @@ export function B2cCardetail() {
           ))}
         </div>
         <div className="label mb-2">{t('acct.card.reminders', 'Reminders')}</div>
-        <div className="p-3 rounded-xl bg-gradient-to-r from-orange-50 to-amber-50 border border-orange-200/80 flex items-start gap-3 shadow-sm">
+        <div className="p-3 rounded-xl bg-gradient-to-r from-orange-50 to-amber-50 dark:from-orange-950/50 dark:to-amber-950/45 border border-orange-200/80 dark:border-orange-800/55 flex items-start gap-3 shadow-sm">
           <div className="w-9 h-9 rounded-full bg-gradient-to-br from-orange-500 to-amber-500 flex items-center justify-center flex-shrink-0 shadow-md">
             <ProtoIcon name="bell" className="w-4 h-4 text-white" />
           </div>
           <div className="flex-1">
-            <div className="font-semibold text-sm">{t('acct.card.oil_due', 'Oil change due in 1,200 km')}</div>
+            <div className="font-semibold text-sm text-slate-900 dark:text-slate-100">{t('acct.card.oil_due', 'Oil change due in 1,200 km')}</div>
             <div className="text-xs text-slate-600 dark:text-slate-400 mt-0.5">{t('acct.card.oil_sub', 'Based on your last change on 8 Feb')}</div>
           </div>
-          <button type="button" className="text-xs font-semibold text-orange-700 tap" onClick={() => show('b2c-map')}>
+          <button type="button" className="text-xs font-semibold text-orange-700 dark:text-orange-300 tap" onClick={() => show('b2c-map')}>
             {t('acct.card.book', 'Book')}
           </button>
         </div>
@@ -162,16 +162,16 @@ export function B2cCardetail() {
             >
               <div className="flex justify-between items-start">
                 <div>
-                  <div className="font-semibold text-sm">{s}</div>
+                  <div className="font-semibold text-sm text-slate-900 dark:text-slate-100">{s}</div>
                   <div className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">{shop}</div>
                 </div>
                 <div className="text-right">
-                  <div className="font-semibold text-sm">{p}</div>
+                  <div className="font-semibold text-sm text-slate-900 dark:text-slate-100">{p}</div>
                   <div className="text-xs text-slate-500 dark:text-slate-400">{d}</div>
                 </div>
               </div>
               {auto ? (
-                <div className="mt-2 text-[10px] uppercase tracking-wider text-teal-700 font-semibold flex items-center gap-1">
+                <div className="mt-2 text-[10px] uppercase tracking-wider text-teal-700 dark:text-teal-400 font-semibold flex items-center gap-1">
                   <ProtoIcon name="zap" className="w-3 h-3" />
                   {t('acct.card.auto', 'Auto-logged from booking')}
                 </div>
@@ -183,7 +183,7 @@ export function B2cCardetail() {
             </div>
           ))}
         </div>
-        <button type="button" className="mt-4 w-full py-3 rounded-xl border border-slate-200 dark:border-slate-600 text-sm font-semibold tap">
+        <button type="button" className="mt-4 w-full py-3 rounded-xl border border-slate-200 dark:border-slate-600 text-sm font-semibold tap text-slate-900 dark:text-slate-100">
           {t('acct.card.add_manual', '+ Add manual entry')}
         </button>
         <div className="h-6" />

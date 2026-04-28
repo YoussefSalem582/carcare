@@ -62,7 +62,7 @@ export function B2bOnboard1() {
                 <div className="label mb-1.5">{t('b2b.on1.pin', 'Pin on map')}</div>
                 <div className="proto-input px-3.5 py-2.5 text-sm flex justify-between items-center">
                   <span>{t('demo.onboard.coords', '30.0980°N · 31.3411°E')}</span>
-                  <span className="text-teal-700 font-semibold tap">{t('b2b.on1.adjust', 'Adjust')}</span>
+                  <span className="text-teal-700 dark:text-teal-400 font-semibold tap">{t('b2b.on1.adjust', 'Adjust')}</span>
                 </div>
               </div>
               <div>
@@ -113,7 +113,7 @@ export function B2bOnboard3() {
             <div className="text-sm text-slate-600 dark:text-slate-400 mt-0.5">{t('b2b.cat.lead', 'Start with presets — you can edit any time.')}</div>
             <button
               type="button"
-              className="btn-ghost py-2 px-3 text-xs w-full mt-3 flex items-center justify-center gap-1 border border-violet-200 bg-violet-50/50 text-violet-900"
+              className="btn-ghost py-2 px-3 text-xs w-full mt-3 flex items-center justify-center gap-1 border border-violet-200 dark:border-violet-700/50 bg-violet-50/50 dark:bg-violet-950/40 text-violet-900 dark:text-violet-100"
             >
               <ProtoIcon name="wand-2" className="w-3.5 h-3.5" />
               {t('b2b.cat.presets', 'Add 12 common services')}
@@ -122,7 +122,7 @@ export function B2bOnboard3() {
               {svcs.map(([s, d, typ, p]) => (
                 <div
                   key={s}
-                  className="p-3 rounded-xl border border-slate-200 dark:border-slate-600/90 bg-gradient-to-r from-white to-teal-50/30 flex justify-between items-center gap-2 shadow-sm"
+                  className="p-3 rounded-xl border border-slate-200 dark:border-slate-600/90 bg-gradient-to-r from-white to-teal-50/30 dark:from-slate-900 dark:to-teal-950/30 flex justify-between items-center gap-2 shadow-sm"
                 >
                   <div className="min-w-0">
                     <div className="font-semibold text-sm text-slate-900 dark:text-slate-100">{s}</div>
@@ -131,13 +131,13 @@ export function B2bOnboard3() {
                     </div>
                   </div>
                   <div className="flex items-center gap-1 flex-shrink-0">
-                    <span className="text-sm font-bold text-teal-800">{p}</span>
-                    <ProtoIcon name="pencil" className="w-4 h-4 text-violet-500" />
+                    <span className="text-sm font-bold text-teal-800 dark:text-teal-200">{p}</span>
+                    <ProtoIcon name="pencil" className="w-4 h-4 text-violet-500 dark:text-violet-400" />
                   </div>
                 </div>
               ))}
             </div>
-            <button type="button" className="mt-3 text-sm text-teal-700 font-semibold flex items-center gap-1 w-full justify-center tap py-2">
+            <button type="button" className="mt-3 text-sm text-teal-700 dark:text-teal-400 font-semibold flex items-center gap-1 w-full justify-center tap py-2">
               <ProtoIcon name="plus" className="w-4 h-4" />
               {t('b2b.cat.custom', 'Add custom service')}
             </button>
@@ -176,29 +176,29 @@ export function B2bPending() {
         <B2bTopbarMobile title={t('b2b.top.welcome', 'Welcome, Omar')} />
         <div className="flex-1 overflow-y-auto p-4 flex items-start justify-center min-h-0">
           <div className="onboard-card-proto p-5 w-full text-center max-w-md">
-            <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-amber-200 to-orange-200 flex items-center justify-center mx-auto shadow-md border border-amber-300/50">
-              <ProtoIcon name="shield-check" className="w-7 h-7 text-amber-900" />
+            <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-amber-200 to-orange-200 dark:from-amber-900/50 dark:to-orange-900/45 flex items-center justify-center mx-auto shadow-md border border-amber-300/50 dark:border-amber-700/50">
+              <ProtoIcon name="shield-check" className="w-7 h-7 text-amber-900 dark:text-amber-200" />
             </div>
-            <div className="text-xl font-bold mt-3">{t('b2b.pend.title', 'Verification in progress')}</div>
+            <div className="text-xl font-bold mt-3 text-slate-900 dark:text-slate-100">{t('b2b.pend.title', 'Verification in progress')}</div>
             <div className="text-sm text-slate-500 dark:text-slate-400 mt-2">{t('b2b.pend.lead', 'We’re reviewing your business and catalog. Typical turnaround is 24–48 hours.')}</div>
             <div className="mt-5 text-left space-y-1.5">
               {rows.map(([rowTitle, s]) => (
                 <div key={rowTitle} className="flex items-center gap-2 p-1.5">
                   <div
                     className={`w-5 h-5 rounded-full ${
-                      s === 'done' ? 'bg-teal-600' : s === 'review' ? 'bg-amber-500' : 'bg-slate-200'
+                      s === 'done' ? 'bg-teal-600' : s === 'review' ? 'bg-amber-500' : 'bg-slate-200 dark:bg-slate-600'
                     } flex items-center justify-center text-white text-[10px] font-bold`}
                   >
                     {s === 'done' ? '✓' : s === 'review' ? '…' : ''}
                   </div>
-                  <div className="flex-1 text-xs font-medium">{rowTitle}</div>
+                  <div className="flex-1 text-xs font-medium text-slate-900 dark:text-slate-100">{rowTitle}</div>
                   <div className="text-[10px] text-slate-500 dark:text-slate-400">
                     {s === 'done' ? t('b2b.pend.done', 'Done') : s === 'review' ? t('b2b.pend.review', 'In review') : t('b2b.pend.wait', 'Wait')}
                   </div>
                 </div>
               ))}
             </div>
-            <div className="mt-4 p-3 rounded-xl callout-success text-xs text-emerald-950 text-left border border-emerald-200/60">
+            <div className="mt-4 p-3 rounded-xl callout-success text-xs text-emerald-950 dark:text-emerald-100 text-left border border-emerald-200/60 dark:border-emerald-700/45">
               <b>{t('b2b.pend.note_title', 'While you wait')}</b> — {t('b2b.pend.note_body', 'add photos and your team. You can open the dashboard anytime.')}
             </div>
             <button type="button" className="btn-primary w-full mt-4 tap shadow-md" onClick={() => show('b2b-dashboard')}>

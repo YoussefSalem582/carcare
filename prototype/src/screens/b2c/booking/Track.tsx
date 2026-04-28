@@ -13,7 +13,7 @@ export function B2cBookings() {
         <div className="font-bold text-xl tracking-tight text-slate-900 dark:text-slate-100">{t('book.list.title', 'Bookings')}</div>
         <button
           type="button"
-          className="w-10 h-10 rounded-xl bg-gradient-to-br from-slate-100 to-indigo-50 border border-slate-200 dark:border-slate-600/80 flex items-center justify-center tap"
+          className="w-10 h-10 rounded-xl bg-gradient-to-br from-slate-100 to-indigo-50 dark:from-slate-800 dark:to-indigo-950/40 border border-slate-200 dark:border-slate-600/80 flex items-center justify-center tap"
         >
           <ProtoIcon name="search" className="w-4 h-4 text-indigo-600 dark:text-indigo-400" />
         </button>
@@ -25,7 +25,7 @@ export function B2cBookings() {
       </div>
       <div className="flex-1 overflow-y-auto px-5 pt-4 space-y-3 app-surface min-h-0">
         <div
-          className="tap p-4 rounded-2xl bg-white dark:bg-slate-900 border border-teal-100 shadow-md shadow-teal-900/5 ring-1 ring-teal-500/10"
+          className="tap p-4 rounded-2xl bg-white dark:bg-slate-900 border border-teal-100 dark:border-teal-800/55 shadow-md shadow-teal-900/5 ring-1 ring-teal-500/10"
           onClick={() => show('b2c-progress')}
           onKeyDown={(e) => e.key === 'Enter' && show('b2c-progress')}
           role="button"
@@ -34,7 +34,7 @@ export function B2cBookings() {
           <div className="flex justify-between items-start">
             <div>
               <div className="text-xs text-teal-700 dark:text-teal-400 font-bold uppercase tracking-wide mb-1">{t('book.list.today', 'Today · 11:00')}</div>
-              <div className="font-semibold">{t('demo.track.job_oil_corolla', 'Oil change — Toyota Corolla')}</div>
+              <div className="font-semibold text-slate-900 dark:text-slate-100">{t('demo.track.job_oil_corolla', 'Oil change — Toyota Corolla')}</div>
               <div className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
                 {t('demo.track.meta_autopro_km', 'AutoPro Heliopolis · 0.8 km')}
               </div>
@@ -57,7 +57,7 @@ export function B2cBookings() {
               <div className="text-xs text-slate-500 dark:text-slate-400 font-bold uppercase tracking-wide mb-1">
                 {t('demo.track.when_tue', 'Tue 21 Apr · 16:00')}
               </div>
-              <div className="font-semibold">{t('demo.track.job_brake_tucson', 'Brake inspection — Hyundai Tucson')}</div>
+              <div className="font-semibold text-slate-900 dark:text-slate-100">{t('demo.track.job_brake_tucson', 'Brake inspection — Hyundai Tucson')}</div>
               <div className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
                 {t('demo.track.meta_toyota_km', 'Toyota Authorized · 2.4 km')}
               </div>
@@ -72,7 +72,7 @@ export function B2cBookings() {
               <div className="text-xs text-slate-500 dark:text-slate-400 font-bold uppercase tracking-wide mb-1">
                 {t('demo.track.past_when_done', '29 Mar · Completed')}
               </div>
-              <div className="font-semibold">{t('demo.track.job_ac_corolla', 'AC recharge — Toyota Corolla')}</div>
+              <div className="font-semibold text-slate-900 dark:text-slate-100">{t('demo.track.job_ac_corolla', 'AC recharge — Toyota Corolla')}</div>
               <div className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
                 {t('demo.track.meta_quickfix_pay', 'QuickFix Nasr City · EGP 450')}
               </div>
@@ -127,7 +127,7 @@ export function B2cProgress() {
                       ? 'bg-emerald-500'
                       : done === 'active'
                         ? 'timeline-dot-active'
-                        : 'bg-slate-200'
+                        : 'bg-slate-200 dark:bg-slate-600'
                   } flex items-center justify-center`}
                 >
                   {done === true ? <ProtoIcon name="check" className="w-3.5 h-3.5 text-white" /> : null}
@@ -135,7 +135,7 @@ export function B2cProgress() {
                 </div>
                 {i < steps.length - 1 ? (
                   <div
-                    className={`flex-1 w-0.5 ${done === true ? 'bg-gradient-to-b from-emerald-500 to-teal-500' : 'bg-slate-200'}`}
+                    className={`flex-1 w-0.5 ${done === true ? 'bg-gradient-to-b from-emerald-500 to-teal-500' : 'bg-slate-200 dark:bg-slate-600'}`}
                     style={{ minHeight: 18 }}
                   />
                 ) : null}
@@ -149,11 +149,11 @@ export function B2cProgress() {
         </div>
         <div className="label mt-3 mb-2">{t('book.progress.shop', 'Shop')}</div>
         <div className="app-panel p-3 flex items-center gap-3">
-          <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-teal-100 to-cyan-50 flex items-center justify-center">
+          <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-teal-100 to-cyan-50 dark:from-teal-950/55 dark:to-cyan-950/40 flex items-center justify-center">
             <ProtoIcon name="wrench" className="w-6 h-6 text-teal-700 dark:text-teal-400" />
           </div>
           <div className="flex-1">
-            <div className="font-semibold text-sm">{t('demo.search.r1_name', 'AutoPro Heliopolis')}</div>
+            <div className="font-semibold text-sm text-slate-900 dark:text-slate-100">{t('demo.search.r1_name', 'AutoPro Heliopolis')}</div>
             <div className="text-xs text-slate-500 dark:text-slate-400">
               {t('demo.track.booking_ref', 'Booking #CC-4A1F9')}
             </div>
@@ -161,13 +161,13 @@ export function B2cProgress() {
           <button type="button" className="w-10 h-10 rounded-full bg-gradient-to-br from-teal-600 to-emerald-600 flex items-center justify-center text-white tap shadow-md">
             <ProtoIcon name="phone" className="w-4 h-4" />
           </button>
-          <button type="button" className="w-10 h-10 rounded-full bg-indigo-100 flex items-center justify-center tap text-indigo-700">
+          <button type="button" className="w-10 h-10 rounded-full bg-indigo-100 dark:bg-indigo-950/55 flex items-center justify-center tap text-indigo-700 dark:text-indigo-300">
             <ProtoIcon name="message-circle" className="w-4 h-4" />
           </button>
         </div>
         <div className="label mt-5 mb-2">{t('book.progress.invoice', 'Invoice (so far)')}</div>
         <div className="app-panel p-4 space-y-1 text-sm">
-          <div className="flex justify-between">
+          <div className="flex justify-between text-slate-900 dark:text-slate-100">
             <span>{t('demo.track.inv_line_oil', 'Oil change (standard)')}</span>
             <span>{t('demo.track.price_350', 'EGP 350')}</span>
           </div>
@@ -176,12 +176,12 @@ export function B2cProgress() {
             <span>{t('demo.track.price_180', 'EGP 180')}</span>
           </div>
           <div className="divider my-2" />
-          <div className="flex justify-between font-bold">
+          <div className="flex justify-between font-bold text-slate-900 dark:text-slate-100">
             <span>{t('book.pay.total', 'Total')}</span>
             <span>{t('demo.track.price_350', 'EGP 350')}</span>
           </div>
         </div>
-        <button type="button" className="mt-4 w-full py-3 rounded-xl text-sm font-semibold border border-slate-200 dark:border-slate-600 tap">
+        <button type="button" className="mt-4 w-full py-3 rounded-xl text-sm font-semibold border border-slate-200 dark:border-slate-600 tap text-slate-900 dark:text-slate-100">
           {t('book.progress.add_btn', 'Add cabin filter (+EGP 180)')}
         </button>
         <div className="h-6" />
@@ -211,22 +211,22 @@ export function B2cReview() {
       </div>
       <div className="flex-1 app-surface px-5 pt-4 overflow-y-auto min-h-0">
         <div className="text-center pt-4">
-          <div className="w-16 h-16 rounded-2xl bg-slate-200 mx-auto mb-3" />
-          <div className="font-bold text-lg">{t('demo.search.r1_name', 'AutoPro Heliopolis')}</div>
+          <div className="w-16 h-16 rounded-2xl bg-slate-200 dark:bg-slate-700 mx-auto mb-3" />
+          <div className="font-bold text-lg text-slate-900 dark:text-slate-100">{t('demo.search.r1_name', 'AutoPro Heliopolis')}</div>
           <div className="text-xs text-slate-500 dark:text-slate-400">
             {t('demo.track.review_ctx', 'AC recharge · 29 Mar')}
           </div>
         </div>
         <div className="flex justify-center gap-2 mt-5">
           {[1, 1, 1, 1, 0].map((on, i) => (
-            <ProtoIcon key={i} name="star" className={`w-10 h-10 ${on ? 'text-amber-500 fill-amber-500' : 'text-slate-300'}`} />
+            <ProtoIcon key={i} name="star" className={`w-10 h-10 ${on ? 'text-amber-500 fill-amber-500' : 'text-slate-300 dark:text-slate-600'}`} />
           ))}
         </div>
-        <div className="text-center text-sm font-semibold mt-2">{t('book.rev.great', 'Great experience')}</div>
+        <div className="text-center text-sm font-semibold mt-2 text-slate-900 dark:text-slate-100">{t('book.rev.great', 'Great experience')}</div>
         <div className="label mt-6 mb-2">{t('book.rev.breakdown', 'Break it down')}</div>
         {breakdown.map(([label, r]) => (
           <div key={label} className="flex justify-between items-center py-2">
-            <div className="text-sm">
+            <div className="text-sm text-slate-900 dark:text-slate-100">
               {label === 'Quality'
                 ? t('disc.shop.rev.quality', 'Quality')
                 : label === 'Price'
@@ -240,7 +240,7 @@ export function B2cReview() {
                 <ProtoIcon
                   key={i}
                   name="star"
-                  className={`w-4 h-4 ${i <= r ? 'text-amber-500 fill-amber-500' : 'text-slate-300'}`}
+                  className={`w-4 h-4 ${i <= r ? 'text-amber-500 fill-amber-500' : 'text-slate-300 dark:text-slate-600'}`}
                 />
               ))}
             </div>
@@ -253,7 +253,7 @@ export function B2cReview() {
           <div className="w-16 h-16 rounded-xl border-2 border-dashed border-slate-300 dark:border-slate-600 flex items-center justify-center">
             <ProtoIcon name="plus" className="w-5 h-5 text-slate-400 dark:text-slate-500" />
           </div>
-          <div className="w-16 h-16 rounded-xl bg-slate-200" />
+          <div className="w-16 h-16 rounded-xl bg-slate-200 dark:bg-slate-700" />
         </div>
       </div>
       <div className="cta-bar">

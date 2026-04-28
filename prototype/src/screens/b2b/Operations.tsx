@@ -66,19 +66,19 @@ export function B2bDashboard() {
                 tabIndex={act ? 0 : undefined}
               >
                 <div>
-                  <div className="text-xs font-bold">{time}</div>
-                  <div className="text-sm font-semibold">{cust}</div>
+                  <div className="text-xs font-bold text-slate-900 dark:text-slate-100">{time}</div>
+                  <div className="text-sm font-semibold text-slate-900 dark:text-slate-100">{cust}</div>
                   <div className="text-xs text-slate-500 dark:text-slate-400">{svc}</div>
                 </div>
                 <span className={`badge ${badge} text-[10px]`}>{lineupStatus(label)}</span>
               </div>
             ))}
-            <div className="text-center text-xs text-teal-700 font-semibold pt-1 tap" onClick={() => show('b2b-bookings')}>
+            <div className="text-center text-xs text-teal-700 dark:text-teal-400 font-semibold pt-1 tap" onClick={() => show('b2b-bookings')}>
               {t('b2b.dash.full_cal', 'Full calendar')}
             </div>
           </div>
           <div className="app-panel p-3">
-            <div className="font-bold text-sm mb-2">{t('b2b.dash.mech', 'Mechanics')}</div>
+            <div className="font-bold text-sm mb-2 text-slate-900 dark:text-slate-100">{t('b2b.dash.mech', 'Mechanics')}</div>
             {(
               [
                 [t('demo.b2b.mech_ahmed', 'Ahmed'), 2, 3],
@@ -88,7 +88,7 @@ export function B2bDashboard() {
             ).map(([n, b, cap], ix) => (
               <div key={n} className="mb-2 last:mb-0">
                 <div className="flex justify-between text-xs">
-                  <span className="font-semibold">{n}</span>
+                  <span className="font-semibold text-slate-900 dark:text-slate-100">{n}</span>
                   <span className="text-slate-500 dark:text-slate-400">
                     {t(
                       ix === 0 ? 'demo.b2b.mech_slots_1' : ix === 1 ? 'demo.b2b.mech_slots_2' : 'demo.b2b.mech_slots_3',
@@ -102,9 +102,9 @@ export function B2bDashboard() {
               </div>
             ))}
           </div>
-          <div className="rounded-xl p-3 text-xs bg-gradient-to-r from-amber-50 to-orange-50 border border-amber-200/70 shadow-sm">
+          <div className="rounded-xl p-3 text-xs bg-gradient-to-r from-amber-50 to-orange-50 dark:from-amber-950/40 dark:to-orange-950/35 border border-amber-200/70 dark:border-amber-800/50 shadow-sm text-amber-950 dark:text-amber-100">
             {t('demo.b2b.rev_need_banner_n', '3')} {t('b2b.dash.rev_banner', 'reviews')} {t('b2b.dash.rev_need', 'need a reply.')}{' '}
-            <span className="text-teal-800 font-semibold tap" onClick={() => show('b2b-reviews')}>
+            <span className="text-teal-800 dark:text-teal-300 font-semibold tap" onClick={() => show('b2b-reviews')}>
               {t('b2b.dash.open', 'Open')}
             </span>
           </div>
@@ -546,10 +546,10 @@ export function B2bMore() {
         <B2bTopbarMobile title={t('b2b.more.title', 'More')} />
         <div className="flex-1 overflow-y-auto p-3">
           <div className="text-xs text-slate-500 dark:text-slate-400 mb-2">{t('b2b.more.account', 'Account')}</div>
-          <div className="app-panel divide-y divide-slate-100 overflow-hidden p-0 shadow-md">
+          <div className="app-panel divide-y divide-slate-100 dark:divide-slate-700 overflow-hidden p-0 shadow-md">
             <button
               type="button"
-              className="w-full p-3 flex items-center justify-between text-left tap hover:bg-amber-50/50"
+              className="w-full p-3 flex items-center justify-between text-left tap hover:bg-amber-50/50 dark:hover:bg-slate-800/80"
               onClick={() => show('b2b-reviews')}
             >
               <span className="flex items-center gap-2 text-sm font-medium">
