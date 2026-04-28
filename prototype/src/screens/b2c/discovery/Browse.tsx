@@ -1,104 +1,130 @@
 import { B2cTabBar } from '../../../components/proto/TabBars';
 import { ProtoHomeIndicator, ProtoStatusBar } from '../../../components/proto/Chrome';
 import { ProtoIcon } from '../../../components/proto/Icon';
-import { B2cMapMainColumn } from '../../../components/proto/MapColumn';
+import type { MarketListingKey } from '../../../context/ProtoContext';
 import { useProto } from '../../../context/ProtoContext';
 import { ScreenWrap } from '../../shared/ScreenWrap';
+import { MARKETPLACE_ROWS } from './marketplaceListings';
 
 export function B2cMarketplace() {
-  const { t } = useProto();
-  const rows: [string, string, string, string, string][] = [
-    [
-      t('demo.market.p1_title', 'Bosch cabin filter'),
-      t('demo.market.p1_price', 'EGP 185'),
-      t('demo.market.p1_star', '4.7'),
-      t('demo.market.p1_extra', '1.2k sold'),
-      t('demo.market.p1_seller', 'Cairo Parts'),
-    ],
-    [
-      t('demo.market.p2_title', 'Michelin 205/55 R16'),
-      t('demo.market.p2_price', 'EGP 2,890'),
-      t('demo.market.p2_star', '4.8'),
-      t('demo.market.p2_extra', 'In stock'),
-      t('demo.market.p2_seller', 'Elite Tires'),
-    ],
-    [
-      t('demo.market.p3_title', 'AGM battery 60Ah'),
-      t('demo.market.p3_price', 'EGP 3,200'),
-      t('demo.market.p3_star', '4.6'),
-      t('demo.market.p3_extra', '2–3d ship'),
-      t('demo.market.p3_seller', 'AutoBatt'),
-    ],
-    [
-      t('demo.market.p4_title', 'Castrol 5W-30 (4L)'),
-      t('demo.market.p4_price', 'EGP 450'),
-      t('demo.market.p4_star', '4.8'),
-      t('demo.market.p4_extra', 'EGP 50 delivery'),
-      t('demo.market.p4_seller', 'Lubrico'),
-    ],
-  ];
+  const { t, show, setMarketListingKey } = useProto();
+  const searchId = 'marketplace-search-demo';
+  const goPart = (key: MarketListingKey) => {
+    setMarketListingKey(key);
+    show('b2c-part-detail');
+  };
   return (
     <ScreenWrap id="b2c-marketplace">
       <ProtoStatusBar />
-      <div className="px-4 pt-2 pb-2 bg-white dark:bg-slate-900 border-b border-slate-100 dark:border-slate-700/80">
-        <div className="font-bold text-lg text-slate-900 dark:text-slate-100">{t('disc.market.title', 'Shop')}</div>
-        <div className="text-xs text-slate-500 dark:text-slate-400">{t('disc.market.sub', 'Parts & accessories from verified sellers')}</div>
-        <div className="flex items-center gap-2 mt-3">
-          <div className="flex-1 rounded-2xl border border-slate-200 dark:border-slate-600 bg-slate-50 dark:bg-slate-800/90 px-3 py-2.5 flex items-center gap-2">
-            <ProtoIcon name="search" className="w-4 h-4 text-slate-400 dark:text-slate-500" />
-            <input
-              className="flex-1 bg-transparent text-sm text-slate-900 dark:text-slate-100 outline-none placeholder:text-slate-400 dark:placeholder:text-slate-500"
-              placeholder={t('disc.market.search_ph', 'Search parts, oil, VIN…')}
-            />
+      <div className="px-4 pt-2 pb-0 bg-white dark:bg-slate-900 border-b border-slate-100 dark:border-slate-700/80">
+        <div className="flex items-start justify-between gap-2 pb-2">
+          <div>
+            <div className="font-bold text-lg leading-tight text-slate-900 dark:text-slate-100">{t('disc.market.title', 'Shop')}</div>
+            <div className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">{t('disc.market.sub', 'Parts & accessories from verified sellers')}</div>
           </div>
-          <div className="relative w-10 h-10 rounded-2xl bg-slate-100 dark:bg-slate-800/80 flex items-center justify-center tap">
-            <ProtoIcon name="shopping-bag" className="w-5 h-5 text-slate-600 dark:text-slate-400" />
-            <span className="absolute -top-0.5 -right-0.5 w-4 h-4 rounded-full bg-orange-500 text-white text-[9px] font-bold flex items-center justify-center">
+          <span className="rounded-full px-2 py-0.5 text-[9px] font-semibold uppercase tracking-wide bg-teal-100 dark:bg-teal-950/60 text-teal-900 dark:text-teal-200 border border-teal-200/80 dark:border-teal-800/55 whitespace-nowrap mt-1">
+            {t('disc.market.phase_p1', 'P1 prototype')}
+          </span>
+        </div>
+        <div className="flex items-center gap-2">
+          <div className="flex-1 min-w-0">
+            <label htmlFor={searchId} className="sr-only">
+              {t('a11y.market.search', 'Search parts and accessories')}
+            </label>
+            <div className="rounded-2xl border border-slate-200/95 dark:border-slate-600 bg-slate-50/90 dark:bg-slate-800/90 px-3 py-2.5 flex items-center gap-2 shadow-sm ring-1 ring-black/[0.02]">
+              <ProtoIcon name="search" className="w-4 h-4 text-slate-400 dark:text-slate-500 shrink-0" aria-hidden />
+              <input
+                id={searchId}
+                className="flex-1 min-w-0 bg-transparent text-sm text-slate-900 dark:text-slate-100 outline-none placeholder:text-slate-400 dark:placeholder:text-slate-500"
+                placeholder={t('disc.market.search_ph', 'Search parts, oil, VIN…')}
+                autoComplete="off"
+              />
+            </div>
+          </div>
+          <button
+            type="button"
+            className="relative w-11 h-11 rounded-2xl bg-gradient-to-br from-slate-100 to-slate-50 dark:from-slate-800 dark:to-slate-900 flex items-center justify-center tap shadow-sm ring-1 ring-slate-200/80 dark:ring-slate-600 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-teal-500/80 flex-shrink-0"
+            aria-label={t('a11y.market.cart', 'Cart')}
+          >
+            <ProtoIcon name="shopping-bag" className="w-5 h-5 text-slate-600 dark:text-slate-400" aria-hidden />
+            <span className="absolute -top-1 -right-1 min-w-[1.1rem] h-[1.1rem] px-0.5 rounded-full bg-orange-500 text-white text-[9px] font-bold flex items-center justify-center shadow-sm">
               {t('demo.market.cart_badge', '2')}
             </span>
+          </button>
+        </div>
+        <div className="chip-scroll-wrap pb-2 -mx-4 px-4">
+          <div className="chip-scroll-row" role="list">
+            <span role="listitem" className="chip on shrink-0">
+              {t('disc.market.chip_for_car', 'For your car')}
+            </span>
+            {[t('disc.market.chip_filters', 'Filters'), t('disc.market.chip_oil', 'Oil & fluids'), t('disc.market.chip_batt', 'Batteries'), t('disc.market.chip_tires', 'Tires'), t('disc.market.chip_brakes', 'Brakes')].map(
+              (lbl) => (
+                <span key={lbl} role="listitem" className="chip shrink-0 whitespace-nowrap">
+                  {lbl}
+                </span>
+              ),
+            )}
           </div>
         </div>
-        <div className="flex gap-2 mt-3 overflow-x-auto no-scrollbar">
-          <span className="chip on">{t('disc.market.chip_for_car', 'For your car')}</span>
-          <span className="chip">{t('disc.market.chip_filters', 'Filters')}</span>
-          <span className="chip">{t('disc.market.chip_oil', 'Oil & fluids')}</span>
-          <span className="chip">{t('disc.market.chip_batt', 'Batteries')}</span>
-          <span className="chip">{t('disc.market.chip_tires', 'Tires')}</span>
-          <span className="chip">{t('disc.market.chip_brakes', 'Brakes')}</span>
+        <div className="text-[11px] text-slate-500 dark:text-slate-400 pb-3 flex flex-wrap items-center gap-x-2 gap-y-1">
+          <ProtoIcon name="shield-check" className="w-3.5 h-3.5 text-teal-600 dark:text-teal-400 shrink-0" aria-hidden />
+          {t('disc.market.trust_strip', 'Verified sellers · Returns within 14 days · Est. shipping 1–2 days')}
         </div>
       </div>
-      <div className="flex-1 overflow-y-auto px-4 py-3 app-surface">
-        <div className="p-3 rounded-2xl promo-banner-market text-white mb-4">
-          <div className="text-xs font-semibold opacity-90">{t('disc.market.deal', 'Weekend deal')}</div>
-          <div className="font-bold mt-0.5">{t('disc.market.deal_title', 'Bosch oil filter + 4L 5W-30')}</div>
-          <div className="flex items-end justify-between mt-2">
-            <div>
-              <span className="text-lg font-bold">{t('demo.market.promo_now', 'EGP 620')}</span>
-              <span className="text-xs line-through opacity-80 ml-2">{t('demo.market.promo_was', 'EGP 780')}</span>
+      <div className="flex-1 overflow-y-auto px-4 py-3 app-surface space-y-4 min-h-0">
+        <button
+          type="button"
+          className="w-full text-start p-[1px] rounded-3xl promo-banner-market text-white mb-2 shadow-xl shadow-orange-900/25 ring-1 ring-white/15 tap focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-amber-300/90 ring-offset-2 ring-offset-transparent"
+          onClick={() => goPart('p4')}
+        >
+          <div className="p-4 rounded-[22px]">
+            <div className="text-xs font-semibold opacity-95 tracking-wide">{t('disc.market.deal', 'Weekend deal')}</div>
+            <div className="font-bold text-[15px] mt-1 leading-snug">{t('disc.market.deal_title', 'Bosch oil filter + 4L 5W-30')}</div>
+            <div className="flex items-end justify-between mt-3 gap-3">
+              <div className="min-w-0">
+                <span className="text-2xl font-extrabold tracking-tight">{t('demo.market.promo_now', 'EGP 620')}</span>
+                <span className="text-sm line-through opacity-75 ms-2">{t('demo.market.promo_was', 'EGP 780')}</span>
+              </div>
+              <span className="shrink-0 px-4 py-2 rounded-2xl bg-white dark:bg-white/95 dark:text-slate-900 text-xs font-bold text-slate-900 shadow-md">
+                {t('disc.market.add_bundle', 'View bundle')}
+              </span>
             </div>
-            <button type="button" className="px-3 py-1.5 rounded-xl bg-white/95 dark:bg-slate-900/30 text-xs font-semibold text-slate-900 dark:text-white">
-              {t('disc.market.add', 'Add')}
-            </button>
           </div>
+        </button>
+
+        <div className="flex items-end justify-between gap-2">
+          <span className="label">{t('disc.market.popular', 'Popular this week')}</span>
+          <button type="button" className="text-xs font-semibold text-teal-700 dark:text-teal-400 tap">
+            {t('disc.market.see_all', 'See all')}
+          </button>
         </div>
-        <div className="label mb-2">{t('disc.market.popular', 'Popular this week')}</div>
-        <div className="grid grid-cols-2 gap-3">
-          {rows.map(([title, price, r, sell, seller]) => (
-            <div
-              key={title}
-              className="tap p-3 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-600/90 shadow-sm ring-1 ring-black/[0.02]"
+        <div className="grid grid-cols-2 gap-3 pb-2">
+          {MARKETPLACE_ROWS.map((row) => (
+            <button
+              key={row.key}
+              type="button"
+              onClick={() => goPart(row.key)}
+              className="tap text-start p-3 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200/95 dark:border-slate-600/90 shadow-md shadow-slate-900/[0.04] ring-1 ring-black/[0.02] hover:border-teal-200/90 dark:hover:border-teal-700/50 hover:shadow-lg transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-teal-500/80"
             >
-              <div className="h-20 rounded-xl bg-gradient-to-br from-slate-100 to-indigo-50/80 dark:from-slate-800 dark:to-indigo-950/40 flex items-center justify-center mb-2">
-                <ProtoIcon name="package" className="w-8 h-8 text-indigo-400 dark:text-indigo-300" />
+              <div
+                className={`h-[5.25rem] rounded-xl bg-gradient-to-br ${row.thumbGradient} flex items-center justify-center mb-2.5 ring-1 ring-white/60 dark:ring-white/5`}
+              >
+                <ProtoIcon name={row.iconName} className={`w-9 h-9 ${row.iconClass}`} aria-hidden strokeWidth={1.35} />
               </div>
-              <div className="text-xs font-semibold leading-tight line-clamp-2 text-slate-900 dark:text-slate-100">{title}</div>
-              <div className="mt-1 flex items-center gap-0.5 text-[10px] text-slate-500 dark:text-slate-400">
-                <ProtoIcon name="star" className="w-2.5 h-2.5 text-amber-500 fill-amber-500" />
-                {r} · {sell}
+              <div className="text-[12px] font-semibold leading-snug line-clamp-2 text-slate-900 dark:text-slate-100">{t(row.titleKey, row.titleEn)}</div>
+              <div className="mt-1.5 flex items-center gap-1 text-[10px] text-slate-500 dark:text-slate-400 leading-tight">
+                <ProtoIcon name="star" className="w-3 h-3 text-amber-500 fill-amber-500 shrink-0 -mt-px" aria-hidden />
+                <span>
+                  {t(row.starKey, row.starEn)} · {t(row.extraKey, row.extraEn)}
+                </span>
               </div>
-              <div className="mt-2 font-bold text-sm text-slate-900 dark:text-slate-100">{price}</div>
-              <div className="text-[10px] text-slate-500 dark:text-slate-400">{seller}</div>
-            </div>
+              <div className="mt-2 font-bold text-sm text-slate-900 dark:text-white">{t(row.priceKey, row.priceEn)}</div>
+              <div className="text-[10px] text-slate-500 dark:text-slate-400 truncate mt-0.5">{t(row.sellerKey, row.sellerEn)}</div>
+              <div className="mt-2 pt-2 border-t border-slate-100 dark:border-slate-700/80 flex items-center justify-between text-[10px] font-semibold text-teal-700 dark:text-teal-400">
+                {t('disc.market.view_details', 'Details')}
+                <ProtoIcon name="chevron-right" className="w-3.5 h-3.5 text-slate-400" aria-hidden />
+              </div>
+            </button>
           ))}
         </div>
       </div>

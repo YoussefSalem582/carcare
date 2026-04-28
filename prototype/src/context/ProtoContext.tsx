@@ -13,6 +13,8 @@ import { STRINGS_AR_EG } from '../i18n/stringsArEG';
 import { defaultScreenForSurface, surfaceForScreenId } from '../navigation/protoNavigation';
 import type { Locale, ScreenRow, Surface, ThemeMode } from '../types';
 
+export type MarketListingKey = 'p1' | 'p2' | 'p3' | 'p4';
+
 const LOCALE_KEY = 'carcare_proto_locale';
 const THEME_KEY = 'carcare_proto_theme';
 
@@ -32,6 +34,9 @@ type ProtoContextValue = {
   catalogStatesArray: (s: ScreenRow) => string[];
   bookingReturnTarget: string;
   setBookingReturnTarget: (id: string) => void;
+  /** Demo: which marketplace row is open on `b2c-part-detail`. */
+  marketListingKey: MarketListingKey;
+  setMarketListingKey: (key: MarketListingKey) => void;
 };
 
 const ProtoContext = createContext<ProtoContextValue | null>(null);
@@ -62,6 +67,7 @@ export function ProtoProvider({ children }: { children: ReactNode }) {
   const [surface, setSurface] = useState<Surface>('b2c');
   const [currentScreen, setCurrentScreen] = useState('b2c-splash');
   const [bookingReturnTarget, setBookingReturnTarget] = useState('b2c-shop');
+  const [marketListingKey, setMarketListingKey] = useState<MarketListingKey>('p1');
 
   useEffect(() => {
     document.documentElement.lang = locale === 'ar-EG' ? 'ar-EG' : 'en';
@@ -193,6 +199,8 @@ export function ProtoProvider({ children }: { children: ReactNode }) {
       catalogStatesArray,
       bookingReturnTarget,
       setBookingReturnTarget,
+      marketListingKey,
+      setMarketListingKey,
     }),
     [
       locale,
@@ -209,6 +217,7 @@ export function ProtoProvider({ children }: { children: ReactNode }) {
       catalogField,
       catalogStatesArray,
       bookingReturnTarget,
+      marketListingKey,
     ],
   );
 
