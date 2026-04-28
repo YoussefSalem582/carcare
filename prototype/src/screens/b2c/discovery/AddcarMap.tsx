@@ -67,7 +67,7 @@ export function B2cAddcar() {
                 {t('disc.addcar.plate', 'Plate')}{' '}
                 <span className="text-slate-400 dark:text-slate-500 normal-case font-normal">{t('common.optional', 'optional')}</span>
               </div>
-              <div className="proto-input px-3.5 py-3 text-sm">س ب ج 7421</div>
+              <div className="proto-input px-3.5 py-3 text-sm">{t('demo.addcar.plate_demo', 'S B G 7421')}</div>
             </div>
           </div>
         </div>

@@ -288,7 +288,7 @@ export function B2cTow() {
                       {t('disc.tow.on_shift', 'On shift')}
                     </div>
                     <div className="text-sm font-bold text-slate-900 dark:text-slate-100 leading-tight">
-                      4 {t('disc.tow.trucks', 'trucks')}
+                      {t('demo.tow.on_shift_trucks_n', '4')} {t('disc.tow.trucks', 'trucks')}
                     </div>
                   </div>
                 </div>

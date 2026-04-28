@@ -8,9 +8,9 @@ import { ScreenWrap } from '../shared/ScreenWrap';
 export function B2bDashboard() {
   const { show, t } = useProto();
   const lineUp = [
-    ['11:00', t('demo.customer.youssef_s', 'Youssef S.'), t('demo.b2b.svc.oil_std', 'Oil (std)'), 'new', 'b-blue', true],
-    ['10:00', t('demo.customer.karim_h', 'Karim H.'), t('demo.b2b.svc.brake_pads', 'Brake pads'), 'in_progress', 'b-amber', true],
-    ['09:00', t('demo.customer.layla_m', 'Layla M.'), t('demo.b2b.svc.oil_filter', 'Oil+filter'), 'done', 'b-green', true],
+    [t('demo.slot.t1100', '11:00'), t('demo.customer.youssef_s', 'Youssef S.'), t('demo.b2b.svc.oil_std', 'Oil (std)'), 'new', 'b-blue', true],
+    [t('demo.slot.t1000', '10:00'), t('demo.customer.karim_h', 'Karim H.'), t('demo.b2b.svc.brake_pads', 'Brake pads'), 'in_progress', 'b-amber', true],
+    [t('demo.slot.t0900', '09:00'), t('demo.customer.layla_m', 'Layla M.'), t('demo.b2b.svc.oil_filter', 'Oil+filter'), 'done', 'b-green', true],
   ] as const;
   const lineupStatus = (k: string) =>
     k === 'new'
@@ -52,7 +52,8 @@ export function B2bDashboard() {
             <div className="flex justify-between items-center mb-2">
               <div className="font-bold text-sm">{t('b2b.dash.lineup', 'Today’s line-up')}</div>
               <span className="text-xs text-slate-500 dark:text-slate-400 flex items-center gap-1">
-                <span className="dot bg-red-500" />1 {t('b2b.dash.new', 'new')}
+                <span className="dot bg-red-500" />
+                {t('demo.b2b.dash_new_n', '1')} {t('b2b.dash.new', 'new')}
               </span>
             </div>
             {lineUp.map(([time, cust, svc, label, badge, act]) => (
@@ -84,12 +85,15 @@ export function B2bDashboard() {
                 [t('demo.b2b.mech_hassan', 'Hassan'), 3, 3],
                 [t('demo.b2b.mech_karim', 'Karim'), 0, 3],
               ] as const
-            ).map(([n, b, cap]) => (
+            ).map(([n, b, cap], ix) => (
               <div key={n} className="mb-2 last:mb-0">
                 <div className="flex justify-between text-xs">
                   <span className="font-semibold">{n}</span>
                   <span className="text-slate-500 dark:text-slate-400">
-                    {b}/{cap}
+                    {t(
+                      ix === 0 ? 'demo.b2b.mech_slots_1' : ix === 1 ? 'demo.b2b.mech_slots_2' : 'demo.b2b.mech_slots_3',
+                      `${b}/${cap}`,
+                    )}
                   </span>
                 </div>
                 <div className="h-1.5 rounded-full bg-slate-100 dark:bg-slate-800/80 overflow-hidden mt-0.5">
@@ -124,9 +128,9 @@ export function B2bBookings() {
     t('demo.b2b.cal_d7', 'F19'),
   ];
   const list = [
-    ['11:00', t('demo.customer.youssef_s', 'Youssef S.'), t('demo.b2b.svc.oil_std', 'Oil (std)'), 'b-blue', 'new'],
-    ['10:00', t('demo.customer.karim_h', 'Karim H.'), t('demo.b2b.svc.brake_pads', 'Brake pads'), 'b-amber', 'in_progress'],
-    ['09:00', t('demo.customer.layla_m', 'Layla M.'), t('demo.b2b.svc.oil_filter', 'Oil+filter'), 'b-green', 'done'],
+    [t('demo.slot.t1100', '11:00'), t('demo.customer.youssef_s', 'Youssef S.'), t('demo.b2b.svc.oil_std', 'Oil (std)'), 'b-blue', 'new'],
+    [t('demo.slot.t1000', '10:00'), t('demo.customer.karim_h', 'Karim H.'), t('demo.b2b.svc.brake_pads', 'Brake pads'), 'b-amber', 'in_progress'],
+    [t('demo.slot.t0900', '09:00'), t('demo.customer.layla_m', 'Layla M.'), t('demo.b2b.svc.oil_filter', 'Oil+filter'), 'b-green', 'done'],
   ] as const;
   const listStatus = (k: string) =>
     k === 'new'
@@ -294,7 +298,11 @@ export function B2bBooking() {
                 <div>
                   <div className="text-sm font-semibold">{n}</div>
                   <div className="text-xs text-slate-500 dark:text-slate-400">
-                    {b}/{cap} {t('b2b.booking.slots', 'slots')}
+                    {t(
+                      ix === 0 ? 'demo.b2b.mech_slots_1' : ix === 1 ? 'demo.b2b.mech_slots_2' : 'demo.b2b.mech_slots_3',
+                      `${b}/${cap}`,
+                    )}{' '}
+                    {t('b2b.booking.slots', 'slots')}
                   </div>
                 </div>
                 {ix === 2 ? (
@@ -332,9 +340,9 @@ export function B2bCatalog() {
   const { show, t } = useProto();
   const fixed = t('b2b.cat.fixed', 'Fixed');
   const rows: [string, string, string, string, boolean][] = [
-    [t('demo.b2b.cat.oil_std', 'Oil (standard)'), t('demo.shop.svc1_price', 'EGP 350'), fixed, '62', true],
-    [t('demo.b2b.cat.brake', 'Brake pads'), t('demo.shop.svc2_price', 'EGP 650'), fixed, '22', true],
-    [t('demo.b2b.cat.ac', 'AC recharge'), t('demo.shop.svc3_price', 'EGP 450'), fixed, '34', true],
+    [t('demo.b2b.cat.oil_std', 'Oil (standard)'), t('demo.shop.svc1_price', 'EGP 350'), fixed, t('demo.b2b.cat.book_mo_1', '62'), true],
+    [t('demo.b2b.cat.brake', 'Brake pads'), t('demo.shop.svc2_price', 'EGP 650'), fixed, t('demo.b2b.cat.book_mo_2', '22'), true],
+    [t('demo.b2b.cat.ac', 'AC recharge'), t('demo.shop.svc3_price', 'EGP 450'), fixed, t('demo.b2b.cat.book_mo_3', '34'), true],
   ];
   return (
     <ScreenWrap id="b2b-catalog">
@@ -517,7 +525,7 @@ export function B2bPayouts() {
               <div className="text-right">
                 <div className="font-bold">{pay}</div>
                 <span className={`badge ${s === 'paid' ? 'b-green' : 'b-amber'} text-[9px]`}>
-                  {s === 'paid' ? t('b2b.pay.status.paid', 'paid') : s}
+                  {s === 'paid' ? t('b2b.pay.status.paid', 'paid') : s === 'pending' ? t('b2b.pay.status.pending', 'pending') : s}
                 </span>
               </div>
             </div>

@@ -209,7 +209,11 @@ export function B2cSlot() {
         <div className="mt-5 p-3 rounded-xl bg-gradient-to-r from-amber-50 to-orange-50 border border-amber-200/80 flex gap-2 items-start shadow-sm">
           <ProtoIcon name="timer" className="w-4 h-4 text-amber-700 dark:text-amber-400 mt-0.5" />
           <div className="text-xs text-amber-950">
-            <b>{t('book.slot.hold', 'Slot held for 10:00')}</b> · {t('book.slot.hold_sub', 'expires in 9m 42s. Complete payment to confirm.')}
+            <b>
+              {t('book.slot.hold_for', 'Slot held for')} {t('demo.slot.hold_time', '10:00')}
+            </b>{' '}
+            · {t('book.slot.hold_expires', 'expires in')} {t('demo.slot.hold_countdown', '9m 42s')}.{' '}
+            {t('book.slot.hold_confirm', 'Complete payment to confirm.')}
           </div>
         </div>
       </div>

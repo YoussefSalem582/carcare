@@ -97,9 +97,9 @@ export function B2bOnboard3() {
   const { show, t } = useProto();
   const fixed = t('b2b.cat.fixed', 'Fixed');
   const svcs = [
-    [t('b2b.on3.s1', 'Oil change (standard)'), t('b2b.on3.s1.dur', '45 min'), fixed, '350'],
-    [t('b2b.on3.s2', 'Brake pads — front'), t('b2b.on3.s2.dur', '1.5 h'), fixed, '650'],
-    [t('b2b.on3.s3', 'AC recharge'), t('b2b.on3.s3.dur', '1 h'), fixed, '450'],
+    [t('b2b.on3.s1', 'Oil change (standard)'), t('b2b.on3.s1.dur', '45 min'), fixed, t('demo.shop.svc1_price', 'EGP 350')],
+    [t('b2b.on3.s2', 'Brake pads — front'), t('b2b.on3.s2.dur', '1.5 h'), fixed, t('demo.shop.svc2_price', 'EGP 650')],
+    [t('b2b.on3.s3', 'AC recharge'), t('b2b.on3.s3.dur', '1 h'), fixed, t('demo.shop.svc3_price', 'EGP 450')],
   ];
   return (
     <ScreenWrap id="b2b-onboard-3">

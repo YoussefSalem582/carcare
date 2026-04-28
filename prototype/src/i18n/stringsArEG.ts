@@ -343,8 +343,9 @@ export const STRINGS_AR_EG = {
   'book.continue_price': 'كمّل · EGP 350',
   'book.slot.morning': 'صباح',
   'book.slot.afternoon': 'بعد الظهر',
-  'book.slot.hold': 'الموعد محجوز لـ 10:00',
-  'book.slot.hold_sub': 'ينتهي خلال 9د 42ث · أكمل الدفع للتأكيد.',
+  'book.slot.hold_for': 'الموعد محجوز لـ',
+  'book.slot.hold_expires': 'ينتهي خلال',
+  'book.slot.hold_confirm': 'أكمل الدفع للتأكيد.',
   'book.pay.method': 'طريقة الدفع',
   'book.pay.center': 'أوتو برو مصر الجديدة',
   'book.pay.when': 'سبت 18 أبريل · 11:00 · ~45 د',
@@ -580,6 +581,7 @@ export const STRINGS_AR_EG = {
   'b2b.pay.recent': 'الأخيرة',
   'b2b.pay.to_bank': 'تحويل للبنك',
   'b2b.pay.status.paid': 'مدفوع',
+  'b2b.pay.status.pending': 'معلّق',
 
   'b2b.more.title': 'المزيد',
   'b2b.more.account': 'الحساب',
@@ -623,6 +625,8 @@ export const STRINGS_AR_EG = {
   'demo.slot.t1030': '10:30',
   'demo.slot.t1100': '11:00',
   'demo.slot.t1130': '11:30',
+  'demo.slot.hold_time': '10:00',
+  'demo.slot.hold_countdown': '9د 42ث',
   'demo.slot.t1200': '12:00',
   'demo.slot.t1230': '12:30',
   'demo.slot.t1300': '13:00',
@@ -846,6 +850,13 @@ export const STRINGS_AR_EG = {
   'demo.b2b.pay.row3_amt': 'EGP 9,486',
 
   'demo.b2b.kpi.bookings_n': '7',
+  'demo.b2b.dash_new_n': '1',
+  'demo.b2b.mech_slots_1': '2/3',
+  'demo.b2b.mech_slots_2': '3/3',
+  'demo.b2b.mech_slots_3': '0/3',
+  'demo.b2b.cat.book_mo_1': '62',
+  'demo.b2b.cat.book_mo_2': '22',
+  'demo.b2b.cat.book_mo_3': '34',
   'demo.b2b.kpi.revenue_k': '3.4k',
   'demo.b2b.kpi.accept_pct': '96%',
   'demo.b2b.kpi.rev_n': '62',
@@ -869,6 +880,7 @@ export const STRINGS_AR_EG = {
 
   'demo.tow.stars_avg': '4.7',
   'demo.tow.rev_total_n': '201',
+  'demo.tow.on_shift_trucks_n': '4',
 
   'demo.shop.rev_v_quality': '4.9',
   'demo.shop.rev_v_price': '4.6',
@@ -883,4 +895,5 @@ export const STRINGS_AR_EG = {
 
   'demo.addcar.year_demo': '2019',
   'demo.addcar.mileage_demo': '82,450',
+  'demo.addcar.plate_demo': 'س ب ج 7421',
 };
