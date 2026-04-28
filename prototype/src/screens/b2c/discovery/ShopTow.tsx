@@ -227,7 +227,7 @@ export function B2cTow() {
             <div className="flex items-center justify-between px-4 pt-1">
               <button
                 type="button"
-                className="w-10 h-10 rounded-full bg-white dark:bg-slate-900/95 shadow-md flex items-center justify-center tap ring-1 ring-white/40"
+                className="w-10 h-10 rounded-full bg-white dark:bg-slate-900/95 shadow-md flex items-center justify-center tap ring-1 ring-white/40 dark:ring-slate-600/80"
                 onClick={() => show('b2c-map')}
                 aria-label={t('a11y.back', 'Back')}
               >
@@ -236,14 +236,14 @@ export function B2cTow() {
               <div className="flex gap-2">
                 <button
                   type="button"
-                  className="w-10 h-10 rounded-full bg-white dark:bg-slate-900/95 shadow-md flex items-center justify-center tap ring-1 ring-white/40"
+                  className="w-10 h-10 rounded-full bg-white dark:bg-slate-900/95 shadow-md flex items-center justify-center tap ring-1 ring-white/40 dark:ring-slate-600/80"
                   aria-label={t('a11y.share', 'Share')}
                 >
                   <ProtoIcon name="share-2" className="w-[18px] h-[18px] text-slate-800 dark:text-slate-200" />
                 </button>
                 <button
                   type="button"
-                  className="w-10 h-10 rounded-full bg-white dark:bg-slate-900/95 shadow-md flex items-center justify-center tap ring-1 ring-white/40"
+                  className="w-10 h-10 rounded-full bg-white dark:bg-slate-900/95 shadow-md flex items-center justify-center tap ring-1 ring-white/40 dark:ring-slate-600/80"
                   aria-label={t('a11y.save', 'Save')}
                 >
                   <ProtoIcon name="heart" className="w-[18px] h-[18px] text-slate-800 dark:text-slate-200" />

@@ -282,7 +282,7 @@ export function B2bSignup() {
             {bullets.map(([text, ic]) => (
               <li key={text} className="flex items-center gap-3 text-sm text-white/95">
                 <span className="w-8 h-8 rounded-full bg-white dark:bg-slate-900/15 border border-white/20 flex items-center justify-center flex-shrink-0">
-                  <ProtoIcon name={ic} className="w-3.5 h-3.5" />
+                  <ProtoIcon name={ic} className="w-3.5 h-3.5 text-white" />
                 </span>
                 <span>{text}</span>
               </li>

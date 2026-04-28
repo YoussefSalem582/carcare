@@ -125,14 +125,14 @@ export function B2cMapMainColumn() {
 
         <button
           type="button"
-          className="absolute right-3 map-fab rounded-full bg-white dark:bg-slate-900 flex items-center justify-center tap"
+          className="absolute right-3 map-fab rounded-full bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-600 shadow-sm flex items-center justify-center tap"
           style={{ bottom: 300 }}
         >
           <ProtoIcon name="locate-fixed" className="w-[18px] h-[18px] text-teal-700 dark:text-teal-400" />
         </button>
         <button
           type="button"
-          className="absolute right-3 map-fab rounded-full bg-white dark:bg-slate-900 flex items-center justify-center tap"
+          className="absolute right-3 map-fab rounded-full bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-600 shadow-sm flex items-center justify-center tap"
           style={{ bottom: 352 }}
           onClick={() => show('b2c-search')}
         >
@@ -157,10 +157,10 @@ export function B2cMapMainColumn() {
           <div className="px-4 pb-3 space-y-2.5 overflow-y-auto" style={{ maxHeight: 218 }}>
             <button
               type="button"
-              className="listing-card tap flex items-center gap-3 p-3.5 rounded-2xl border-2 border-teal-300/80 bg-gradient-to-br from-teal-50 to-white shadow-sm w-full border-solid text-left font-inherit"
+              className="listing-card tap flex items-center gap-3 p-3.5 rounded-2xl border-2 border-teal-300/80 dark:border-teal-600/70 bg-gradient-to-br from-teal-50 to-white dark:from-teal-950/45 dark:to-slate-900 shadow-sm w-full border-solid text-left font-inherit"
               onClick={() => show('b2c-shop')}
             >
-              <div className="w-12 h-12 rounded-xl bg-slate-100 dark:bg-slate-800/80 flex items-center justify-center ring-1 ring-slate-200/80">
+              <div className="w-12 h-12 rounded-xl bg-slate-100 dark:bg-slate-800/80 flex items-center justify-center ring-1 ring-slate-200/80 dark:ring-slate-600/80">
                 <ProtoIcon name="wrench" className="w-5 h-5 text-slate-600 dark:text-slate-400" />
               </div>
               <div className="flex-1 min-w-0">
@@ -171,7 +171,7 @@ export function B2cMapMainColumn() {
                   <ProtoIcon name="badge-check" className="w-4 h-4 text-teal-700 dark:text-teal-400 flex-shrink-0" />
                 </div>
                 <div className="text-xs text-slate-600 dark:text-slate-400 mt-1">
-                  {t('demo.search.r1_dist', '0.8 km')} · <span className="text-emerald-600 font-medium">{t('map.sheet.open', 'Open')}</span> ·{' '}
+                  {t('demo.search.r1_dist', '0.8 km')} · <span className="text-emerald-600 dark:text-emerald-400 font-medium">{t('map.sheet.open', 'Open')}</span> ·{' '}
                   {t('map.sheet.next_slot', 'Next slot')}{' '}
                   <span className="font-semibold text-slate-700 dark:text-slate-300">{t('demo.search.r1_next', '11:30')}</span>
                 </div>
@@ -181,7 +181,7 @@ export function B2cMapMainColumn() {
                     {t('demo.search.r1_stars', '4.8')}
                   </span>
                   <span className="text-slate-400 dark:text-slate-500">({t('demo.search.r1_rev_n', '312')})</span>
-                  <span className="text-slate-300">·</span>
+                  <span className="text-slate-400 dark:text-slate-500">·</span>
                   <span className="text-slate-600 dark:text-slate-400 font-medium">{t('demo.search.r1_price', 'EGP 350–900')}</span>
                 </div>
               </div>
@@ -199,7 +199,7 @@ export function B2cMapMainColumn() {
                   <ProtoIcon name="badge-check" className="w-4 h-4 text-teal-700 dark:text-teal-400 flex-shrink-0" />
                 </div>
                 <div className="text-xs text-slate-600 dark:text-slate-400 mt-1">
-                  {t('demo.search.r2_dist', '1.6 km')} · <span className="text-emerald-600 font-medium">{t('map.sheet.open', 'Open')}</span> ·{' '}
+                  {t('demo.search.r2_dist', '1.6 km')} · <span className="text-emerald-600 dark:text-emerald-400 font-medium">{t('map.sheet.open', 'Open')}</span> ·{' '}
                   {t('map.sheet.next_slot', 'Next slot')}{' '}
                   <span className="font-semibold text-slate-700 dark:text-slate-300">{t('demo.search.r2_next', '12:15')}</span>
                 </div>
@@ -209,7 +209,7 @@ export function B2cMapMainColumn() {
                     {t('demo.search.r2_stars', '4.6')}
                   </span>
                   <span className="text-slate-400 dark:text-slate-500">({t('demo.search.r2_rev_n', '188')})</span>
-                  <span className="text-slate-300">·</span>
+                  <span className="text-slate-400 dark:text-slate-500">·</span>
                   <span className="text-slate-600 dark:text-slate-400 font-medium">{t('demo.search.r2_price', 'EGP 250–1200')}</span>
                 </div>
               </div>

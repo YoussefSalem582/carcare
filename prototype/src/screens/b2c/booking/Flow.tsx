@@ -85,13 +85,13 @@ export function B2cService() {
                 {on ? <div className="w-2.5 h-2.5 rounded-full bg-teal-600" /> : null}
               </div>
               <div className="flex-1">
-                <div className="font-semibold text-sm">{rowTitle}</div>
+                <div className="font-semibold text-sm text-slate-900 dark:text-slate-100">{rowTitle}</div>
                 <div className="text-xs text-slate-500 dark:text-slate-400">
                   {d} · {dur}
                 </div>
               </div>
               <div className="text-right">
-                <div className="font-semibold">{p}</div>
+                <div className="font-semibold text-slate-900 dark:text-slate-100">{p}</div>
                 <div className="text-[10px] uppercase text-slate-400 dark:text-slate-500">
                   {typ === 'range' ? t('book.from', 'from') : t('book.fixed', 'fixed')}
                 </div>
@@ -102,11 +102,11 @@ export function B2cService() {
         <div className="label mt-6 mb-2">{t('book.addons', 'Add-ons')}</div>
         <div className="p-3 rounded-xl border border-slate-200 dark:border-slate-600 flex justify-between items-center">
           <div>
-            <div className="font-semibold text-sm">{t('book.cabin_filter', 'Cabin air filter')}</div>
+            <div className="font-semibold text-sm text-slate-900 dark:text-slate-100">{t('book.cabin_filter', 'Cabin air filter')}</div>
             <div className="text-xs text-slate-500 dark:text-slate-400">{t('book.cabin_sub', 'OEM · +10 min')}</div>
           </div>
           <div className="flex items-center gap-2">
-            <div className="text-sm font-semibold">{t('demo.flow.addon_180', '+EGP 180')}</div>
+            <div className="text-sm font-semibold text-slate-900 dark:text-slate-100">{t('demo.flow.addon_180', '+EGP 180')}</div>
             <div className="w-6 h-6 rounded-md border border-slate-300 dark:border-slate-600 flex items-center justify-center">
               <ProtoIcon name="plus" className="w-3.5 h-3.5" />
             </div>
@@ -174,7 +174,7 @@ export function B2cSlot() {
               <div className={`text-xs ${i === 0 ? 'text-white/85' : 'text-slate-500 dark:text-slate-400'}`}>
                 {d.split(' ')[0]}
               </div>
-              <div className="font-bold">{d.split(' ')[1]}</div>
+              <div className={`font-bold ${i === 0 ? '' : 'text-slate-900 dark:text-slate-100'}`}>{d.split(' ')[1]}</div>
             </div>
           ))}
         </div>
@@ -200,15 +200,15 @@ export function B2cSlot() {
           {afternoon.map((time) => (
             <div
               key={time}
-              className="text-center py-2.5 rounded-xl border border-slate-200 dark:border-slate-600 font-medium text-sm"
+              className="text-center py-2.5 rounded-xl border border-slate-200 dark:border-slate-600 bg-white dark:bg-slate-900 font-medium text-sm text-slate-900 dark:text-slate-100"
             >
               {time}
             </div>
           ))}
         </div>
-        <div className="mt-5 p-3 rounded-xl bg-gradient-to-r from-amber-50 to-orange-50 border border-amber-200/80 flex gap-2 items-start shadow-sm">
+        <div className="mt-5 p-3 rounded-xl bg-gradient-to-r from-amber-50 to-orange-50 dark:from-amber-950/45 dark:to-orange-950/35 border border-amber-200/80 dark:border-amber-800/50 flex gap-2 items-start shadow-sm">
           <ProtoIcon name="timer" className="w-4 h-4 text-amber-700 dark:text-amber-400 mt-0.5" />
-          <div className="text-xs text-amber-950">
+          <div className="text-xs text-amber-950 dark:text-amber-100">
             <b>
               {t('book.slot.hold_for', 'Slot held for')} {t('demo.slot.hold_time', '10:00')}
             </b>{' '}
@@ -242,17 +242,17 @@ export function B2cPayment() {
       <div className="flex-1 app-surface px-5 pt-4 overflow-y-auto min-h-0">
         <div className="app-panel p-4">
           <div className="flex items-center gap-3">
-            <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-teal-100 to-cyan-100 flex items-center justify-center">
+            <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-teal-100 to-cyan-100 dark:from-teal-950/50 dark:to-cyan-950/40 flex items-center justify-center">
               <ProtoIcon name="wrench" className="w-6 h-6 text-teal-700 dark:text-teal-400" />
             </div>
             <div className="flex-1">
-              <div className="font-semibold text-sm">{t('book.pay.center', 'AutoPro Heliopolis')}</div>
+              <div className="font-semibold text-sm text-slate-900 dark:text-slate-100">{t('book.pay.center', 'AutoPro Heliopolis')}</div>
               <div className="text-xs text-slate-500 dark:text-slate-400">{t('book.pay.when', 'Sat 18 Apr · 11:00 · ~45 min')}</div>
             </div>
           </div>
           <div className="divider my-3" />
           <div className="space-y-1.5 text-sm">
-            <div className="flex justify-between">
+            <div className="flex justify-between text-slate-900 dark:text-slate-100">
               <span>{t('demo.pay.line_oil', 'Oil change (standard)')}</span>
               <span>{t('demo.flow.price_350', 'EGP 350')}</span>
             </div>
@@ -260,26 +260,26 @@ export function B2cPayment() {
               <span>{t('book.pay.fee', 'Service fee')}</span>
               <span>{t('demo.pay.fee_15', 'EGP 15')}</span>
             </div>
-            <div className="flex justify-between text-green-700">
+            <div className="flex justify-between text-green-700 dark:text-green-400">
               <span>{t('book.pay.promo', 'Promo FIRST50')}</span>
               <span>{t('demo.pay.discount_50', '−EGP 50')}</span>
             </div>
           </div>
           <div className="divider my-3" />
-          <div className="flex justify-between font-bold">
+          <div className="flex justify-between font-bold text-slate-900 dark:text-slate-100">
             <span>{t('book.pay.total', 'Total')}</span>
             <span>{t('demo.pay.total_315', 'EGP 315')}</span>
           </div>
         </div>
         <div className="label mt-5 mb-2">{t('book.pay.method', 'Payment method')}</div>
         <div className="space-y-2">
-          <label className="flex items-center gap-3 p-3 rounded-xl border-2 border-teal-500 bg-gradient-to-r from-teal-50 to-emerald-50/80 shadow-sm tap">
+          <label className="flex items-center gap-3 p-3 rounded-xl border-2 border-teal-500 bg-gradient-to-r from-teal-50 to-emerald-50/80 dark:from-teal-950/45 dark:to-emerald-950/35 dark:border-teal-500 shadow-sm tap">
             <div className="w-5 h-5 rounded-full border-2 border-teal-600 flex items-center justify-center">
               <div className="w-2.5 h-2.5 rounded-full bg-teal-600" />
             </div>
             <ProtoIcon name="credit-card" className="w-5 h-5 text-indigo-600 dark:text-indigo-400" />
             <div className="flex-1">
-              <div className="text-sm font-semibold">{t('demo.pay.card_mask', 'Visa •• 4242')}</div>
+              <div className="text-sm font-semibold text-slate-900 dark:text-slate-100">{t('demo.pay.card_mask', 'Visa •• 4242')}</div>
               <div className="text-xs text-slate-500 dark:text-slate-400">{t('book.pay.card_sub', 'Expires 08/27')}</div>
             </div>
           </label>
@@ -287,7 +287,7 @@ export function B2cPayment() {
             <div className="w-5 h-5 rounded-full border-2 border-slate-300 dark:border-slate-600" />
             <ProtoIcon name="banknote" className="w-5 h-5 text-emerald-600 dark:text-emerald-400" />
             <div className="flex-1">
-              <div className="text-sm font-semibold">{t('book.pay.cash', 'Cash on service')}</div>
+              <div className="text-sm font-semibold text-slate-900 dark:text-slate-100">{t('book.pay.cash', 'Cash on service')}</div>
               <div className="text-xs text-slate-500 dark:text-slate-400">{t('book.pay.cash_sub', 'Pay at the center')}</div>
             </div>
           </label>
@@ -295,7 +295,7 @@ export function B2cPayment() {
             <div className="w-5 h-5 rounded-full border-2 border-slate-300 dark:border-slate-600" />
             <ProtoIcon name="wallet" className="w-5 h-5 text-violet-600 dark:text-violet-400" />
             <div className="flex-1">
-              <div className="text-sm font-semibold">{t('book.pay.vf', 'Vodafone Cash')}</div>
+              <div className="text-sm font-semibold text-slate-900 dark:text-slate-100">{t('book.pay.vf', 'Vodafone Cash')}</div>
               <div className="text-xs text-slate-500 dark:text-slate-400">{t('demo.pay.vf_phone', '+20 100 555 0142')}</div>
             </div>
           </label>
@@ -331,7 +331,7 @@ export function B2cConfirmed() {
         <div className="confirmed-hero-icon mb-4">
           <ProtoIcon name="check" className="w-11 h-11" />
         </div>
-        <div className="text-2xl font-bold">{t('book.confirmed.title', 'Booking confirmed')}</div>
+        <div className="text-2xl font-bold text-slate-900 dark:text-slate-100">{t('book.confirmed.title', 'Booking confirmed')}</div>
         <div className="text-sm text-slate-500 dark:text-slate-400 mt-2 max-w-xs">{t('book.confirmed.lead', "You're booked at AutoPro Heliopolis on Sat 18 Apr at 11:00. We'll remind you an hour before.")}</div>
         <div className="mt-6 w-full app-panel p-4 text-left">
           <div className="flex justify-between text-xs text-slate-500 dark:text-slate-400">
@@ -339,7 +339,7 @@ export function B2cConfirmed() {
             <span>{t('demo.track.booking_id', '#CC-4A1F9')}</span>
           </div>
           <div className="divider my-2" />
-          <div className="space-y-2 text-sm">
+          <div className="space-y-2 text-sm text-slate-900 dark:text-slate-100">
             <div className="flex items-center gap-2">
               <ProtoIcon name="calendar" className="w-4 h-4 text-slate-500 dark:text-slate-400" />
               <span>{t('demo.confirmed.when_detail', 'Sat 18 Apr · 11:00 AM')}</span>

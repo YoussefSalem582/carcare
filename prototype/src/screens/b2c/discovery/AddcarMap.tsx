@@ -37,7 +37,7 @@ export function B2cAddcar() {
             <div className="text-sm font-semibold text-slate-900 dark:text-slate-100">{t('disc.addcar.vin_title', 'Scan VIN with camera')}</div>
             <div className="text-xs text-slate-600 dark:text-slate-400">{t('disc.addcar.vin_sub', 'Autofill brand, model, year')}</div>
           </div>
-          <ProtoIcon name="chevron-right" className="w-5 h-5 text-violet-400 flex-shrink-0" />
+          <ProtoIcon name="chevron-right" className="w-5 h-5 text-violet-400 dark:text-violet-300 flex-shrink-0" />
         </button>
         <div className="app-panel p-4 mt-5 space-y-3">
           <div>

@@ -102,7 +102,7 @@ export function OnboardStepper({ active }: { active: number }) {
               {i < active ? '✓' : i + 1}
             </div>
             <div
-              className={`text-sm font-medium ${i === active ? '' : 'text-slate-500 dark:text-slate-400'}`}
+              className={`text-sm font-medium ${i === active ? 'text-slate-900 dark:text-slate-100' : 'text-slate-500 dark:text-slate-400'}`}
             >
               {s}
             </div>

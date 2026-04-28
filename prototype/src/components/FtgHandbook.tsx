@@ -49,7 +49,8 @@ function FtgHandbookInner({ screenId }: { screenId: string }) {
       <p className="ftg-tech-intro">{intro}</p>
       <div className="label mt-1 text-slate-600 dark:text-slate-400">{implLabel}</div>
       <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5 mb-2">
-        <span className="font-semibold text-slate-600 dark:text-slate-300">{g.eyebrow}</span> · {g.title}
+        <span className="font-semibold text-slate-600 dark:text-slate-300">{g.eyebrow}</span> ·{' '}
+        <span className="text-slate-900 dark:text-slate-100">{g.title}</span>
       </p>
       {'hint' in g && g.hint ? (
         <p className="ftg-guide-hint" dangerouslySetInnerHTML={{ __html: g.hint }} />

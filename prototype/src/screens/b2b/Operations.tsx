@@ -28,29 +28,29 @@ export function B2bDashboard() {
             <div className="kpi-tile kpi-tile--teal p-3 pl-4">
               <div className="text-[10px] text-slate-500 dark:text-slate-400 font-semibold uppercase tracking-wide">{t('b2b.dash.kpi.book', 'Bookings')}</div>
               <div className="text-2xl font-bold text-slate-900 dark:text-slate-100">{t('demo.b2b.kpi.bookings_n', '7')}</div>
-              <div className="text-[10px] text-emerald-600 font-semibold">{t('b2b.dash.kpi.vs_y', '+2 vs yesterday')}</div>
+              <div className="text-[10px] text-emerald-600 dark:text-emerald-400 font-semibold">{t('b2b.dash.kpi.vs_y', '+2 vs yesterday')}</div>
             </div>
             <div className="kpi-tile kpi-tile--violet p-3 pl-4">
               <div className="text-[10px] text-slate-500 dark:text-slate-400 font-semibold uppercase tracking-wide">{t('b2b.dash.kpi.rev', 'Revenue')}</div>
               <div className="text-2xl font-bold text-slate-900 dark:text-slate-100">{t('demo.b2b.kpi.revenue_k', '3.4k')}</div>
-              <div className="text-[10px] text-violet-600 font-medium">{t('b2b.dash.kpi.egp', 'EGP')}</div>
+              <div className="text-[10px] text-violet-600 dark:text-violet-400 font-medium">{t('b2b.dash.kpi.egp', 'EGP')}</div>
             </div>
             <div className="kpi-tile kpi-tile--amber p-3 pl-4">
               <div className="text-[10px] text-slate-500 dark:text-slate-400 font-semibold uppercase tracking-wide">{t('b2b.dash.kpi.rating', 'Rating')}</div>
               <div className="text-2xl font-bold text-slate-900 dark:text-slate-100">{t('demo.search.r1_stars', '4.8')}</div>
-              <div className="text-[10px] text-amber-700">
+              <div className="text-[10px] text-amber-700 dark:text-amber-300">
                 {t('demo.b2b.kpi.rev_n', '62')} {t('b2b.dash.kpi.rev_suffix', 'rev.')}
               </div>
             </div>
             <div className="kpi-tile kpi-tile--emerald p-3 pl-4">
               <div className="text-[10px] text-slate-500 dark:text-slate-400 font-semibold uppercase tracking-wide">{t('b2b.dash.kpi.accept', 'Accept')}</div>
               <div className="text-2xl font-bold text-slate-900 dark:text-slate-100">{t('demo.b2b.kpi.accept_pct', '96%')}</div>
-              <div className="text-[10px] text-emerald-600 font-semibold">{t('b2b.dash.kpi.ok', 'OK')}</div>
+              <div className="text-[10px] text-emerald-600 dark:text-emerald-400 font-semibold">{t('b2b.dash.kpi.ok', 'OK')}</div>
             </div>
           </div>
           <div className="app-panel p-3">
             <div className="flex justify-between items-center mb-2">
-              <div className="font-bold text-sm">{t('b2b.dash.lineup', 'Today’s line-up')}</div>
+              <div className="font-bold text-sm text-slate-900 dark:text-slate-100">{t('b2b.dash.lineup', 'Today’s line-up')}</div>
               <span className="text-xs text-slate-500 dark:text-slate-400 flex items-center gap-1">
                 <span className="dot bg-red-500" />
                 {t('demo.b2b.dash_new_n', '1')} {t('b2b.dash.new', 'new')}
@@ -149,11 +149,11 @@ export function B2bBookings() {
             <span className="px-2.5 py-1 rounded-lg text-slate-500 dark:text-slate-400">{t('b2b.cal.day', 'Day')}</span>
           </div>
           <div className="flex items-center gap-1">
-            <button type="button" className="w-8 h-8 rounded-lg bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-600 flex items-center justify-center">
+            <button type="button" className="w-8 h-8 rounded-lg bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-600 flex items-center justify-center text-slate-700 dark:text-slate-300">
               <ProtoIcon name="chevron-left" className="w-4 h-4" />
             </button>
-            <div className="text-xs font-semibold">{t('b2b.cal.range', 'Apr 13 – 19')}</div>
-            <button type="button" className="w-8 h-8 rounded-lg bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-600 flex items-center justify-center">
+            <div className="text-xs font-semibold text-slate-900 dark:text-slate-100">{t('b2b.cal.range', 'Apr 13 – 19')}</div>
+            <button type="button" className="w-8 h-8 rounded-lg bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-600 flex items-center justify-center text-slate-700 dark:text-slate-300">
               <ProtoIcon name="chevron-right" className="w-4 h-4" />
             </button>
           </div>
@@ -190,7 +190,7 @@ export function B2bBookings() {
               >
                 <div>
                   <div className="text-xs text-slate-500 dark:text-slate-400">{time}</div>
-                  <div className="text-sm font-semibold">{cust}</div>
+                  <div className="text-sm font-semibold text-slate-900 dark:text-slate-100">{cust}</div>
                   <div className="text-xs text-slate-500 dark:text-slate-400">{svc}</div>
                 </div>
                 <span className={`badge ${badge} text-[10px] self-start`}>{listStatus(l)}</span>
@@ -238,7 +238,7 @@ export function B2bBooking() {
           >
             <ProtoIcon name="arrow-left" className="w-5 h-5" />
           </button>
-          <div className="font-semibold text-sm truncate flex-1">{t('demo.track.booking_id', '#CC-4A1F9')}</div>
+          <div className="font-semibold text-sm truncate flex-1 text-slate-900 dark:text-slate-100">{t('demo.track.booking_id', '#CC-4A1F9')}</div>
         </div>
         <div className="flex-1 overflow-y-auto p-3 space-y-3">
           <div className="app-panel p-4 ring-1 ring-indigo-500/10">
@@ -246,11 +246,11 @@ export function B2bBooking() {
               <span className="badge b-indigo">{t('b2b.booking.badge', 'New · 14m')}</span>
               <span className="text-xs text-slate-500 dark:text-slate-400">{t('b2b.booking.when', 'Sat 18 Apr · 11:00')}</span>
             </div>
-            <div className="text-xl font-bold mt-2">{t('b2b.on3.s1', 'Oil change (standard)')}</div>
+            <div className="text-xl font-bold mt-2 text-slate-900 dark:text-slate-100">{t('b2b.on3.s1', 'Oil change (standard)')}</div>
             <div className="text-sm text-slate-500 dark:text-slate-400">{t('b2b.booking.vehicle', 'Corolla 2019 · 82,450 km')}</div>
             <div className="mt-2 flex justify-between">
               <span className="text-xs text-slate-500 dark:text-slate-400">{t('b2b.booking.quote', 'Quote')}</span>
-              <span className="text-lg font-bold">{t('demo.track.price_350', 'EGP 350')}</span>
+              <span className="text-lg font-bold text-slate-900 dark:text-slate-100">{t('demo.track.price_350', 'EGP 350')}</span>
             </div>
             <div className="flex flex-col gap-2 mt-3">
               <button type="button" className="btn-accent w-full shadow-md shadow-orange-500/20">
@@ -259,7 +259,7 @@ export function B2bBooking() {
               <button type="button" className="btn-ghost w-full text-sm border border-slate-200 dark:border-slate-600 bg-white dark:bg-slate-900">
                 {t('b2b.booking.propose', 'Propose new time')}
               </button>
-              <button type="button" className="btn-ghost w-full text-sm text-red-600 bg-red-50 border border-red-100">
+              <button type="button" className="btn-ghost w-full text-sm text-red-600 dark:text-red-400 bg-red-50 dark:bg-red-950/35 border border-red-100 dark:border-red-900/50">
                 {t('b2b.booking.reject', 'Reject')}
               </button>
             </div>
@@ -267,11 +267,11 @@ export function B2bBooking() {
           <div className="app-panel p-4">
             <div className="label mb-2">{t('b2b.booking.customer', 'Customer')}</div>
             <div className="flex items-center gap-2">
-              <div className="w-10 h-10 rounded-full bg-gradient-to-br from-teal-100 to-cyan-100 text-teal-900 font-bold flex items-center justify-center border border-teal-200/60">
+              <div className="w-10 h-10 rounded-full bg-gradient-to-br from-teal-100 to-cyan-100 dark:from-teal-950/55 dark:to-cyan-950/40 text-teal-900 dark:text-teal-100 font-bold flex items-center justify-center border border-teal-200/60 dark:border-teal-700/50">
                 {t('demo.b2b.customer_ini', 'YS')}
               </div>
               <div>
-                <div className="font-semibold text-sm">{t('demo.customer.youssef_salem', 'Youssef Salem')}</div>
+                <div className="font-semibold text-sm text-slate-900 dark:text-slate-100">{t('demo.customer.youssef_salem', 'Youssef Salem')}</div>
                 <div className="text-[10px] text-slate-500 dark:text-slate-400">{t('b2b.booking.bookings_count', '4 bookings')}</div>
               </div>
             </div>
@@ -296,7 +296,7 @@ export function B2bBooking() {
                 } mb-2 last:mb-0`}
               >
                 <div>
-                  <div className="text-sm font-semibold">{n}</div>
+                  <div className="text-sm font-semibold text-slate-900 dark:text-slate-100">{n}</div>
                   <div className="text-xs text-slate-500 dark:text-slate-400">
                     {t(
                       ix === 0 ? 'demo.b2b.mech_slots_1' : ix === 1 ? 'demo.b2b.mech_slots_2' : 'demo.b2b.mech_slots_3',
@@ -315,7 +315,7 @@ export function B2bBooking() {
           </div>
           <div className="app-panel p-4">
             <div className="label mb-2">{t('b2b.booking.invoice', 'Invoice (draft)')}</div>
-            <div className="text-sm flex justify-between py-1">
+            <div className="text-sm flex justify-between py-1 text-slate-900 dark:text-slate-100">
               <span>{t('b2b.booking.line_oil', 'Oil (std)')}</span>
               <span>{t('demo.track.price_350', 'EGP 350')}</span>
             </div>
@@ -324,7 +324,7 @@ export function B2bBooking() {
               <span>{t('demo.b2b.comm_deduct', '−35')}</span>
             </div>
             <div className="divider my-2" />
-            <div className="font-bold flex justify-between">
+            <div className="font-bold flex justify-between text-slate-900 dark:text-slate-100">
               <span>{t('b2b.booking.payout_label', 'Your payout')}</span>
               <span>{t('demo.pay.total_315', 'EGP 315')}</span>
             </div>
@@ -370,14 +370,14 @@ export function B2bCatalog() {
               className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-600/90 rounded-xl p-3 flex justify-between items-start shadow-sm ring-1 ring-violet-500/5"
             >
               <div>
-                <div className="text-sm font-semibold">{s}</div>
+                <div className="text-sm font-semibold text-slate-900 dark:text-slate-100">{s}</div>
                 <div className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
                   <span className="badge b-slate">{priceType}</span> {b}
                   {t('b2b.cat.per_mo', '/mo')}
                 </div>
-                <div className="text-sm font-bold mt-1">{p}</div>
+                <div className="text-sm font-bold mt-1 text-slate-900 dark:text-slate-100">{p}</div>
               </div>
-              <div className={`w-9 h-5 rounded-full ${live ? 'bg-teal-600' : 'bg-slate-300'}`}>
+              <div className={`w-9 h-5 rounded-full ${live ? 'bg-teal-600' : 'bg-slate-300 dark:bg-slate-600'}`}>
                 <div className="w-4 h-4 m-0.5 rounded-full bg-white dark:bg-slate-900 float-right" />
               </div>
             </div>
@@ -420,7 +420,7 @@ export function B2bReviews() {
           >
             <ProtoIcon name="arrow-left" className="w-5 h-5" />
           </button>
-          <div className="font-semibold text-sm">{t('b2b.rev.title', 'Reviews')}</div>
+          <div className="font-semibold text-sm text-slate-900 dark:text-slate-100">{t('b2b.rev.title', 'Reviews')}</div>
         </div>
         <div className="flex-1 overflow-y-auto p-3 space-y-3">
           <div className="kpi-tile kpi-tile--amber p-3 pl-4">
@@ -428,23 +428,23 @@ export function B2bReviews() {
               {t('demo.search.r1_stars', '4.8')}{' '}
               <span className="text-sm text-slate-500 dark:text-slate-400 font-normal">{t('b2b.rev.reviews_n', '312 reviews')}</span>
             </div>
-            <div className="text-xs text-amber-800 font-semibold mt-1">{t('b2b.rev.need_n', '24 need reply')}</div>
+            <div className="text-xs text-amber-800 dark:text-amber-300 font-semibold mt-1">{t('b2b.rev.need_n', '24 need reply')}</div>
           </div>
           <div className="flex gap-2 overflow-x-auto no-scrollbar">
             <span className="chip on flex-shrink-0">{t('b2b.rev.chip.all', 'All')}</span>
             <span className="chip flex-shrink-0">{t('b2b.rev.chip.pending', 'Pending')}</span>
             <span className="chip flex-shrink-0">{t('b2b.rev.chip.5', '5★')}</span>
           </div>
-          <div className="app-panel divide-y divide-slate-100 overflow-hidden p-0">
+          <div className="app-panel divide-y divide-slate-100 dark:divide-slate-700 overflow-hidden p-0">
             {reviews.map(([n, ini, r, txt, state]) => (
               <div key={n} className="p-3">
                 <div className="flex gap-2">
-                  <div className="w-8 h-8 rounded-full bg-teal-100 text-xs font-bold text-teal-800 flex items-center justify-center">
+                  <div className="w-8 h-8 rounded-full bg-teal-100 dark:bg-teal-950/55 text-xs font-bold text-teal-800 dark:text-teal-200 flex items-center justify-center">
                     {ini}
                   </div>
                   <div className="flex-1 min-w-0">
                     <div className="flex justify-between items-start">
-                      <span className="text-sm font-semibold">{n}</span>
+                      <span className="text-sm font-semibold text-slate-900 dark:text-slate-100">{n}</span>
                       {state === 'pending' ? <span className="badge b-amber text-[9px]">{t('b2b.rev.reply', 'Reply')}</span> : null}
                     </div>
                     <div className="flex gap-0.5 mt-0.5">
@@ -452,11 +452,11 @@ export function B2bReviews() {
                         <ProtoIcon
                           key={i}
                           name="star"
-                          className={`w-3 h-3 ${i <= r ? 'text-amber-500 fill-amber-500' : 'text-slate-300'}`}
+                          className={`w-3 h-3 ${i <= r ? 'text-amber-500 fill-amber-500' : 'text-slate-300 dark:text-slate-600'}`}
                         />
                       ))}
                     </div>
-                    <div className="text-sm mt-1">{txt}</div>
+                    <div className="text-sm mt-1 text-slate-700 dark:text-slate-300">{txt}</div>
                   </div>
                 </div>
               </div>
@@ -488,7 +488,7 @@ export function B2bPayouts() {
           >
             <ProtoIcon name="arrow-left" className="w-5 h-5" />
           </button>
-          <div className="font-semibold text-sm pl-1">
+          <div className="font-semibold text-sm pl-1 text-slate-900 dark:text-slate-100">
             {t('b2b.pay.title', 'Payouts')}{' '}
             <span className="badge b-amber text-[9px] ml-1">{t('common.phase_p2', 'P2')}</span>
           </div>
@@ -496,7 +496,7 @@ export function B2bPayouts() {
         <div className="flex-1 overflow-y-auto p-3 space-y-3">
           <div className="kpi-tile kpi-tile--teal p-3 pl-4 text-center">
             <div className="text-xs text-slate-500 dark:text-slate-400">{t('b2b.pay.available', 'Available')}</div>
-            <div className="text-2xl font-bold">{t('demo.b2b.pay.available_amt', 'EGP 12,840')}</div>
+            <div className="text-2xl font-bold text-slate-900 dark:text-slate-100">{t('demo.b2b.pay.available_amt', 'EGP 12,840')}</div>
             <button type="button" className="btn-primary w-full text-xs py-2 mt-2">
               {t('b2b.pay.request', 'Request payout')}
             </button>
@@ -519,11 +519,11 @@ export function B2bPayouts() {
           {recent.map(([d, pay, s]) => (
             <div key={d} className="app-panel p-3 flex justify-between text-sm">
               <div>
-                <div className="font-semibold">{d}</div>
+                <div className="font-semibold text-slate-900 dark:text-slate-100">{d}</div>
                 <div className="text-xs text-slate-500 dark:text-slate-400">{t('b2b.pay.to_bank', 'Payout to bank')}</div>
               </div>
               <div className="text-right">
-                <div className="font-bold">{pay}</div>
+                <div className="font-bold text-slate-900 dark:text-slate-100">{pay}</div>
                 <span className={`badge ${s === 'paid' ? 'b-green' : 'b-amber'} text-[9px]`}>
                   {s === 'paid' ? t('b2b.pay.status.paid', 'paid') : s === 'pending' ? t('b2b.pay.status.pending', 'pending') : s}
                 </span>
@@ -563,7 +563,7 @@ export function B2bMore() {
               onClick={() => show('b2b-payouts')}
             >
               <span className="flex items-center gap-2 text-sm font-medium">
-                <ProtoIcon name="wallet" className="w-4 h-4 text-teal-600" /> {t('b2b.more.payouts', 'Payouts')}
+                <ProtoIcon name="wallet" className="w-4 h-4 text-teal-600 dark:text-teal-400" /> {t('b2b.more.payouts', 'Payouts')}
               </span>
               <span className="badge b-amber text-[9px]">{t('common.phase_p2', 'P2')}</span>
             </button>
@@ -577,7 +577,7 @@ export function B2bMore() {
               <span className="flex items-center gap-2 text-sm">
                 <ProtoIcon name="settings" className="w-4 h-4" /> {t('b2b.more.settings', 'Settings')}
               </span>
-              <ProtoIcon name="chevron-right" className="w-4 h-4" />
+              <ProtoIcon name="chevron-right" className="w-4 h-4 text-slate-400 dark:text-slate-500" />
             </div>
           </div>
         </div>

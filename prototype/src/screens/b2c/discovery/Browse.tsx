@@ -76,7 +76,7 @@ export function B2cMarketplace() {
               <span className="text-lg font-bold">{t('demo.market.promo_now', 'EGP 620')}</span>
               <span className="text-xs line-through opacity-80 ml-2">{t('demo.market.promo_was', 'EGP 780')}</span>
             </div>
-            <button type="button" className="px-3 py-1.5 rounded-xl bg-white dark:bg-slate-900/20 text-xs font-semibold">
+            <button type="button" className="px-3 py-1.5 rounded-xl bg-white/95 dark:bg-slate-900/30 text-xs font-semibold text-slate-900 dark:text-white">
               {t('disc.market.add', 'Add')}
             </button>
           </div>
@@ -88,15 +88,15 @@ export function B2cMarketplace() {
               key={title}
               className="tap p-3 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-600/90 shadow-sm ring-1 ring-black/[0.02]"
             >
-              <div className="h-20 rounded-xl bg-gradient-to-br from-slate-100 to-indigo-50/80 flex items-center justify-center mb-2">
-                <ProtoIcon name="package" className="w-8 h-8 text-indigo-400" />
+              <div className="h-20 rounded-xl bg-gradient-to-br from-slate-100 to-indigo-50/80 dark:from-slate-800 dark:to-indigo-950/40 flex items-center justify-center mb-2">
+                <ProtoIcon name="package" className="w-8 h-8 text-indigo-400 dark:text-indigo-300" />
               </div>
-              <div className="text-xs font-semibold leading-tight line-clamp-2">{title}</div>
+              <div className="text-xs font-semibold leading-tight line-clamp-2 text-slate-900 dark:text-slate-100">{title}</div>
               <div className="mt-1 flex items-center gap-0.5 text-[10px] text-slate-500 dark:text-slate-400">
                 <ProtoIcon name="star" className="w-2.5 h-2.5 text-amber-500 fill-amber-500" />
                 {r} · {sell}
               </div>
-              <div className="mt-2 font-bold text-sm">{price}</div>
+              <div className="mt-2 font-bold text-sm text-slate-900 dark:text-slate-100">{price}</div>
               <div className="text-[10px] text-slate-500 dark:text-slate-400">{seller}</div>
             </div>
           ))}
@@ -202,7 +202,7 @@ export function B2cFilters() {
             <div key={label} className="flex justify-between items-center py-0.5">
               <div className="text-sm font-medium text-slate-800 dark:text-slate-200">{label}</div>
               <div
-                className={`w-10 h-6 rounded-full ${on ? 'bg-gradient-to-r from-teal-600 to-emerald-500' : 'bg-slate-200'} relative transition-colors`}
+                className={`w-10 h-6 rounded-full ${on ? 'bg-gradient-to-r from-teal-600 to-emerald-500' : 'bg-slate-200 dark:bg-slate-600'} relative transition-colors`}
               >
                 <div
                   className={`absolute top-0.5 ${on ? 'right-0.5' : 'left-0.5'} w-5 h-5 rounded-full bg-white dark:bg-slate-900 shadow-md`}
@@ -296,7 +296,7 @@ export function B2cSearch() {
   return (
     <ScreenWrap id="b2c-search">
       <ProtoStatusBar />
-      <div className="px-4 pt-2 pb-2 bg-white dark:bg-slate-900">
+      <div className="px-4 pt-2 pb-2 bg-white dark:bg-slate-900 border-b border-slate-100 dark:border-slate-700/80">
         <div className="flex items-center gap-2">
           <button type="button" className="tap text-slate-500 dark:text-slate-400" onClick={() => show('b2c-map')}>
             <ProtoIcon name="arrow-left" className="w-5 h-5" />
@@ -360,7 +360,7 @@ export function B2cSearch() {
                     {r}
                   </span>
                   <span className="text-slate-400 dark:text-slate-500">({c})</span>
-                  <span className="text-slate-300">·</span>
+                  <span className="text-slate-400 dark:text-slate-500">·</span>
                   <span className="text-slate-600 dark:text-slate-400">{p}</span>
                 </div>
                 <div className="mt-2 flex items-center justify-between gap-2">
