@@ -5,7 +5,8 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "tsc --noEmit && npm run check:i18n && vite build",
+    "build": "tsc --noEmit && npm run check:i18n && npm run check:screens && vite build",
+    "check:screens": "node scripts/check-screens-parity.mjs",
     "preview": "vite preview",
     "check:i18n": "node scripts/check-i18n.mjs"
   },

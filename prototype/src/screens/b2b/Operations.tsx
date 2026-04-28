@@ -494,6 +494,9 @@ export function B2bPayouts() {
           </div>
         </div>
         <div className="flex-1 overflow-y-auto p-3 space-y-3">
+          <div className="rounded-xl border border-teal-100 dark:border-teal-800/50 bg-teal-50/80 dark:bg-teal-950/35 px-3 py-2.5 text-xs text-teal-950 dark:text-teal-100 leading-relaxed">
+            {t('b2b.pay.tier_explainer', 'Commission is tiered by verification status (shown in onboarding) — payouts net of platform fees.')}
+          </div>
           <div className="kpi-tile kpi-tile--teal p-3 pl-4 text-center">
             <div className="text-xs text-slate-500 dark:text-slate-400">{t('b2b.pay.available', 'Available')}</div>
             <div className="text-2xl font-bold text-slate-900 dark:text-slate-100">{t('demo.b2b.pay.available_amt', 'EGP 12,840')}</div>

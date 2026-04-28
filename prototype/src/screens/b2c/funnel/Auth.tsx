@@ -79,12 +79,28 @@ export function B2cLogin() {
           <p className="preauth-page-lead">{t('b2c.login.lead', 'Enter the email and password for your CarCare account.')}</p>
           <div className="preauth-form-fields">
             <div>
-              <div className="label mb-2">{t('common.email', 'Email')}</div>
-              <input type="email" className="proto-input px-3.5 py-3.5 text-sm" defaultValue={t('demo.funnel.email_sample', 'you@example.com')} autoComplete="off" />
+              <label className="label mb-2 block" htmlFor="b2c-login-email">
+                {t('common.email', 'Email')}
+              </label>
+              <input
+                id="b2c-login-email"
+                type="email"
+                className="proto-input px-3.5 py-3.5 text-sm"
+                defaultValue={t('demo.funnel.email_sample', 'you@example.com')}
+                autoComplete="email"
+              />
             </div>
             <div>
-              <div className="label mb-2">{t('common.password', 'Password')}</div>
-              <input type="password" className="proto-input px-3.5 py-3.5 text-sm" defaultValue={t('demo.input.password_masked', '••••••••••')} autoComplete="off" />
+              <label className="label mb-2 block" htmlFor="b2c-login-password">
+                {t('common.password', 'Password')}
+              </label>
+              <input
+                id="b2c-login-password"
+                type="password"
+                className="proto-input px-3.5 py-3.5 text-sm"
+                defaultValue={t('demo.input.password_masked', '••••••••••')}
+                autoComplete="current-password"
+              />
             </div>
             <button type="button" className="text-right text-xs font-semibold text-teal-700 dark:text-teal-400 tap w-full" style={{ marginTop: -6 }}>
               {t('b2c.login.forgot', 'Forgot password?')}
@@ -134,25 +150,37 @@ export function B2cRegister() {
           <p className="preauth-page-lead">{t('b2c.register.lead', 'Email and password — we’ll ask for your car next.')}</p>
           <div className="preauth-form-fields">
             <div>
-              <div className="label mb-1.5">
-                {t('b2c.register.fullname', 'Full name')}{' '}
+              <label className="label mb-1.5 block" htmlFor="b2c-register-name">
+                <span>{t('b2c.register.fullname', 'Full name')} </span>
                 <span className="text-slate-400 dark:text-slate-500 normal-case font-normal">
                   {t('common.optional', 'optional')}
                 </span>
-              </div>
-              <input className="proto-input px-3.5 py-3 text-sm" defaultValue={t('demo.customer.youssef_salem', 'Youssef Salem')} autoComplete="off" />
+              </label>
+              <input id="b2c-register-name" className="proto-input px-3.5 py-3 text-sm" defaultValue={t('demo.customer.youssef_salem', 'Youssef Salem')} autoComplete="name" />
             </div>
             <div>
-              <div className="label mb-1.5">{t('common.email', 'Email')}</div>
-              <input type="email" className="proto-input px-3.5 py-3 text-sm" defaultValue={t('demo.funnel.email_sample', 'you@example.com')} autoComplete="off" />
+              <label className="label mb-1.5 block" htmlFor="b2c-register-email">
+                {t('common.email', 'Email')}
+              </label>
+              <input id="b2c-register-email" type="email" className="proto-input px-3.5 py-3 text-sm" defaultValue={t('demo.funnel.email_sample', 'you@example.com')} autoComplete="email" />
             </div>
             <div>
-              <div className="label mb-1.5">{t('common.password', 'Password')}</div>
-              <input type="password" className="proto-input px-3.5 py-3 text-sm" defaultValue={t('demo.input.password_masked', '••••••••••')} autoComplete="off" />
+              <label className="label mb-1.5 block" htmlFor="b2c-register-password">
+                {t('common.password', 'Password')}
+              </label>
+              <input id="b2c-register-password" type="password" className="proto-input px-3.5 py-3 text-sm" defaultValue={t('demo.input.password_masked', '••••••••••')} autoComplete="new-password" />
             </div>
             <div>
-              <div className="label mb-1.5">{t('b2c.register.confirm', 'Confirm password')}</div>
-              <input type="password" className="proto-input px-3.5 py-3 text-sm" defaultValue={t('demo.input.password_masked', '••••••••••')} autoComplete="off" />
+              <label className="label mb-1.5 block" htmlFor="b2c-register-password-confirm">
+                {t('b2c.register.confirm', 'Confirm password')}
+              </label>
+              <input
+                id="b2c-register-password-confirm"
+                type="password"
+                className="proto-input px-3.5 py-3 text-sm"
+                defaultValue={t('demo.input.password_masked', '••••••••••')}
+                autoComplete="new-password"
+              />
             </div>
           </div>
           <button type="button" className="btn-primary btn-primary-lg w-full mt-6 tap" onClick={() => show('b2c-addcar')}>

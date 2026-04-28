@@ -1,11 +1,44 @@
+import { useState } from 'react';
 import { useProto } from '../../context/ProtoContext';
 import { ProtoIcon } from './Icon';
+import { ProtoStateStrip } from './ProtoStateStrip';
+
+type MapScenario = 'default' | 'loading' | 'empty' | 'denied' | 'emergency';
 
 export function B2cMapMainColumn() {
   const { show, t } = useProto();
+  const [mapScenario, setMapScenario] = useState<MapScenario>('default');
+
   return (
     <>
       <div className="map-search-header px-4 pt-2 pb-0 bg-white dark:bg-slate-900 relative z-30">
+        <ProtoStateStrip<MapScenario>
+          ariaLabel={t('map.proto_strip.a11y', 'Map prototype scenario')}
+          label={t('map.proto_strip.label', 'Demo scenario')}
+          value={mapScenario}
+          onChange={setMapScenario}
+          options={[
+            { key: 'default', label: t('map.proto_strip.default', 'Pins') },
+            { key: 'loading', label: t('map.proto_strip.loading', 'Loading') },
+            { key: 'empty', label: t('map.proto_strip.empty', 'No results') },
+            { key: 'denied', label: t('map.proto_strip.denied', 'Location off') },
+            { key: 'emergency', label: t('map.proto_strip.emergency', 'Emergency') },
+          ]}
+        />
+        {mapScenario === 'denied' ? (
+          <div className="rounded-xl border border-amber-200 bg-amber-50 dark:bg-amber-950/40 dark:border-amber-700/55 px-3 py-2 mb-3 flex gap-2 items-start">
+            <ProtoIcon name="map-pin-off" className="w-4 h-4 text-amber-700 dark:text-amber-400 mt-0.5 shrink-0" />
+            <p className="text-xs text-amber-950 dark:text-amber-100 leading-snug">
+              {t('map.proto.denied_msg', 'Location is off — showing Cairo city center until you grant access or pick an area manually.')}
+            </p>
+          </div>
+        ) : null}
+        {mapScenario === 'emergency' ? (
+          <div className="rounded-xl border border-orange-400/70 bg-orange-500/15 dark:bg-orange-950/55 dark:border-orange-600/65 px-3 py-2 mb-3 flex gap-2 items-start">
+            <ProtoIcon name="zap" className="w-4 h-4 text-orange-600 dark:text-orange-400 mt-0.5 shrink-0" />
+            <p className="text-xs text-orange-950 dark:text-orange-100 leading-snug">{t('map.proto.emergency_msg', 'Emergency mode prioritizes towing + 24/7 verified shops within range.')}</p>
+          </div>
+        ) : null}
         <div className="flex items-center gap-2.5 pb-3">
           <div className="flex-1 rounded-2xl border border-slate-200 dark:border-slate-600/90 bg-white dark:bg-slate-900 px-3.5 py-3 flex items-center gap-2 shadow-sm">
             <ProtoIcon name="search" className="w-4 h-4 text-slate-400 dark:text-slate-500 flex-shrink-0" />
@@ -42,7 +75,7 @@ export function B2cMapMainColumn() {
               <ProtoIcon name="map-pin" className="w-3.5 h-3.5" />
               {t('map.chip.km', '<5 km')}
             </span>
-            <span className="chip bg-orange-500 text-white border-orange-500 flex-shrink-0">
+            <span className={`chip flex-shrink-0 shadow-sm bg-orange-500 text-white border-orange-500 ${mapScenario === 'emergency' ? 'ring-2 ring-orange-400/85' : ''}`}>
               <ProtoIcon name="zap" className="w-3.5 h-3.5" />
               {t('map.chip.emergency', 'Emergency')}
             </span>
@@ -54,7 +87,11 @@ export function B2cMapMainColumn() {
         </div>
       </div>
 
-      <div className="flex-1 relative map-canvas map-canvas-pro overflow-hidden min-h-0">
+      <div
+        className={`flex-1 relative map-canvas map-canvas-pro overflow-hidden min-h-0 ${
+          mapScenario === 'emergency' ? 'ring-2 ring-inset ring-orange-400/55 dark:ring-orange-600/50' : ''
+        }`}
+      >
         <div className="map-building" style={{ left: '8%', top: '18%', width: '22%', height: '14%' }} />
         <div className="map-building" style={{ left: '38%', top: '12%', width: '18%', height: '18%' }} />
         <div className="map-building" style={{ left: '68%', top: '22%', width: '24%', height: '12%' }} />
@@ -67,61 +104,68 @@ export function B2cMapMainColumn() {
         <div className="map-road-v" style={{ left: '34%' }} />
         <div className="map-road-v" style={{ left: '72%' }} />
 
-        <div className="user-loc-dot-wrap" style={{ left: '48%', top: '44%' }}>
+        <div
+          className={`user-loc-dot-wrap transition-opacity ${mapScenario === 'denied' ? 'opacity-55' : ''}`}
+          style={{ left: '48%', top: '44%' }}
+        >
           <div className="user-loc-dot-pulse" />
           <div className="user-loc-dot-core" />
         </div>
 
-        <div className="absolute z-10" style={{ left: '30%', top: '24%' }}>
-          <div className="pin" style={{ background: '#0F766E' }}>
-            <ProtoIcon name="badge-check" className="w-4 h-4 text-white" />
-          </div>
-        </div>
-        <button
-          type="button"
-          className="absolute tap z-10"
-          style={{ left: '56%', top: '36%' }}
-          onClick={() => show('b2c-shop')}
-        >
-          <div className="pin" style={{ background: '#F97316', transform: 'rotate(-45deg) scale(1.2)' }}>
-            <ProtoIcon name="wrench" className="w-4 h-4 text-white" />
-          </div>
-        </button>
-        <div className="absolute z-10" style={{ left: '64%', top: '66%' }}>
-          <div className="pin" style={{ background: '#0F766E' }}>
-            <ProtoIcon name="badge-check" className="w-4 h-4 text-white" />
-          </div>
-        </div>
-        <div className="absolute z-10" style={{ left: '22%', top: '70%' }}>
-          <div className="pin" style={{ background: '#64748B' }}>
-            <ProtoIcon name="wrench" className="w-4 h-4 text-white" />
-          </div>
-        </div>
-        <div className="absolute z-10" style={{ left: '78%', top: '18%' }}>
-          <div className="pin" style={{ background: '#0F766E' }}>
-            <ProtoIcon name="badge-check" className="w-4 h-4 text-white" />
-          </div>
-        </div>
-        <button
-          type="button"
-          className="absolute tap z-10"
-          style={{ left: '46%', top: '68%' }}
-          onClick={() => show('b2c-tow')}
-        >
-          <div className="pin" style={{ background: '#1D4ED8' }}>
-            <ProtoIcon name="truck" className="w-4 h-4 text-white" />
-          </div>
-        </button>
-        <button
-          type="button"
-          className="absolute tap z-10"
-          style={{ left: '12%', top: '38%' }}
-          onClick={() => show('b2c-tow')}
-        >
-          <div className="pin" style={{ background: '#1E40AF' }}>
-            <ProtoIcon name="truck" className="w-4 h-4 text-white" />
-          </div>
-        </button>
+        {mapScenario !== 'loading' && mapScenario !== 'empty' ? (
+          <>
+            <div className="absolute z-10" style={{ left: '30%', top: '24%' }}>
+              <div className="pin" style={{ background: '#0F766E' }}>
+                <ProtoIcon name="badge-check" className="w-4 h-4 text-white" />
+              </div>
+            </div>
+            <button
+              type="button"
+              className="absolute tap z-10"
+              style={{ left: '56%', top: '36%' }}
+              onClick={() => show('b2c-shop')}
+            >
+              <div className="pin" style={{ background: '#F97316', transform: 'rotate(-45deg) scale(1.2)' }}>
+                <ProtoIcon name="wrench" className="w-4 h-4 text-white" />
+              </div>
+            </button>
+            <div className="absolute z-10" style={{ left: '64%', top: '66%' }}>
+              <div className="pin" style={{ background: '#0F766E' }}>
+                <ProtoIcon name="badge-check" className="w-4 h-4 text-white" />
+              </div>
+            </div>
+            <div className="absolute z-10" style={{ left: '22%', top: '70%' }}>
+              <div className="pin" style={{ background: '#64748B' }}>
+                <ProtoIcon name="wrench" className="w-4 h-4 text-white" />
+              </div>
+            </div>
+            <div className="absolute z-10" style={{ left: '78%', top: '18%' }}>
+              <div className="pin" style={{ background: '#0F766E' }}>
+                <ProtoIcon name="badge-check" className="w-4 h-4 text-white" />
+              </div>
+            </div>
+            <button
+              type="button"
+              className="absolute tap z-10"
+              style={{ left: '46%', top: '68%' }}
+              onClick={() => show('b2c-tow')}
+            >
+              <div className="pin" style={{ background: '#1D4ED8' }}>
+                <ProtoIcon name="truck" className="w-4 h-4 text-white" />
+              </div>
+            </button>
+            <button
+              type="button"
+              className="absolute tap z-10"
+              style={{ left: '12%', top: '38%' }}
+              onClick={() => show('b2c-tow')}
+            >
+              <div className="pin" style={{ background: '#1E40AF' }}>
+                <ProtoIcon name="truck" className="w-4 h-4 text-white" />
+              </div>
+            </button>
+          </>
+        ) : null}
 
         <button
           type="button"
@@ -139,22 +183,64 @@ export function B2cMapMainColumn() {
           <ProtoIcon name="list" className="w-[18px] h-[18px] text-slate-700 dark:text-slate-300" />
         </button>
 
+        {mapScenario === 'loading' ? (
+          <div
+            className="absolute inset-0 z-[42] bg-white/70 dark:bg-slate-900/72 backdrop-blur-[2px] flex flex-col items-center justify-center gap-3 pointer-events-none"
+            aria-hidden
+          >
+            <ProtoIcon name="loader-2" className="w-10 h-10 text-teal-600 dark:text-teal-400 animate-spin" />
+            <div className="text-sm font-semibold text-slate-700 dark:text-slate-300">{t('map.proto.loading_label', 'Loading nearby centers…')}</div>
+          </div>
+        ) : null}
+
         <div className="sheet sheet-elevated absolute left-0 right-0 bottom-0" style={{ minHeight: 292 }}>
           <div className="sheet-handle" />
           <div className="px-4 pt-3 pb-2 flex justify-between items-end">
             <div>
               <div className="text-[17px] font-bold text-slate-900 dark:text-slate-100 tracking-tight">
-                {t('map.sheet.title', 'Nearest to you')}
+                {mapScenario === 'empty'
+                  ? t('map.proto.sheet_empty_title', 'Nothing in this radius yet')
+                  : t('map.sheet.title', 'Nearest to you')}
               </div>
               <div className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
-                {t('map.sheet.sub', 'Sorted by distance · live availability')}
+                {mapScenario === 'empty'
+                  ? t('map.proto.sheet_empty_sub', 'Loosen filters, zoom out, or move the map.')
+                  : t('map.sheet.sub', 'Sorted by distance · live availability')}
               </div>
             </div>
-            <span className="text-[11px] font-semibold text-teal-800 dark:text-teal-100 bg-teal-50 dark:bg-teal-950/45 border border-teal-100 dark:border-teal-800/60 px-2.5 py-1 rounded-full">
-              {t('map.sheet.badge', '17 centers')}
+            <span
+              className={`text-[11px] font-semibold px-2.5 py-1 rounded-full border ${
+                mapScenario === 'empty'
+                  ? 'text-amber-900 dark:text-amber-100 bg-amber-50 dark:bg-amber-950/45 border-amber-200 dark:border-amber-800/60'
+                  : 'text-teal-800 dark:text-teal-100 bg-teal-50 dark:bg-teal-950/45 border-teal-100 dark:border-teal-800/60'
+              }`}
+            >
+              {mapScenario === 'empty' ? t('map.proto.sheet_badge_none', '0 centers') : t('map.sheet.badge', '17 centers')}
             </span>
           </div>
           <div className="px-4 pb-3 space-y-2.5 overflow-y-auto" style={{ maxHeight: 218 }}>
+            {mapScenario === 'empty' ? (
+              <div className="text-center py-8 px-2">
+                <ProtoIcon name="search-x" className="w-14 h-14 mx-auto text-slate-300 dark:text-slate-600 mb-4" aria-hidden />
+                <p className="text-sm font-semibold text-slate-800 dark:text-slate-200 mb-2">
+                  {t('map.proto.no_results_title', 'No verified centers yet')}
+                </p>
+                <p className="text-xs text-slate-600 dark:text-slate-400 leading-relaxed max-w-[240px] mx-auto">
+                  {t(
+                    'map.proto.no_results_body',
+                    'PostGIS nearby_centers returned 0 rows for your filters — try resetting service filters or widening distance.',
+                  )}
+                </p>
+                <button
+                  type="button"
+                  className="btn-secondary text-xs font-semibold mt-6 tap rounded-xl px-4 py-2.5"
+                  onClick={() => show('b2c-filters')}
+                >
+                  {t('map.proto.adjust_filters', 'Adjust filters')}
+                </button>
+              </div>
+            ) : (
+              <>
             <button
               type="button"
               className="listing-card tap flex items-center gap-3 p-3.5 rounded-2xl border-2 border-teal-300/80 dark:border-teal-600/70 bg-gradient-to-br from-teal-50 to-white dark:from-teal-950/45 dark:to-slate-900 shadow-sm w-full border-solid text-left font-inherit"
@@ -222,6 +308,8 @@ export function B2cMapMainColumn() {
             >
               {t('map.sheet.more', '+ 15 more centers · see full list')}
             </button>
+              </>
+            )}
           </div>
         </div>
       </div>
