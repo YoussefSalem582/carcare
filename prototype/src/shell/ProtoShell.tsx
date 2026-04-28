@@ -22,9 +22,11 @@ function PhoneStage() {
   return <Cmp />;
 }
 
+const FOCUS_RING =
+  'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-500/80 dark:focus-visible:ring-sky-400/70 focus-visible:ring-offset-2 focus-visible:ring-offset-white dark:focus-visible:ring-offset-slate-900';
 const INACTIVE_TAB =
-  'px-3 py-2 rounded-lg text-sm font-semibold text-slate-600 dark:text-slate-400 whitespace-nowrap';
-const ACTIVE_TAB = 'px-3 py-2 rounded-lg text-sm font-semibold tab-active whitespace-nowrap';
+  `px-3 py-2 rounded-lg text-sm font-semibold text-slate-600 dark:text-slate-400 whitespace-nowrap ${FOCUS_RING}`;
+const ACTIVE_TAB = `px-3 py-2 rounded-lg text-sm font-semibold tab-active whitespace-nowrap ${FOCUS_RING}`;
 
 const PHONE_PAIR_SURFACES: { surface: Surface; layoutId: string; stageId: string; asideId: string }[] = [
   { surface: 'b2c', layoutId: 'b2cLayout', stageId: 'b2cStage', asideId: 'b2cDetailAside' },
@@ -68,12 +70,14 @@ function ScreenListItems({
       <button
         key={s.id}
         type="button"
-        className={`screen-btn ${s.id === currentScreen ? 'active' : ''} text-left text-sm px-3 py-2 rounded-lg hover:bg-slate-50 dark:hover:bg-slate-800 flex items-center justify-between w-full border-0 bg-transparent font-[inherit] cursor-pointer`}
+        aria-current={s.id === currentScreen ? 'page' : undefined}
+        className={`screen-btn ${s.id === currentScreen ? 'active' : ''} text-left text-sm px-3 py-2 rounded-lg hover:bg-slate-50 dark:hover:bg-slate-800 flex items-center justify-between w-full border-0 bg-transparent font-[inherit] cursor-pointer ${FOCUS_RING}`}
         onClick={() => onSelect(s.id)}
       >
         <span className="flex items-center gap-2 min-w-0">
           <span
             className="dot flex-shrink-0"
+            aria-hidden
             style={{ background: s.phase === 1 ? '#10B981' : '#F59E0B' }}
           />
           <span className="truncate">{nm}</span>
@@ -108,7 +112,7 @@ export function ProtoShell() {
             className="w-11 h-11 rounded-2xl flex items-center justify-center shadow-md ring-1 ring-black/5 dark:ring-white/10 shrink-0"
             style={{ background: 'var(--brand)', color: 'white' }}
           >
-            <ProtoIcon name="wrench" className="w-5 h-5" />
+            <ProtoIcon name="wrench" className="w-5 h-5" aria-hidden />
           </div>
           <div className="min-w-0">
             <div id="shellTitle" className="text-lg font-bold tracking-tight text-slate-900 dark:text-slate-100 truncate">
@@ -124,7 +128,7 @@ export function ProtoShell() {
             <button
               type="button"
               id="protoLocaleEn"
-              className={`px-2.5 py-1.5 rounded-lg text-xs font-semibold ${locale === 'en' ? 'tab-active' : 'text-slate-600 dark:text-slate-400'}`}
+              className={`px-2.5 py-1.5 rounded-lg text-xs font-semibold ${FOCUS_RING} ${locale === 'en' ? 'tab-active' : 'text-slate-600 dark:text-slate-400'}`}
               title={t('shell.locale_en_title', 'English')}
               onClick={() => setLocale('en')}
             >
@@ -133,7 +137,7 @@ export function ProtoShell() {
             <button
               type="button"
               id="protoLocaleAr"
-              className={`px-2.5 py-1.5 rounded-lg text-xs font-semibold ${locale === 'ar-EG' ? 'tab-active' : 'text-slate-600 dark:text-slate-400'}`}
+              className={`px-2.5 py-1.5 rounded-lg text-xs font-semibold ${FOCUS_RING} ${locale === 'ar-EG' ? 'tab-active' : 'text-slate-600 dark:text-slate-400'}`}
               title={t('shell.locale_ar_title', 'العربية (مصر)')}
               onClick={() => setLocale('ar-EG')}
             >
@@ -143,17 +147,18 @@ export function ProtoShell() {
           <button
             type="button"
             id="protoThemeToggle"
-            className="inline-flex items-center justify-center w-10 h-10 rounded-xl border border-slate-200/90 dark:border-slate-700 bg-white/90 dark:bg-slate-900/90 shadow-sm tap"
+            className={`inline-flex items-center justify-center w-10 h-10 rounded-xl border border-slate-200/90 dark:border-slate-700 bg-white/90 dark:bg-slate-900/90 shadow-sm tap ${FOCUS_RING}`}
             aria-label={t('a11y.theme_toggle', 'Toggle light or dark theme')}
             onClick={toggleTheme}
           >
-            <ProtoIcon name="sun" className="w-5 h-5 dark:hidden text-amber-500" />
-            <ProtoIcon name="moon" className="w-5 h-5 hidden dark:inline text-slate-300" />
+            <ProtoIcon name="sun" className="w-5 h-5 dark:hidden text-amber-500" aria-hidden />
+            <ProtoIcon name="moon" className="w-5 h-5 hidden dark:inline text-slate-300" aria-hidden />
           </button>
           <div className="flex flex-wrap items-center justify-end gap-1.5 bg-white/90 dark:bg-slate-900/90 backdrop-blur rounded-2xl p-1 border border-slate-200/80 dark:border-slate-700 shadow-sm max-w-xl">
             <button
               type="button"
               id="toggleB2C"
+              aria-current={surface === 'b2c' ? 'page' : undefined}
               className={surface === 'b2c' ? ACTIVE_TAB : INACTIVE_TAB}
               onClick={() => switchSurface('b2c')}
             >
@@ -162,6 +167,7 @@ export function ProtoShell() {
             <button
               type="button"
               id="toggleB2B"
+              aria-current={surface === 'b2b' ? 'page' : undefined}
               className={surface === 'b2b' ? ACTIVE_TAB : INACTIVE_TAB}
               onClick={() => switchSurface('b2b')}
             >
@@ -170,6 +176,7 @@ export function ProtoShell() {
             <button
               type="button"
               id="toggleFlutterGuide"
+              aria-current={surface === 'flutterGuide' ? 'page' : undefined}
               className={surface === 'flutterGuide' ? ACTIVE_TAB : INACTIVE_TAB}
               onClick={() => switchSurface('flutterGuide')}
             >
@@ -184,7 +191,11 @@ export function ProtoShell() {
           <div id="shellScreensLabel" className="label mb-2 text-slate-600 dark:text-slate-400">
             {t('shell.screens', 'Screens')}
           </div>
-          <div id="screenList" className="screen-list flex flex-col gap-1">
+          <nav
+            id="screenList"
+            className="screen-list flex flex-col gap-1"
+            aria-label={t('a11y.screen_nav', 'Prototype screen catalog')}
+          >
             <ScreenListItems
               screenList={screenList as ScreenRow[]}
               currentScreen={currentScreen}
@@ -193,7 +204,7 @@ export function ProtoShell() {
               tGroup={tGroup}
               catalogField={catalogField}
             />
-          </div>
+          </nav>
           <div className="divider my-4 dark:bg-slate-700" />
           <div className="text-xs text-slate-500 dark:text-slate-400 leading-relaxed">
             <div className="flex items-center gap-2 mb-1">
@@ -207,7 +218,11 @@ export function ProtoShell() {
           </div>
         </aside>
 
-        <main className="flex items-start justify-center pt-4 pb-10 w-full min-w-0" style={{ minHeight: 900 }}>
+        <main
+          className="flex items-start justify-center pt-4 pb-10 w-full min-w-0"
+          style={{ minHeight: 900 }}
+          aria-label={t('a11y.main_landmark', 'Prototype preview')}
+        >
           {PHONE_PAIR_SURFACES.map(({ surface: srf, layoutId, stageId, asideId }) => (
             <div
               key={layoutId}
