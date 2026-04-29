@@ -249,21 +249,25 @@ export function B2bOnboarding() {
               </div>
             </div>
 
-            <div className="mt-5 flex justify-center gap-2" role="tablist" aria-label={t('b2b.onb.carousel_dots', 'Slides')}>
-              {slides.map((s, dotIdx) => {
-                const sel = slideIdx === dotIdx;
-                return (
-                  <button
-                    key={s.titleKey}
-                    type="button"
-                    role="tab"
-                    aria-selected={sel}
-                    tabIndex={sel ? 0 : -1}
-                    className={`h-2.5 rounded-full transition-all tap ${sel ? 'w-8 bg-teal-600 shadow-sm' : 'w-2.5 bg-slate-300 dark:bg-slate-600 hover:bg-slate-400'}`}
-                    onClick={() => setSlideIdx(dotIdx)}
-                  />
-                );
-              })}
+            <div className="mt-5 flex items-center justify-between gap-3">
+              <span className="text-[11px] font-semibold tracking-wide text-slate-500 dark:text-slate-400">
+                {t('b2b.onb.intro_meta', 'Intro')} · {slideIdx + 1}/{ONB_SLIDE_COUNT}
+              </span>
+              <div className="flex justify-end gap-2" role="group" aria-label={t('b2b.onb.carousel_dots', 'Slides')}>
+                {slides.map((s, dotIdx) => {
+                  const sel = slideIdx === dotIdx;
+                  return (
+                    <button
+                      key={s.titleKey}
+                      type="button"
+                      aria-label={`${t(s.titleKey, s.titleFb)} · ${dotIdx + 1}/${ONB_SLIDE_COUNT}`}
+                      aria-current={sel ? 'step' : undefined}
+                      className={`h-2.5 rounded-full transition-all tap ${sel ? 'w-8 bg-teal-600 shadow-sm' : 'w-2.5 bg-slate-300 dark:bg-slate-600 hover:bg-slate-400'}`}
+                      onClick={() => setSlideIdx(dotIdx)}
+                    />
+                  );
+                })}
+              </div>
             </div>
 
             <div className={`mt-6 flex gap-3 ${slideIdx === 0 ? 'justify-stretch' : ''}`}>

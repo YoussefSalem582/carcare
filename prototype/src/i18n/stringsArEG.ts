@@ -153,6 +153,7 @@ export const STRINGS_AR_EG = {
   'b2b.onb.slide_next': 'التالي',
   'b2b.onb.cta_finish': 'ابدأ',
   'b2b.onb.hint': 'اسحب البطاقة أو اضغط «التالي»',
+  'b2b.onb.intro_meta': 'مقدمة',
   'b2b.onb.carousel_back_cta': 'رجوع',
 
   'b2b.auth.title': 'دخول أعمال',
@@ -735,6 +736,8 @@ export const STRINGS_AR_EG = {
   'b2b.on3.pause': 'إيقاف مؤقت من القائمة',
   'b2b.on3.show_map': 'الظهور في الاكتشاف وملف المركز',
   'b2b.on3.phase': 'الكتالوج',
+  'b2b.on3.filter_empty': 'لا توجد عناصر في هذا التصفية — اختر «الكل» أو أضف القوالب.',
+  'b2b.on3.cat_other': 'أخرى',
 
   'b2b.pend.title': 'التحقق قيد المراجعة',
   'b2b.pend.lead': 'بنراجع بياناتك والكتالوج. غالبًا 24–48 ساعة.',

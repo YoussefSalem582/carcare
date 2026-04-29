@@ -11,6 +11,8 @@ export function B2bOnboard1() {
 
   const [kind, setKind] = useState<BizKey>('independent');
   const [mapOpen, setMapOpen] = useState(false);
+  const [pinSaved, setPinSaved] = useState(false);
+  const [pin, setPin] = useState({ x: 46, y: 43 });
 
   const bizChips: { id: BizKey; labelKey: string; fb: string }[] = [
     { id: 'independent', labelKey: 'b2b.on1.biz.ind', fb: 'Independent workshop' },
@@ -38,8 +40,18 @@ export function B2bOnboard1() {
                   <ProtoIcon name="check" className="h-3 w-3 text-teal-600" aria-hidden />
                   {t('b2b.on1.setup_trade', 'Trade name')}
                 </span>
-                <span className="inline-flex items-center gap-1 rounded-full bg-white/90 px-2.5 py-1 text-[11px] font-medium text-slate-700 shadow-sm ring-1 ring-slate-200 dark:bg-slate-900/80 dark:text-slate-200 dark:ring-slate-600">
-                  <ProtoIcon name="map-pin" className="h-3 w-3 text-slate-400" aria-hidden />
+                <span
+                  className={`inline-flex items-center gap-1 rounded-full px-2.5 py-1 text-[11px] font-medium shadow-sm ring-1 transition ${
+                    pinSaved
+                      ? 'bg-white/90 text-slate-700 ring-teal-200 dark:bg-slate-900/80 dark:text-slate-200 dark:ring-teal-800/60'
+                      : 'bg-white/90 text-slate-700 shadow-sm ring-slate-200 dark:bg-slate-900/80 dark:text-slate-200 dark:ring-slate-600'
+                  }`}
+                >
+                  <ProtoIcon
+                    name={pinSaved ? 'check' : 'map-pin'}
+                    className={`h-3 w-3 ${pinSaved ? 'text-teal-600' : 'text-slate-400'}`}
+                    aria-hidden
+                  />
                   {t('b2b.on1.setup_map', 'Map pin')}
                 </span>
                 <span className="inline-flex items-center gap-1 rounded-full bg-white/90 px-2.5 py-1 text-[11px] font-medium text-slate-700 shadow-sm ring-1 ring-slate-200 dark:bg-slate-900/80 dark:text-slate-200 dark:ring-slate-600">
@@ -97,7 +109,10 @@ export function B2bOnboard1() {
                         backgroundSize: '18px 18px',
                       }}
                     />
-                    <div className="absolute left-[46%] top-[43%] flex -translate-x-1/2 -translate-y-1/2 flex-col items-center">
+                    <div
+                      className="absolute flex flex-col items-center"
+                      style={{ left: `${pin.x}%`, top: `${pin.y}%`, transform: 'translate(-50%, -50%)' }}
+                    >
                       <span className="flex h-11 w-11 items-center justify-center rounded-full bg-teal-600 text-white shadow-lg ring-4 ring-white/90 dark:bg-teal-500 dark:ring-slate-800">
                         <ProtoIcon name="map-pin" className="h-6 w-6" aria-hidden />
                       </span>
@@ -108,14 +123,26 @@ export function B2bOnboard1() {
                   </div>
                   <p className="mt-2 text-xs leading-relaxed text-slate-600 dark:text-slate-400">{t('b2b.on1.map_hint', 'Drivers use this pin for navigation. Keep it inside your gates.')}</p>
                   <div className="mt-3 grid grid-cols-2 gap-2">
-                    <button type="button" className="btn-ghost rounded-xl border border-slate-200 py-2.5 text-xs font-semibold dark:border-slate-600">
+                    <button
+                      type="button"
+                      className="btn-ghost rounded-xl border border-slate-200 py-2.5 text-xs font-semibold active:scale-[0.98] dark:border-slate-600"
+                      onClick={() =>
+                        setPin((p) => ({
+                          x: Math.min(68, Math.max(28, p.x + (Math.random() > 0.5 ? 5 : -5))),
+                          y: Math.min(62, Math.max(30, p.y + (Math.random() > 0.5 ? 4 : -4))),
+                        }))
+                      }
+                    >
                       <ProtoIcon name="move-horizontal" className="mr-1 inline h-4 w-4" aria-hidden />
                       {t('b2b.on1.nudge', 'Fine-tune')}
                     </button>
                     <button
                       type="button"
                       className="btn-primary rounded-xl py-2.5 text-xs font-semibold shadow-sm"
-                      onClick={() => setMapOpen(false)}
+                      onClick={() => {
+                        setPinSaved(true);
+                        setMapOpen(false);
+                      }}
                     >
                       {t('b2b.on1.map_save', 'Save pin')}
                     </button>
@@ -162,32 +189,90 @@ export function B2bOnboard1() {
   );
 }
 
-type SvcRow = [string, string, string, string];
+type SvcCat = 'oil' | 'brakes' | 'ac' | 'general';
+type CatalogLine = { key: string; title: string; dur: string; typ: string; price: string; cat: SvcCat };
 
 export function B2bOnboard3() {
   const { show, t } = useProto();
   const fixed = t('b2b.cat.fixed', 'Fixed');
-  const baseRows: SvcRow[] = useMemo(
+
+  const baseLines: CatalogLine[] = useMemo(
     () => [
-      [t('b2b.on3.s1', 'Oil change (standard)'), t('b2b.on3.s1.dur', '45 min'), fixed, t('demo.shop.svc1_price', 'EGP 350')],
-      [t('b2b.on3.s2', 'Brake pads — front'), t('b2b.on3.s2.dur', '1.5 h'), fixed, t('demo.shop.svc2_price', 'EGP 650')],
-      [t('b2b.on3.s3', 'AC recharge'), t('b2b.on3.s3.dur', '1 h'), fixed, t('demo.shop.svc3_price', 'EGP 450')],
+      {
+        key: 's1',
+        cat: 'oil',
+        title: t('b2b.on3.s1', 'Oil change (standard)'),
+        dur: t('b2b.on3.s1.dur', '45 min'),
+        typ: fixed,
+        price: t('demo.shop.svc1_price', 'EGP 350'),
+      },
+      {
+        key: 's2',
+        cat: 'brakes',
+        title: t('b2b.on3.s2', 'Brake pads — front'),
+        dur: t('b2b.on3.s2.dur', '1.5 h'),
+        typ: fixed,
+        price: t('demo.shop.svc2_price', 'EGP 650'),
+      },
+      {
+        key: 's3',
+        cat: 'ac',
+        title: t('b2b.on3.s3', 'AC recharge'),
+        dur: t('b2b.on3.s3.dur', '1 h'),
+        typ: fixed,
+        price: t('demo.shop.svc3_price', 'EGP 450'),
+      },
     ],
     [t, fixed],
   );
 
-  const extraRows: SvcRow[] = useMemo(
+  const extraLines: CatalogLine[] = useMemo(
     () => [
-      [t('b2b.on3.e1', 'Tire rotation'), t('b2b.on3.e1.dur', '30 min'), fixed, t('b2b.on3.e1.price', 'EGP 200')],
-      [t('b2b.on3.e2', 'Battery diagnostic'), t('b2b.on3.e2.dur', '20 min'), fixed, t('b2b.on3.e2.price', 'EGP 120')],
-      [t('b2b.on3.e3', 'Wheel alignment'), t('b2b.on3.e3.dur', '1 h'), fixed, t('b2b.on3.e3.price', 'EGP 500')],
+      {
+        key: 'e1',
+        cat: 'general',
+        title: t('b2b.on3.e1', 'Tire rotation'),
+        dur: t('b2b.on3.e1.dur', '30 min'),
+        typ: fixed,
+        price: t('b2b.on3.e1.price', 'EGP 200'),
+      },
+      {
+        key: 'e2',
+        cat: 'general',
+        title: t('b2b.on3.e2', 'Battery diagnostic'),
+        dur: t('b2b.on3.e2.dur', '20 min'),
+        typ: fixed,
+        price: t('b2b.on3.e2.price', 'EGP 120'),
+      },
+      {
+        key: 'e3',
+        cat: 'general',
+        title: t('b2b.on3.e3', 'Wheel alignment'),
+        dur: t('b2b.on3.e3.dur', '1 h'),
+        typ: fixed,
+        price: t('b2b.on3.e3.price', 'EGP 500'),
+      },
     ],
     [t, fixed],
   );
 
   const [presetsMerged, setPresetsMerged] = useState(false);
-  const rows = presetsMerged ? [...baseRows, ...extraRows] : baseRows;
+  const merged = presetsMerged ? [...baseLines, ...extraLines] : baseLines;
+  const [filterChip, setFilterChip] = useState<'all' | SvcCat>('all');
+
+  const visible =
+    filterChip === 'all' ? merged : merged.filter((line) => line.cat === filterChip);
+
   const [openIdx, setOpenIdx] = useState<number | null>(null);
+
+  const chipChoices: ('all' | SvcCat)[] = ['all', 'oil', 'brakes', 'ac'];
+
+  function chipLabel(c: typeof chipChoices[number]) {
+    if (c === 'all') return t('b2b.cat.chip.all', 'All');
+    if (c === 'oil') return t('b2b.cat.chip.oil', 'Oil');
+    if (c === 'brakes') return t('b2b.cat.chip.brakes', 'Brakes');
+    return t('b2b.cat.chip.ac', 'AC');
+  }
 
   return (
     <ScreenWrap id="b2b-onboard-3">
@@ -208,17 +293,22 @@ export function B2bOnboard3() {
             </div>
 
             <div className="mt-4 flex flex-wrap gap-2">
-              {(['all', 'oil', 'brakes'] as const).map((chip) => (
+              {chipChoices.map((c) => (
                 <button
-                  key={chip}
+                  key={c}
                   type="button"
-                  className={`tap rounded-full border px-3 py-1 text-[11px] font-semibold uppercase tracking-wide shadow-sm transition ${chip === 'all' ? 'border-teal-500 bg-teal-50 text-teal-950 dark:bg-teal-950/35 dark:text-teal-100' : 'border-slate-200 bg-white text-slate-600 hover:bg-slate-50 dark:border-slate-600 dark:bg-slate-900 dark:text-slate-300'}`}
+                  aria-pressed={filterChip === c}
+                  onClick={() => {
+                    setFilterChip(c);
+                    setOpenIdx(null);
+                  }}
+                  className={`tap rounded-full border px-3 py-1.5 text-[11px] font-semibold uppercase tracking-wide shadow-sm transition ${
+                    filterChip === c
+                      ? 'border-teal-500 bg-teal-50 text-teal-950 shadow-teal-900/10 dark:bg-teal-950/35 dark:text-teal-100'
+                      : 'border-slate-200 bg-white text-slate-600 hover:bg-slate-50 dark:border-slate-600 dark:bg-slate-900 dark:text-slate-300'
+                  }`}
                 >
-                  {chip === 'all'
-                    ? t('b2b.cat.chip.all', 'All')
-                    : chip === 'oil'
-                      ? t('b2b.cat.chip.oil', 'Oil')
-                      : t('b2b.cat.chip.brakes', 'Brakes')}
+                  {chipLabel(c)}
                 </button>
               ))}
             </div>
@@ -239,10 +329,15 @@ export function B2bOnboard3() {
               </p>
             ) : null}
 
+            {visible.length === 0 ? (
+              <p className="mt-4 rounded-xl border border-dashed border-slate-300 bg-slate-50 px-4 py-6 text-center text-sm font-medium text-slate-600 dark:border-slate-600 dark:bg-slate-800/50 dark:text-slate-400">
+                {t('b2b.on3.filter_empty', 'Nothing in this filter — pick All or add presets.')}
+              </p>
+            ) : (
             <div className="mt-4 space-y-2">
-              {rows.map(([s, d, typ, p], ix) => {
+              {visible.map((line, ix) => {
                 const expanded = openIdx === ix;
-                const key = `${s}-${ix}`;
+                const key = `${line.key}-${ix}`;
                 return (
                   <div
                     key={key}
@@ -255,13 +350,16 @@ export function B2bOnboard3() {
                       aria-expanded={expanded}
                     >
                       <div className="min-w-0">
-                        <div className="font-semibold text-sm text-slate-900 dark:text-slate-100">{s}</div>
+                        <div className="font-semibold text-sm text-slate-900 dark:text-slate-100">{line.title}</div>
                         <div className="text-xs text-slate-600 dark:text-slate-400">
-                          {d} · <span className="badge b-slate">{typ}</span>
+                          {line.dur} · <span className="badge b-slate">{line.typ}</span>{' '}
+                          <span className="ml-1 inline rounded-md bg-slate-100 px-1.5 py-0.5 text-[10px] font-semibold uppercase tracking-wide text-slate-600 dark:bg-slate-800 dark:text-slate-400">
+                            {line.cat === 'general' ? t('b2b.on3.cat_other', 'Other') : chipLabel(line.cat)}
+                          </span>
                         </div>
                       </div>
                       <div className="flex flex-shrink-0 items-center gap-1">
-                        <span className="text-sm font-bold text-teal-800 dark:text-teal-200">{p}</span>
+                        <span className="text-sm font-bold text-teal-800 dark:text-teal-200">{line.price}</span>
                         <ProtoIcon name={expanded ? 'chevron-up' : 'chevron-down'} className="h-4 w-4 text-slate-400" aria-hidden />
                       </div>
                     </button>
@@ -288,6 +386,7 @@ export function B2bOnboard3() {
                 );
               })}
             </div>
+            )}
             <button type="button" className="mt-3 flex w-full items-center justify-center gap-1 rounded-xl py-2.5 text-sm font-semibold text-teal-700 tap dark:text-teal-400">
               <ProtoIcon name="plus" className="h-4 w-4" />
               {t('b2b.cat.custom', 'Add custom service')}
