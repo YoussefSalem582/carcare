@@ -15,6 +15,20 @@ import type { Locale, ScreenRow, Surface, ThemeMode } from '../types';
 
 export type MarketListingKey = 'p1' | 'p2' | 'p3' | 'p4';
 
+/** Persisted prototype selection across Service → Slot → Payment. */
+export type BookingPricingMode = 'fixed' | 'range' | 'quote';
+export type BookingDraft = {
+  serviceIdx: number;
+  addonOn: boolean;
+  pricingMode: BookingPricingMode;
+};
+
+const BOOKING_DRAFT_DEFAULT: BookingDraft = {
+  serviceIdx: 0,
+  addonOn: false,
+  pricingMode: 'fixed',
+};
+
 const LOCALE_KEY = 'carcare_proto_locale';
 const THEME_KEY = 'carcare_proto_theme';
 
@@ -37,6 +51,8 @@ type ProtoContextValue = {
   /** Demo: which marketplace row is open on `b2c-part-detail`. */
   marketListingKey: MarketListingKey;
   setMarketListingKey: (key: MarketListingKey) => void;
+  bookingDraft: BookingDraft;
+  setBookingDraft: (next: BookingDraft | ((prev: BookingDraft) => BookingDraft)) => void;
 };
 
 const ProtoContext = createContext<ProtoContextValue | null>(null);
@@ -68,6 +84,11 @@ export function ProtoProvider({ children }: { children: ReactNode }) {
   const [currentScreen, setCurrentScreen] = useState('b2c-splash');
   const [bookingReturnTarget, setBookingReturnTarget] = useState('b2c-shop');
   const [marketListingKey, setMarketListingKey] = useState<MarketListingKey>('p1');
+  const [bookingDraft, setBookingDraftState] = useState<BookingDraft>(BOOKING_DRAFT_DEFAULT);
+
+  const setBookingDraft = useCallback((next: BookingDraft | ((prev: BookingDraft) => BookingDraft)) => {
+    setBookingDraftState((prev) => (typeof next === 'function' ? next(prev) : next));
+  }, []);
 
   useEffect(() => {
     document.documentElement.lang = locale === 'ar-EG' ? 'ar-EG' : 'en';
@@ -201,6 +222,8 @@ export function ProtoProvider({ children }: { children: ReactNode }) {
       setBookingReturnTarget,
       marketListingKey,
       setMarketListingKey,
+      bookingDraft,
+      setBookingDraft,
     }),
     [
       locale,
@@ -218,6 +241,8 @@ export function ProtoProvider({ children }: { children: ReactNode }) {
       catalogStatesArray,
       bookingReturnTarget,
       marketListingKey,
+      bookingDraft,
+      setBookingDraft,
     ],
   );
 

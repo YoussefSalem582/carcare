@@ -2,10 +2,10 @@ import { useEffect, useState } from 'react';
 import { ProtoFunnelProgress, ProtoHomeIndicator, ProtoStatusBar } from '../../../components/proto/Chrome';
 import { ProtoIcon } from '../../../components/proto/Icon';
 import { ProtoStateStrip } from '../../../components/proto/ProtoStateStrip';
-import { useProto } from '../../../context/ProtoContext';
+import { useProto, type BookingPricingMode } from '../../../context/ProtoContext';
 import { ScreenWrap } from '../../shared/ScreenWrap';
 
-type PricingDemo = 'fixed' | 'range' | 'quote';
+type PricingDemo = BookingPricingMode;
 type SlotDemo = 'held' | 'empty_day' | 'expired';
 type PayDemo = 'card_promo' | 'cash' | 'fail';
 
@@ -14,7 +14,7 @@ function BookingFlowChrome({ step }: { step: 1 | 2 | 3 | 4 }) {
   const { t } = useProto();
   const funnelStep = Math.min(step, 3);
 
-  let hint =
+  const hint =
     step === 1
       ? t('book.flow.hint_service', 'Choose your car & line items')
       : step === 2
@@ -114,10 +114,10 @@ const SERVICE_OPTIONS_STATIC: readonly SvcOpt[] = [
 ];
 
 export function B2cService() {
-  const { show, t, bookingReturnTarget } = useProto();
-  const [pricingDemo, setPricingDemo] = useState<PricingDemo>('fixed');
-  const [selectedIdx, setSelectedIdx] = useState(0);
-  const [addonOn, setAddonOn] = useState(false);
+  const { show, t, bookingReturnTarget, bookingDraft, setBookingDraft } = useProto();
+  const [pricingDemo, setPricingDemo] = useState<PricingDemo>(bookingDraft.pricingMode);
+  const [selectedIdx, setSelectedIdx] = useState(bookingDraft.serviceIdx);
+  const [addonOn, setAddonOn] = useState(bookingDraft.addonOn);
 
   useEffect(() => {
     if (pricingDemo === 'range') setSelectedIdx(3);
@@ -290,7 +290,10 @@ export function B2cService() {
         <button
           type="button"
           className={`btn-primary btn-primary-lg w-full tap shadow-lg flex flex-col items-center justify-center py-4 gap-0.5`}
-          onClick={() => show('b2c-slot')}
+          onClick={() => {
+            setBookingDraft({ serviceIdx: selectedIdx, addonOn, pricingMode: pricingDemo });
+            show('b2c-slot');
+          }}
         >
           <span>{canContinueQuote ? t('book.flow.cta_quote', 'Continue to schedule') : t('book.flow.cta_continue', 'Continue')}</span>
           <span className="text-[11px] font-medium opacity-90">{pricingDemo !== 'quote' ? totalDisplay : ''}</span>
@@ -302,7 +305,7 @@ export function B2cService() {
 }
 
 export function B2cSlot() {
-  const { show, t } = useProto();
+  const { show, t, bookingDraft } = useProto();
   const [slotDemo, setSlotDemo] = useState<SlotDemo>('held');
   const [dayIdx, setDayIdx] = useState(0);
   const morning = [
@@ -340,6 +343,11 @@ export function B2cSlot() {
 
   const blockContinue = slotDemo === 'empty_day';
 
+  const summarySvc = SERVICE_OPTIONS_STATIC[bookingDraft.serviceIdx];
+  const summaryAddonEligible = bookingDraft.pricingMode !== 'quote' && summarySvc.priceNum > 0;
+  const summaryAddonCharge = bookingDraft.addonOn && summaryAddonEligible ? 180 : 0;
+  const summaryLineTotal = summarySvc.priceNum + summaryAddonCharge;
+
   return (
     <ScreenWrap id="b2c-slot">
       <ProtoStatusBar />
@@ -358,11 +366,22 @@ export function B2cSlot() {
       </div>
       <div className="flex-1 app-surface px-5 pt-4 overflow-y-auto min-h-0">
         <BookingShopPeek />
-        <div className="rounded-xl border border-indigo-100 dark:border-indigo-800/50 bg-indigo-50/65 dark:bg-indigo-950/35 px-3 py-2.5 mb-4 text-[12px] text-indigo-950 dark:text-indigo-100 ring-1 ring-indigo-200/70 dark:ring-indigo-800/50">
-          <span className="font-semibold text-indigo-900 dark:text-indigo-100">{t('book.flow.slot_summary_label', 'Current selection')}: </span>
-          <span>{t('demo.pay.line_oil', 'Oil change (standard)')}</span>
-          <span className="text-indigo-600 dark:text-indigo-300 mx-1">·</span>
-          <span>{t('demo.flow.price_350', 'EGP 350')}</span>
+        <div className="rounded-xl border border-indigo-100 dark:border-indigo-800/50 bg-indigo-50/65 dark:bg-indigo-950/35 px-3 py-2.5 mb-4 text-[12px] text-indigo-950 dark:text-indigo-100 ring-1 ring-indigo-200/70 dark:ring-indigo-800/50 leading-snug flex flex-wrap items-baseline gap-x-1 gap-y-1">
+          <span className="font-semibold text-indigo-900 dark:text-indigo-100">{t('book.flow.slot_summary_label', 'Current selection')}:</span>
+          <span>{t(summarySvc.titleKey, summarySvc.titleEn)}</span>
+          {bookingDraft.addonOn && summaryAddonCharge > 0 ? (
+            <span className="text-[11px] font-medium text-teal-800 dark:text-teal-300">
+              + {t('book.cabin_filter_short', 'cabin filter')}
+            </span>
+          ) : null}
+          <span className="text-indigo-600 dark:text-indigo-300">·</span>
+          {bookingDraft.pricingMode === 'quote' ? (
+            <span>{t('demo.flow.quote_pending', 'Quote pending')}</span>
+          ) : summaryLineTotal <= 0 ? (
+            <span>{t('demo.flow.price_free', 'Free')}</span>
+          ) : (
+            <span>{`${t('book.flow.currency_prefix', 'EGP')} ${summaryLineTotal.toLocaleString('en-EG')}`}</span>
+          )}
         </div>
         <ProtoStateStrip<SlotDemo>
           ariaLabel={t('book.proto.slot_strip_a11y', 'Slot availability preview')}
@@ -487,13 +506,38 @@ export function B2cSlot() {
 }
 
 export function B2cPayment() {
-  const { show, t } = useProto();
+  const { show, t, bookingDraft } = useProto();
   const [payDemo, setPayDemo] = useState<PayDemo>('card_promo');
 
   const cardSelected = payDemo === 'card_promo' || payDemo === 'fail';
   const cashSelected = payDemo === 'cash';
 
   const payGroup = 'booking-payment-demo';
+
+  const svc = SERVICE_OPTIONS_STATIC[bookingDraft.serviceIdx];
+  const addonEligible = bookingDraft.pricingMode !== 'quote' && svc.priceNum > 0;
+  const addonCharge = bookingDraft.addonOn && addonEligible ? 180 : 0;
+  const subtotalNum = svc.priceNum + addonCharge;
+  const feeNum = bookingDraft.pricingMode !== 'quote' ? 15 : 0;
+  const promoApplied = bookingDraft.pricingMode !== 'quote' && !cashSelected;
+  const totalCard = Math.max(0, subtotalNum + feeNum - (promoApplied ? 50 : 0));
+  const totalCash = Math.max(0, subtotalNum + feeNum);
+  const isQuote = bookingDraft.pricingMode === 'quote';
+
+  const fmt = (n: number) => `${t('book.flow.currency_prefix', 'EGP')} ${n.toLocaleString('en-EG')}`;
+
+  const totalLabel = isQuote
+    ? t('demo.flow.quote_pending', 'Quote pending')
+    : payDemo === 'cash'
+      ? `${fmt(totalCash)} ${t('book.pay.at_shop', 'at shop')}`
+      : fmt(totalCard);
+
+  const payCtaLabel =
+    payDemo === 'cash'
+      ? t('book.pay.cta_cash_demo', 'Confirm booking · pay at shop')
+      : isQuote
+        ? t('book.pay.cta_confirm_quote', 'Confirm booking')
+        : t('book.pay.cta_card', 'Pay {amount} & confirm').replace('{amount}', fmt(totalCard));
 
   return (
     <ScreenWrap id="b2c-payment">
@@ -535,28 +579,38 @@ export function B2cPayment() {
             </div>
           </div>
           <div className="divider my-3" />
-          <div className="space-y-2 text-sm">
-            <div className="flex justify-between text-slate-900 dark:text-slate-100">
-              <span>{t('demo.pay.line_oil', 'Oil change (standard)')}</span>
-              <span>{t('demo.flow.price_350', 'EGP 350')}</span>
+          {isQuote ? (
+            <p className="text-sm text-slate-600 dark:text-slate-400 leading-relaxed">{t('book.pay.quote_checkout', 'Price is set after inspection — you will confirm before work starts.')}</p>
+          ) : (
+            <div className="space-y-2 text-sm">
+              <div className="flex justify-between text-slate-900 dark:text-slate-100 gap-2">
+                <span className="min-w-0 truncate">{t(svc.titleKey, svc.titleEn)}</span>
+                <span className="shrink-0 tabular-nums">{t(svc.priceKey, svc.priceEn)}</span>
+              </div>
+              {addonCharge > 0 ? (
+                <div className="flex justify-between text-slate-700 dark:text-slate-300 gap-2">
+                  <span className="min-w-0">{t('book.cabin_filter', 'Cabin air filter')}</span>
+                  <span className="shrink-0 tabular-nums">{t('demo.flow.addon_180', '+EGP 180')}</span>
+                </div>
+              ) : null}
+              <div className="flex justify-between text-slate-500 dark:text-slate-400">
+                <span>{t('book.pay.fee', 'Service fee')}</span>
+                <span className="tabular-nums">{t('demo.pay.fee_15', 'EGP 15')}</span>
+              </div>
+              <div
+                className={`flex justify-between transition-opacity ${
+                  payDemo === 'cash' ? 'opacity-35 text-slate-500 dark:text-slate-500' : 'text-green-700 dark:text-green-400'
+                }`}
+              >
+                <span>{t('book.pay.promo', 'Promo FIRST50')}</span>
+                <span className="tabular-nums">{t('demo.pay.discount_50', '−EGP 50')}</span>
+              </div>
             </div>
-            <div className="flex justify-between text-slate-500 dark:text-slate-400">
-              <span>{t('book.pay.fee', 'Service fee')}</span>
-              <span>{t('demo.pay.fee_15', 'EGP 15')}</span>
-            </div>
-            <div
-              className={`flex justify-between transition-opacity ${
-                payDemo === 'cash' ? 'opacity-35 text-slate-500 dark:text-slate-500' : 'text-green-700 dark:text-green-400'
-              }`}
-            >
-              <span>{t('book.pay.promo', 'Promo FIRST50')}</span>
-              <span>{t('demo.pay.discount_50', '−EGP 50')}</span>
-            </div>
-          </div>
+          )}
           <div className="divider my-3" />
-          <div className="flex justify-between items-baseline font-bold text-lg text-slate-900 dark:text-slate-100">
+          <div className="flex justify-between items-baseline gap-2 font-bold text-lg text-slate-900 dark:text-slate-100">
             <span>{t('book.pay.total', 'Total')}</span>
-            <span>{payDemo === 'cash' ? t('demo.pay.total_at_shop', 'EGP 315 at shop') : t('demo.pay.total_315', 'EGP 315')}</span>
+            <span className="text-end leading-tight tabular-nums">{totalLabel}</span>
           </div>
         </div>
 
@@ -658,7 +712,7 @@ export function B2cPayment() {
           }`}
           onClick={() => show('b2c-confirmed')}
         >
-          {payDemo === 'cash' ? t('book.pay.cta_cash_demo', 'Confirm booking · pay at shop') : t('book.pay.cta', 'Pay EGP 315 & confirm')}
+          {payCtaLabel}
         </button>
       </div>
       <ProtoHomeIndicator />
@@ -667,7 +721,8 @@ export function B2cPayment() {
 }
 
 export function B2cConfirmed() {
-  const { show, t } = useProto();
+  const { show, t, bookingDraft } = useProto();
+  const svc = SERVICE_OPTIONS_STATIC[bookingDraft.serviceIdx];
   return (
     <ScreenWrap id="b2c-confirmed">
       <ProtoStatusBar />
@@ -709,7 +764,7 @@ export function B2cConfirmed() {
               <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-xl bg-amber-50 dark:bg-amber-950/50">
                 <ProtoIcon name="wrench" className="w-4 h-4 text-amber-700 dark:text-amber-400" aria-hidden />
               </span>
-              <span className="leading-snug">{t('demo.pay.line_oil', 'Oil change (standard)')}</span>
+              <span className="leading-snug">{t(svc.titleKey, svc.titleEn)}</span>
             </div>
           </div>
         </div>
