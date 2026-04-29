@@ -12,24 +12,25 @@ export function B2cTabBar({ active }: { active: string }) {
     ['b2c-dashboard', t('tabs.b2c.home', 'Home'), 'gauge', 'home'],
   ];
   return (
-    <div className="tab-bar">
+    <nav className="tab-bar" aria-label={t('tabs.b2c.nav_label', 'Primary navigation')}>
       {items.map(([id, label, icon, key]) => {
         const isOn = active === key;
+        if (isOn) {
+          return (
+            <span key={id} className="tab on" aria-current="page">
+              <ProtoIcon name={icon} className="ic" aria-hidden />
+              {label}
+            </span>
+          );
+        }
         return (
-          <div
-            key={id}
-            className={`tab${isOn ? ' on' : ' tap'}`}
-            onClick={isOn ? undefined : () => show(id)}
-            onKeyDown={isOn ? undefined : undefined}
-            role={isOn ? undefined : 'button'}
-            tabIndex={isOn ? undefined : 0}
-          >
-            <ProtoIcon name={icon} className="ic" />
+          <button key={id} type="button" className="tab tap" onClick={() => show(id)}>
+            <ProtoIcon name={icon} className="ic" aria-hidden />
             {label}
-          </div>
+          </button>
         );
       })}
-    </div>
+    </nav>
   );
 }
 
@@ -64,23 +65,25 @@ export function B2bTabBar({ active }: { active: string }) {
     ['b2b-more', t('tabs.b2b.more', 'More'), 'menu', 'more'],
   ];
   return (
-    <div className="b2b-tab-bar">
+    <nav className="b2b-tab-bar" aria-label={t('tabs.b2b.nav_label', 'Workshop navigation')}>
       {items.map(([id, label, icon, key]) => {
         const isOn = active === key;
+        if (isOn) {
+          return (
+            <span key={id} className="tab on" aria-current="page">
+              <ProtoIcon name={icon} className="ic" aria-hidden />
+              {label}
+            </span>
+          );
+        }
         return (
-          <div
-            key={id}
-            className={`tab${isOn ? ' on' : ' tap'}`}
-            onClick={isOn ? undefined : () => show(id)}
-            role={isOn ? undefined : 'button'}
-            tabIndex={isOn ? undefined : 0}
-          >
-            <ProtoIcon name={icon} className="ic" />
+          <button key={id} type="button" className="tab tap" onClick={() => show(id)}>
+            <ProtoIcon name={icon} className="ic" aria-hidden />
             {label}
-          </div>
+          </button>
         );
       })}
-    </div>
+    </nav>
   );
 }
 

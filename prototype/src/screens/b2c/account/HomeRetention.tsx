@@ -9,91 +9,119 @@ export function B2cDashboard() {
   return (
     <ScreenWrap id="b2c-dashboard">
       <ProtoStatusBar />
-      <div className="px-5 pt-3 pb-2 flex items-center justify-between bg-gradient-to-r from-white via-teal-50/30 to-indigo-50/40 dark:from-slate-900 dark:via-slate-900 dark:to-slate-800 border-b border-slate-100 dark:border-slate-700/80">
+      <div className="px-5 pt-3 pb-3 flex items-center justify-between bg-gradient-to-r from-white via-teal-50/30 to-indigo-50/40 dark:from-slate-900 dark:via-slate-900 dark:to-slate-800 border-b border-slate-100 dark:border-slate-700/80">
         <div>
           <div className="text-sm text-slate-600 dark:text-slate-400">{t('acct.dash.greet', 'Good morning,')}</div>
-          <div className="font-bold text-xl tracking-tight text-slate-900 dark:text-slate-100">
-            {t('acct.dash.demo_first_name', 'Youssef')}
-          </div>
+          <div className="font-bold text-xl tracking-tight text-slate-900 dark:text-slate-100">{t('acct.dash.demo_first_name', 'Youssef')}</div>
         </div>
-        <div className="w-11 h-11 rounded-2xl bg-gradient-to-br from-teal-500 to-cyan-600 flex items-center justify-center text-white font-bold shadow-md">
+        <button
+          type="button"
+          aria-label={t('acct.dash.avatar_a11y', 'Garage')}
+          className="w-11 h-11 rounded-2xl bg-gradient-to-br from-teal-500 to-cyan-600 flex items-center justify-center text-white font-bold shadow-md tap shrink-0 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-teal-500 focus-visible:ring-offset-2 focus-visible:ring-offset-white dark:focus-visible:ring-offset-slate-900"
+          onClick={() => show('b2c-garage')}
+        >
           {t('acct.dash.demo_avatar_initial', 'Y')}
-        </div>
+        </button>
       </div>
-      <div className="flex-1 overflow-y-auto px-5 space-y-4 pt-3 app-surface min-h-0">
-        <div className="p-4 rounded-2xl text-white bg-gradient-to-br from-orange-500 via-amber-500 to-rose-500 shadow-lg shadow-orange-500/25">
+      <div className="flex-1 overflow-y-auto px-5 space-y-4 pt-4 app-surface min-h-0">
+        <section aria-labelledby="dash-alert-title" className="p-4 rounded-2xl text-white bg-gradient-to-br from-orange-500 via-amber-500 to-rose-500 shadow-lg shadow-orange-500/25 ring-1 ring-white/10">
           <div className="flex items-start gap-3">
-            <ProtoIcon name="bell" className="w-5 h-5" />
-            <div className="flex-1">
-              <div className="font-bold">{t('acct.dash.remind_title', 'Oil change due soon')}</div>
-              <div className="text-sm opacity-90 mt-0.5">{t('acct.dash.remind_sub', '1,200 km away · 3 centers near you')}</div>
+            <div className="w-10 h-10 rounded-xl bg-white/20 flex items-center justify-center shrink-0 ring-1 ring-white/25" aria-hidden>
+              <ProtoIcon name="bell" className="w-5 h-5" />
+            </div>
+            <div className="flex-1 min-w-0">
+              <h2 id="dash-alert-title" className="font-bold text-[15px] leading-snug">
+                {t('acct.dash.remind_title', 'Oil change due soon')}
+              </h2>
+              <p className="text-sm text-white/90 mt-1 leading-relaxed">{t('acct.dash.remind_sub', 'Due in ~1,200 km · book at 3 verified shops nearby')}</p>
             </div>
           </div>
           <button
             type="button"
-            className="mt-3 w-full py-2.5 rounded-xl bg-white dark:bg-slate-900/20 backdrop-blur text-sm font-semibold tap text-slate-900 dark:text-white"
+            className="mt-3.5 w-full py-2.5 rounded-xl bg-white text-slate-900 text-sm font-semibold tap shadow-sm ring-1 ring-black/5 dark:bg-slate-950/25 dark:text-white dark:ring-white/10"
             onClick={() => show('b2c-reminder')}
           >
             {t('acct.dash.recs', 'See recommendations')}
           </button>
-        </div>
-        <div className="app-panel p-4">
-          <div className="label mb-2">{t('acct.dash.health', 'Car health')}</div>
+        </section>
+
+        <section className="app-panel p-4 shadow-sm ring-1 ring-black/[0.03] dark:ring-white/[0.06]" aria-labelledby="dash-health-title">
+          <h2 id="dash-health-title" className="label mb-3">
+            {t('acct.dash.health', 'Car health')}
+          </h2>
           <div className="flex items-end gap-2 mb-3">
-            <div className="text-3xl font-bold text-teal-700 dark:text-teal-300">{t('demo.dash.health_score', '82')}</div>
+            <div className="text-3xl font-bold text-teal-700 dark:text-teal-300 tabular-nums">{t('demo.dash.health_score', '82')}</div>
             <div className="text-xs text-slate-500 dark:text-slate-400 pb-1">{t('acct.dash.good', '/ 100 · Good')}</div>
           </div>
-          <div className="h-2 rounded-full bg-slate-100 dark:bg-slate-800/80 overflow-hidden ring-1 ring-slate-200/80">
-            <div className="h-full bg-gradient-to-r from-teal-500 via-emerald-500 to-cyan-500" style={{ width: '82%' }} />
+          <div
+            className="h-2 rounded-full bg-slate-100 dark:bg-slate-800/80 overflow-hidden ring-1 ring-slate-200/80 dark:ring-slate-700/60"
+            role="img"
+            aria-label={t('acct.dash.health_meter_a11y', 'Health meter: 82 of 100')}
+          >
+            <div className="h-full rounded-full bg-gradient-to-r from-teal-500 via-emerald-500 to-cyan-500 transition-[width] duration-300 ease-out" style={{ width: '82%' }} />
           </div>
-          <div className="mt-3 grid grid-cols-3 gap-2 text-xs text-center">
-            <div className="p-2 rounded-xl bg-emerald-50 dark:bg-emerald-950/45 text-emerald-900 dark:text-emerald-100 font-medium border border-emerald-100 dark:border-emerald-800/55">
+          <div className="mt-3 grid grid-cols-3 gap-2 text-[11px] text-center leading-tight">
+            <div className="p-2.5 rounded-xl bg-emerald-50 dark:bg-emerald-950/45 text-emerald-900 dark:text-emerald-100 font-semibold border border-emerald-100 dark:border-emerald-800/55">
               {t('acct.dash.eng_ok', 'Engine: OK')}
             </div>
-            <div className="p-2 rounded-xl bg-amber-50 dark:bg-amber-950/45 text-amber-900 dark:text-amber-100 font-medium border border-amber-100 dark:border-amber-800/55">
+            <div className="p-2.5 rounded-xl bg-amber-50 dark:bg-amber-950/45 text-amber-900 dark:text-amber-100 font-semibold border border-amber-100 dark:border-amber-800/55">
               {t('acct.dash.oil_due', 'Oil: Due')}
             </div>
-            <div className="p-2 rounded-xl bg-cyan-50 dark:bg-cyan-950/45 text-cyan-900 dark:text-cyan-100 font-medium border border-cyan-100 dark:border-cyan-800/55">
+            <div className="p-2.5 rounded-xl bg-cyan-50 dark:bg-cyan-950/45 text-cyan-900 dark:text-cyan-100 font-semibold border border-cyan-100 dark:border-cyan-800/55">
               {t('acct.dash.tires_ok', 'Tires: OK')}
             </div>
           </div>
-        </div>
-        <div className="app-panel p-4">
-          <div className="flex justify-between mb-3">
-            <div className="label">{t('acct.dash.upcoming', 'Upcoming')}</div>
-            <button type="button" className="text-xs text-teal-700 dark:text-teal-400 font-semibold tap" onClick={() => show('b2c-bookings')}>
+        </section>
+
+        <section className="app-panel p-4 shadow-sm ring-1 ring-black/[0.03] dark:ring-white/[0.06]">
+          <div className="flex justify-between items-center mb-1">
+            <h2 className="label">{t('acct.dash.upcoming', 'Upcoming')}</h2>
+            <button
+              type="button"
+              className="text-xs text-teal-700 dark:text-teal-400 font-semibold tap py-2 -my-2 px-2 -mr-2 rounded-xl focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-teal-500 focus-visible:ring-offset-2"
+              onClick={() => show('b2c-bookings')}
+            >
               {t('acct.dash.see_all', 'See all')}
             </button>
           </div>
-          <div className="flex items-center gap-3">
-            <div className="w-11 h-11 rounded-xl bg-gradient-to-br from-teal-100 to-cyan-100 dark:from-teal-950/70 dark:to-cyan-950/60 text-teal-800 dark:text-teal-100 border border-teal-200/60 dark:border-teal-700/50 flex flex-col items-center justify-center shadow-sm">
+          <button
+            type="button"
+            className="flex w-full items-center gap-2 sm:gap-3 rounded-xl px-1 py-2.5 -mx-1 text-start tap hover:bg-slate-50 dark:hover:bg-slate-800/80 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-teal-500 focus-visible:ring-offset-2 focus-visible:ring-offset-white dark:focus-visible:ring-offset-slate-900 transition-colors"
+            onClick={() => show('b2c-progress')}
+            aria-label={t('acct.dash.upcoming_a11y', 'Open booking: Oil change at AutoPro')}
+          >
+            <div className="w-11 h-11 rounded-xl bg-gradient-to-br from-teal-100 to-cyan-100 dark:from-teal-950/70 dark:to-cyan-950/60 text-teal-800 dark:text-teal-100 border border-teal-200/60 dark:border-teal-700/50 flex flex-col items-center justify-center shadow-sm shrink-0 leading-none">
               <div className="text-[10px] font-bold">{t('demo.dash.cal_month_apr', 'APR')}</div>
-              <div className="text-sm font-bold -mt-0.5">{t('demo.dash.cal_day_n', '18')}</div>
+              <div className="text-sm font-bold mt-0.5">{t('demo.dash.cal_day_n', '18')}</div>
             </div>
-            <div className="flex-1">
-              <div className="font-semibold text-sm text-slate-900 dark:text-slate-100">{t('acct.dash.booking_line', 'Oil change · AutoPro')}</div>
-              <div className="text-xs text-slate-500 dark:text-slate-400">{t('acct.dash.today', 'Today · 11:00')}</div>
+            <div className="flex-1 min-w-0">
+              <div className="font-semibold text-sm text-slate-900 dark:text-slate-100 truncate">{t('acct.dash.booking_line', 'Oil change · AutoPro')}</div>
+              <div className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">{t('acct.dash.today', 'Today · 11:00')}</div>
             </div>
-            <span className="badge b-indigo">{t('book.list.badge.confirmed', 'Confirmed')}</span>
+            <span className="badge b-indigo shrink-0">{t('book.list.badge.confirmed', 'Confirmed')}</span>
+            <ProtoIcon name="chevron-right" className="w-4 h-4 text-slate-300 dark:text-slate-600 shrink-0" aria-hidden />
+          </button>
+        </section>
+
+        <section className="app-panel p-4 shadow-sm ring-1 ring-black/[0.03] dark:ring-white/[0.06]" aria-labelledby="dash-month-title">
+          <h2 id="dash-month-title" className="label mb-3">
+            {t('acct.dash.month', 'This month')}
+          </h2>
+          <div className="grid grid-cols-3 gap-0 divide-x divide-slate-100 dark:divide-slate-700">
+            <div className="text-center px-2 first:pl-0">
+              <div className="text-2xl font-bold text-slate-900 dark:text-slate-100 tabular-nums">{t('demo.dash.spent_month', 'EGP 970')}</div>
+              <div className="text-[11px] text-slate-500 dark:text-slate-400 mt-1 font-medium">{t('acct.dash.spent', 'Spent')}</div>
+            </div>
+            <div className="text-center px-2">
+              <div className="text-2xl font-bold text-slate-900 dark:text-slate-100 tabular-nums">{t('demo.dash.month_svc_n', '2')}</div>
+              <div className="text-[11px] text-slate-500 dark:text-slate-400 mt-1 font-medium">{t('acct.dash.services', 'Services')}</div>
+            </div>
+            <div className="text-center px-2 last:pr-0">
+              <div className="text-2xl font-bold text-slate-900 dark:text-slate-100 tabular-nums">{t('demo.dash.streak_n', '28')}</div>
+              <div className="text-[11px] text-slate-500 dark:text-slate-400 mt-1 font-medium">{t('acct.dash.streak', 'Days streak')}</div>
+            </div>
           </div>
-        </div>
-        <div className="app-panel p-4">
-          <div className="label mb-2">{t('acct.dash.month', 'This month')}</div>
-          <div className="flex gap-3">
-            <div className="flex-1">
-              <div className="text-2xl font-bold text-slate-900 dark:text-slate-100">{t('demo.dash.spent_month', 'EGP 970')}</div>
-              <div className="text-xs text-slate-500 dark:text-slate-400">{t('acct.dash.spent', 'Spent')}</div>
-            </div>
-            <div className="flex-1">
-              <div className="text-2xl font-bold text-slate-900 dark:text-slate-100">{t('demo.dash.month_svc_n', '2')}</div>
-              <div className="text-xs text-slate-500 dark:text-slate-400">{t('acct.dash.services', 'Services')}</div>
-            </div>
-            <div className="flex-1">
-              <div className="text-2xl font-bold text-slate-900 dark:text-slate-100">{t('demo.dash.streak_n', '28')}</div>
-              <div className="text-xs text-slate-500 dark:text-slate-400">{t('acct.dash.streak', 'Days streak')}</div>
-            </div>
-          </div>
-        </div>
+        </section>
         <div className="h-2" />
       </div>
       <B2cTabBar active="home" />
@@ -134,7 +162,12 @@ export function B2cReminder() {
     <ScreenWrap id="b2c-reminder">
       <ProtoStatusBar />
       <div className="screen-topbar">
-        <button type="button" className="funnel-back tap -ml-1" onClick={() => show('b2c-dashboard')}>
+        <button
+          type="button"
+          className="funnel-back tap -ml-1 rounded-xl focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-teal-500"
+          onClick={() => show('b2c-dashboard')}
+          aria-label={t('a11y.back', 'Back')}
+        >
           <ProtoIcon name="arrow-left" className="w-5 h-5" />
         </button>
         <div className="font-semibold text-slate-900 dark:text-slate-100">{t('acct.remind.title', 'Oil change')}</div>
@@ -188,11 +221,20 @@ export function B2cReminder() {
         <button type="button" className="btn-primary w-full tap mt-3" onClick={() => show('b2c-slot')}>
           {t('acct.remind.cta', 'Book at AutoPro · EGP 350')}
         </button>
-        <div className="text-xs text-center text-slate-500 dark:text-slate-400 mt-2">
-          {t('acct.remind.or', 'Or')}{' '}
-          <button type="button" className="text-teal-700 dark:text-teal-400 font-semibold tap" onClick={() => show('b2c-map')}>
-            {t('acct.remind.map', 'see all on map')}
+        <div className="flex flex-col items-center gap-2 text-xs text-center text-slate-500 dark:text-slate-400 mt-2">
+          <button
+            type="button"
+            className="text-teal-800 dark:text-teal-300 font-semibold tap underline-offset-2 hover:underline decoration-teal-600/50"
+            onClick={() => show('b2c-cardetail')}
+          >
+            {t('acct.remind.view_vehicle', 'Vehicle details & history')}
           </button>
+          <div>
+            {t('acct.remind.or', 'Or')}{' '}
+            <button type="button" className="text-teal-700 dark:text-teal-400 font-semibold tap" onClick={() => show('b2c-map')}>
+              {t('acct.remind.map', 'see all on map')}
+            </button>
+          </div>
         </div>
       </div>
       <ProtoHomeIndicator />
