@@ -4,12 +4,13 @@ import { ProtoIcon } from './Icon';
 
 export function B2cTabBar({ active }: { active: string }) {
   const { show, t } = useProto();
+  /** Order: Home first (conventional), then map → bookings → shop → garage. */
   const items: [string, string, string, string][] = [
+    ['b2c-dashboard', t('tabs.b2c.home', 'Home'), 'home', 'home'],
     ['b2c-map', t('tabs.b2c.map', 'Map'), 'map', 'map'],
     ['b2c-bookings', t('tabs.b2c.bookings', 'Bookings'), 'calendar-check', 'bookings'],
     ['b2c-marketplace', t('tabs.b2c.shop', 'Shop'), 'store', 'market'],
     ['b2c-garage', t('tabs.b2c.garage', 'Garage'), 'car', 'garage'],
-    ['b2c-dashboard', t('tabs.b2c.home', 'Home'), 'gauge', 'home'],
   ];
   return (
     <nav className="tab-bar" aria-label={t('tabs.b2c.nav_label', 'Primary navigation')}>
