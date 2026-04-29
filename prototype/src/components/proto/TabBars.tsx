@@ -88,33 +88,67 @@ export function B2bTabBar({ active }: { active: string }) {
   );
 }
 
-export function OnboardStepper({ active }: { active: number }) {
-  const { t } = useProto();
+export function OnboardStepper({
+  active,
+  interactive,
+}: {
+  active: number;
+  /** Navigate between business onboarding screens (prototype). */
+  interactive?: boolean;
+}) {
+  const { t, show } = useProto();
   const steps = [t('onboard.step_business', 'Business'), t('onboard.step_catalog', 'Catalog')];
+  const targets = ['b2b-onboard-1', 'b2b-onboard-3'];
+
+  function goTo(i: number) {
+    if (!interactive || i === active || i < 0 || i >= targets.length) return;
+    show(targets[i]);
+  }
+
   return (
-    <div className="flex flex-wrap items-center gap-2 sm:gap-3 mb-4">
+    <div className="mb-4 flex flex-wrap items-center gap-2 sm:gap-3">
       {steps.map((s, i) => (
         <Fragment key={s}>
-          <div className="flex items-center gap-2">
-            <div
-              className={`w-7 h-7 rounded-full ${
-                i <= active
-                  ? 'bg-teal-600 text-white'
-                  : 'bg-slate-200 dark:bg-slate-600 text-slate-500 dark:text-slate-300'
-              } flex items-center justify-center text-xs font-bold`}
+          {interactive ? (
+            <button
+              type="button"
+              onClick={() => goTo(i)}
+              aria-current={active === i ? 'step' : undefined}
+              className={`tap flex shrink-0 items-center gap-2 rounded-xl px-2 py-1.5 text-left outline-none ring-offset-white transition hover:bg-slate-100/95 focus-visible:ring-2 focus-visible:ring-teal-600 focus-visible:ring-offset-2 dark:ring-offset-slate-900 dark:hover:bg-slate-800/80 ${
+                i === active ? 'bg-teal-50/90 shadow-sm shadow-teal-900/10 dark:bg-teal-950/35' : ''
+              }`}
             >
-              {i < active ? '✓' : i + 1}
+              <span
+                className={`flex h-7 w-7 shrink-0 items-center justify-center rounded-full text-xs font-bold shadow-sm ring-2 ring-transparent ring-offset-white transition dark:ring-offset-slate-900 ${
+                  i < active ? 'bg-teal-600 text-white' : i === active ? 'scale-105 bg-teal-600 text-white ring-teal-200 dark:ring-teal-900' : 'bg-slate-200 text-slate-500 dark:bg-slate-600 dark:text-slate-300'
+                }`}
+              >
+                {i < active ? '✓' : i + 1}
+              </span>
+              <span
+                className={`max-w-[9rem] text-sm font-medium ${i === active ? 'text-slate-900 dark:text-slate-100' : 'text-slate-500 dark:text-slate-400'}`}
+              >
+                {s}
+              </span>
+            </button>
+          ) : (
+            <div className="flex items-center gap-2">
+              <div
+                className={`flex h-7 w-7 items-center justify-center rounded-full text-xs font-bold ${
+                  i <= active ? 'bg-teal-600 text-white' : 'bg-slate-200 text-slate-500 dark:bg-slate-600 dark:text-slate-300'
+                }`}
+              >
+                {i < active ? '✓' : i + 1}
+              </div>
+              <div
+                className={`text-sm font-medium ${i === active ? 'text-slate-900 dark:text-slate-100' : 'text-slate-500 dark:text-slate-400'}`}
+              >
+                {s}
+              </div>
             </div>
-            <div
-              className={`text-sm font-medium ${i === active ? 'text-slate-900 dark:text-slate-100' : 'text-slate-500 dark:text-slate-400'}`}
-            >
-              {s}
-            </div>
-          </div>
+          )}
           {i < steps.length - 1 ? (
-            <div
-              className={`w-8 h-px ${i < active ? 'bg-teal-600' : 'bg-slate-200 dark:bg-slate-600'}`}
-            />
+            <div className={`h-px w-6 shrink-0 sm:w-10 ${i < active ? 'bg-teal-600' : 'bg-slate-200 dark:bg-slate-600'}`} aria-hidden />
           ) : null}
         </Fragment>
       ))}
