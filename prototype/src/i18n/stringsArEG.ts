@@ -610,6 +610,12 @@ export const STRINGS_AR_EG = {
   'acct.card.hist_view_booking': 'عرض حالة الحجز',
   'acct.card.hist_close': 'تمام',
 
+  'acct.card.edit_hint': 'تعديل ملف المركبة في إصدار لاحق من التطبيق.',
+  'acct.card.stat_mileage_hint': 'يُحدَّث من آخر قراءة للعداد بالورشة — راجع الإيصالات ضمن السجل.',
+  'acct.card.stat_tile_a11y': '{label}: {value}',
+  'acct.card.reminder_cta': 'جدولة',
+  'acct.card.hist_open_map': 'عرض المركز على الخريطة',
+
   'acct.card.stat.mileage': 'العداد',
   'acct.card.stat.bookings': 'حجوزات',
   'acct.card.stat.spent': 'مصروف',

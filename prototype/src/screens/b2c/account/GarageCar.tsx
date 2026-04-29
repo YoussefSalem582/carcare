@@ -90,12 +90,19 @@ export function B2cGarage() {
 }
 
 export function B2cCardetail() {
-  const { show, t } = useProto();
+  const { show, t, locale } = useProto();
   const [manualOpen, setManualOpen] = useState(false);
   const [histDetail, setHistDetail] = useState<number | null>(null);
   const [toast, setToast] = useState(false);
   const [svcDraft, setSvcDraft] = useState('');
   const [priceDraft, setPriceDraft] = useState('');
+  const [surfaceHint, setSurfaceHint] = useState<string | null>(null);
+
+  useEffect(() => {
+    if (!surfaceHint) return;
+    const tm = window.setTimeout(() => setSurfaceHint(null), 4200);
+    return () => window.clearTimeout(tm);
+  }, [surfaceHint]);
 
   useEffect(() => {
     if (!manualOpen && histDetail === null) return;
@@ -156,13 +163,43 @@ export function B2cCardetail() {
       auto: false,
     },
   ];
-  const stats = [
-    [t('acct.card.stat.mileage', 'Mileage'), t('demo.card.stat_km', '82,450 km'), 'cyan'],
-    [t('acct.card.stat.bookings', 'Bookings'), '14', 'violet'],
-    [t('acct.card.stat.spent', 'Spent'), t('demo.card.stat_spent', 'EGP 7,820'), 'amber'],
+
+  function statToneClass(tone: 'cyan' | 'violet' | 'amber') {
+    if (tone === 'cyan') return 'bg-cyan-50 dark:bg-cyan-950/45 text-cyan-900 dark:text-cyan-100';
+    if (tone === 'violet') return 'bg-violet-50 dark:bg-violet-950/45 text-violet-900 dark:text-violet-100';
+    return 'bg-amber-50 dark:bg-amber-950/45 text-amber-900 dark:text-amber-100';
+  }
+
+  const statsTiles = [
+    {
+      label: t('acct.card.stat.mileage', 'Mileage'),
+      value: t('demo.card.stat_km', '82,450 km'),
+      tone: 'cyan' as const,
+      action: 'mileage' as const,
+    },
+    {
+      label: t('acct.card.stat.bookings', 'Bookings'),
+      value: '14',
+      tone: 'violet' as const,
+      action: 'bookings' as const,
+    },
+    {
+      label: t('acct.card.stat.spent', 'Spent'),
+      value: t('demo.card.stat_spent', 'EGP 7,820'),
+      tone: 'amber' as const,
+      action: 'spent' as const,
+    },
   ];
 
+  const onStatTap = (action: 'mileage' | 'bookings' | 'spent') => {
+    if (action === 'mileage') setSurfaceHint(t('acct.card.stat_mileage_hint', 'Shown from last odometer update — drill into history for receipts.'));
+    if (action === 'bookings') show('b2c-bookings');
+    if (action === 'spent') show('b2c-expenses');
+  };
+
   const detailRow = histDetail !== null ? histItems[histDetail] : null;
+  const rtl = locale === 'ar-EG';
+  const flipChevron = rtl ? '[transform:scaleX(-1)]' : '';
 
   return (
     <ScreenWrap id="b2c-cardetail">
@@ -182,6 +219,7 @@ export function B2cCardetail() {
             type="button"
             aria-label={t('acct.card.edit_a11y', 'Edit vehicle')}
             className="tap w-10 h-10 rounded-xl bg-violet-50 dark:bg-violet-950/45 text-violet-700 dark:text-violet-300 flex items-center justify-center focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-violet-400 active:scale-[0.97]"
+            onClick={() => setSurfaceHint(t('acct.card.edit_hint', 'Vehicle profile editing is coming in a future release.'))}
           >
             <ProtoIcon name="pencil" className="w-5 h-5" />
           </button>
@@ -209,42 +247,48 @@ export function B2cCardetail() {
           </div>
         </div>
 
+        {surfaceHint ? (
+          <div role="status" className="mx-5 mb-2 rounded-xl px-3 py-2.5 text-[12px] leading-snug font-medium text-indigo-950 dark:text-indigo-50 bg-indigo-50 dark:bg-indigo-950/50 ring-1 ring-indigo-200/85 dark:ring-indigo-800/55 shadow-sm">
+            {surfaceHint}
+          </div>
+        ) : null}
+
         <div className="flex-1 overflow-y-auto overflow-x-hidden px-5 pt-2 app-surface proto-scroll min-h-0 pb-6">
           <div className="grid grid-cols-3 gap-2.5 mb-6">
-            {stats.map(([l, v, tone]) => (
-              <div
-                key={l}
-                className={`p-3.5 rounded-2xl text-center shadow-sm ring-1 ring-black/[0.04] dark:ring-white/[0.06] min-h-[4.75rem] flex flex-col justify-center ${
-                  tone === 'cyan'
-                    ? 'bg-cyan-50 dark:bg-cyan-950/45 text-cyan-900 dark:text-cyan-100'
-                    : tone === 'violet'
-                      ? 'bg-violet-50 dark:bg-violet-950/45 text-violet-900 dark:text-violet-100'
-                      : 'bg-amber-50 dark:bg-amber-950/45 text-amber-900 dark:text-amber-100'
-                }`}
+            {statsTiles.map((tile) => (
+              <button
+                key={tile.label}
+                type="button"
+                onClick={() => onStatTap(tile.action)}
+                className={`${statToneClass(tile.tone)} relative p-3.5 rounded-2xl text-center shadow-sm ring-1 ring-black/[0.04] dark:ring-white/[0.06] min-h-[4.85rem] flex flex-col justify-center tap transition-transform active:scale-[0.98] hover:brightness-[1.03] dark:hover:brightness-110 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-teal-500 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-100 dark:focus-visible:ring-offset-slate-950`}
+                aria-label={t('acct.card.stat_tile_a11y', '{label}: {value}')
+                  .replace('{label}', tile.label)
+                  .replace('{value}', tile.value)}
               >
-                <div className="text-[10px] font-bold uppercase tracking-wide opacity-80 leading-none">{l}</div>
-                <div className="font-bold text-[15px] mt-2 leading-none tabular-nums">{v}</div>
-              </div>
+                <div className="text-[10px] font-bold uppercase tracking-wide opacity-80 leading-none">{tile.label}</div>
+                <div className="font-bold text-[15px] mt-2 leading-none tabular-nums">{tile.value}</div>
+              </button>
             ))}
           </div>
 
           <h2 className="label mb-2.5">{t('acct.card.reminders', 'Reminders')}</h2>
-          <div className="p-3.5 rounded-2xl bg-gradient-to-r from-orange-50 to-amber-50 dark:from-orange-950/50 dark:to-amber-950/45 border border-orange-200/80 dark:border-orange-800/55 flex items-start gap-3 shadow-sm">
+          <button
+            type="button"
+            className="w-full p-3.5 rounded-2xl bg-gradient-to-r from-orange-50 to-amber-50 dark:from-orange-950/50 dark:to-amber-950/45 border border-orange-200/80 dark:border-orange-800/55 flex gap-3 items-start shadow-sm text-start tap hover:border-orange-300/90 dark:hover:border-orange-700/65 active:scale-[0.995] transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-orange-400 focus-visible:ring-offset-2"
+            onClick={() => show('b2c-reminder')}
+          >
             <div className="w-10 h-10 rounded-full bg-gradient-to-br from-orange-500 to-amber-500 flex items-center justify-center flex-shrink-0 shadow-md" aria-hidden>
               <ProtoIcon name="bell" className="w-[18px] h-[18px] text-white" />
             </div>
-            <div className="flex-1 min-w-0">
+            <div className="flex-1 min-w-0 pt-0.5">
               <div className="font-semibold text-sm text-slate-900 dark:text-slate-100 leading-snug">{t('acct.card.oil_due', 'Oil change due in 1,200 km')}</div>
               <div className="text-xs text-slate-600 dark:text-slate-400 mt-1 leading-relaxed">{t('acct.card.oil_sub', 'Based on your last change on 8 Feb')}</div>
             </div>
-            <button
-              type="button"
-              className="text-xs font-bold text-orange-700 dark:text-orange-300 tap py-1 px-1 -mr-1 rounded-lg shrink-0 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-orange-400"
-              onClick={() => show('b2c-reminder')}
-            >
-              {t('acct.card.book', 'Book')}
-            </button>
-          </div>
+            <div className="flex flex-col items-end shrink-0 gap-1 pt-0.5">
+              <ProtoIcon name="chevron-right" className={`w-5 h-5 text-orange-600/85 dark:text-orange-400 ${flipChevron}`} aria-hidden />
+              <span className="text-[11px] font-bold text-orange-800 dark:text-orange-300 whitespace-nowrap">{t('acct.card.reminder_cta', 'Schedule')}</span>
+            </div>
+          </button>
 
           <div className="flex items-center justify-between gap-2 mt-8 mb-3">
             <h2 id="svc-history-heading" className="label m-0">
@@ -258,10 +302,10 @@ export function B2cCardetail() {
                 <button
                   type="button"
                   onClick={() => setHistDetail(i)}
-                  className="w-full text-left rounded-2xl border border-slate-200/95 dark:border-slate-600/90 bg-white dark:bg-slate-900 px-4 py-3.5 shadow-sm ring-1 ring-black/[0.02] dark:ring-white/[0.04] tap transition-all hover:border-teal-200/90 dark:hover:border-teal-800/65 hover:shadow-md active:scale-[0.994] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-teal-500 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-100 dark:focus-visible:ring-offset-slate-950"
+                  className={`w-full text-start rounded-2xl border border-slate-200/95 dark:border-slate-600/90 bg-white dark:bg-slate-900 px-4 py-3.5 shadow-sm ring-1 ring-black/[0.02] dark:ring-white/[0.04] tap transition-all hover:border-teal-200/90 dark:hover:border-teal-800/65 hover:shadow-md active:scale-[0.994] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-teal-500 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-100 dark:focus-visible:ring-offset-slate-950`}
                   aria-label={t('acct.card.history_row_a11y', 'View details · {service}').replace('{service}', row.service)}
                 >
-                  <div className="flex gap-3 items-start">
+                  <div className={`flex gap-3 items-start ${rtl ? 'flex-row-reverse' : ''}`}>
                     <div className="min-w-0 flex-1">
                       <div className="font-semibold text-[15px] text-slate-900 dark:text-slate-100 leading-snug pr-1">{row.service}</div>
                       <div className="text-xs text-slate-500 dark:text-slate-400 mt-1 leading-snug">{row.shop}</div>
@@ -287,7 +331,7 @@ export function B2cCardetail() {
                     </div>
                     <div className="flex flex-col items-end justify-between shrink-0 gap-2 pt-0.5">
                       <span className="text-lg font-bold tabular-nums text-slate-900 dark:text-slate-100 leading-none">{row.price}</span>
-                      <ProtoIcon name="chevron-right" className="w-5 h-5 text-slate-300 dark:text-slate-600" aria-hidden />
+                      <ProtoIcon name="chevron-right" className={`w-5 h-5 text-slate-300 dark:text-slate-600 ${flipChevron}`} aria-hidden />
                     </div>
                   </div>
                 </button>
@@ -377,16 +421,28 @@ export function B2cCardetail() {
                 )}
               </div>
               {detailRow.auto ? (
-                <button
-                  type="button"
-                  className="mt-5 w-full py-3.5 rounded-xl font-semibold btn-primary tap shadow-md shadow-teal-900/15"
-                  onClick={() => {
-                    setHistDetail(null);
-                    show('b2c-progress');
-                  }}
-                >
-                  {t('acct.card.hist_view_booking', 'View booking status')}
-                </button>
+                <>
+                  <button
+                    type="button"
+                    className="mt-3 w-full py-3 rounded-xl font-semibold border border-slate-200 dark:border-slate-600 tap text-slate-800 dark:text-slate-100 text-sm shadow-sm hover:bg-slate-50 dark:hover:bg-slate-800"
+                    onClick={() => {
+                      setHistDetail(null);
+                      show('b2c-map');
+                    }}
+                  >
+                    {t('acct.card.hist_open_map', 'Centre on map')}
+                  </button>
+                  <button
+                    type="button"
+                    className="mt-2 w-full py-3.5 rounded-xl font-semibold btn-primary tap shadow-md shadow-teal-900/15"
+                    onClick={() => {
+                      setHistDetail(null);
+                      show('b2c-progress');
+                    }}
+                  >
+                    {t('acct.card.hist_view_booking', 'View booking status')}
+                  </button>
+                </>
               ) : (
                 <button type="button" className="mt-5 w-full py-3.5 rounded-xl font-semibold border border-slate-200 dark:border-slate-600 tap text-slate-700 dark:text-slate-200" onClick={() => setHistDetail(null)}>
                   {t('acct.card.hist_close', 'Got it')}
