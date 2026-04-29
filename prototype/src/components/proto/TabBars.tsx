@@ -19,14 +19,14 @@ export function B2cTabBar({ active }: { active: string }) {
         if (isOn) {
           return (
             <span key={id} className="tab on" aria-current="page">
-              <ProtoIcon name={icon} className="ic" aria-hidden />
+              <ProtoIcon name={icon} className="ic" strokeWidth={1.65} aria-hidden />
               {label}
             </span>
           );
         }
         return (
           <button key={id} type="button" className="tab tap" onClick={() => show(id)}>
-            <ProtoIcon name={icon} className="ic" aria-hidden />
+            <ProtoIcon name={icon} className="ic" strokeWidth={1.65} aria-hidden />
             {label}
           </button>
         );
@@ -72,14 +72,14 @@ export function B2bTabBar({ active }: { active: string }) {
         if (isOn) {
           return (
             <span key={id} className="tab on" aria-current="page">
-              <ProtoIcon name={icon} className="ic" aria-hidden />
+              <ProtoIcon name={icon} className="ic" strokeWidth={1.65} aria-hidden />
               {label}
             </span>
           );
         }
         return (
           <button key={id} type="button" className="tab tap" onClick={() => show(id)}>
-            <ProtoIcon name={icon} className="ic" aria-hidden />
+            <ProtoIcon name={icon} className="ic" strokeWidth={1.65} aria-hidden />
             {label}
           </button>
         );

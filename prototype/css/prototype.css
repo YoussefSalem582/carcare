@@ -934,8 +934,11 @@ button:focus-visible { outline: 2px solid rgba(15, 118, 110, 0.5); outline-offse
   background: #fff;
   display: grid;
   grid-template-columns: repeat(5, 1fr);
-  padding: 10px 4px 18px;
-  box-shadow: 0 -6px 24px rgba(15,23,42,.05);
+  gap: 0;
+  align-items: stretch;
+  padding: 10px 4px calc(14px + env(safe-area-inset-bottom, 0px));
+  padding-inline: max(4px, env(safe-area-inset-left)) max(4px, env(safe-area-inset-right));
+  box-shadow: 0 -6px 24px rgba(15,23,42,.06);
 }
 .tab-bar button.tab {
   appearance: none;
@@ -947,11 +950,21 @@ button:focus-visible { outline: 2px solid rgba(15, 118, 110, 0.5); outline-offse
   font: inherit;
   cursor: pointer;
   color: inherit;
+  touch-action: manipulation;
+  border-radius: 999px;
+  transition: background 0.16s ease, color 0.16s ease, transform 0.12s ease;
+}
+.tab-bar button.tab:hover:not(.on) {
+  background: rgba(15, 23, 42, 0.04);
 }
 .tab-bar button.tab:focus-visible {
   outline: 2px solid var(--brand);
   outline-offset: 2px;
-  border-radius: 12px;
+  border-radius: 999px;
+}
+.tab-bar button.tab:active:not(.on) {
+  transform: scale(0.97);
+  background: rgba(15, 23, 42, 0.06);
 }
 .b2b-tab-bar button.tab {
   appearance: none;
@@ -974,8 +987,8 @@ button:focus-visible { outline: 2px solid rgba(15, 118, 110, 0.5); outline-offse
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: 4px;
-  color: #94A3B8;
+  gap: 5px;
+  color: #64748b;
   font-size: 10px;
   font-weight: 500;
   letter-spacing: 0.01em;
@@ -986,8 +999,9 @@ button:focus-visible { outline: 2px solid rgba(15, 118, 110, 0.5); outline-offse
   background: #fff;
   display: grid;
   grid-template-columns: repeat(4, 1fr);
-  padding: 8px 4px 16px;
-  box-shadow: 0 -6px 24px rgba(15,23,42,.05);
+  padding: 8px 4px calc(14px + env(safe-area-inset-bottom, 0px));
+  padding-inline: max(4px, env(safe-area-inset-left)) max(4px, env(safe-area-inset-right));
+  box-shadow: 0 -6px 24px rgba(15,23,42,.06);
 }
 .b2b-tab-bar .tab { font-size: 10px; }
 .tab.on {
@@ -1000,15 +1014,38 @@ button:focus-visible { outline: 2px solid rgba(15, 118, 110, 0.5); outline-offse
   z-index: 0;
 }
 .tab-bar .tab.on {
-  background: rgba(15, 118, 110, 0.1);
-  border-radius: 14px;
-  margin-inline: 1px;
-  padding-inline: 2px;
+  background: rgba(15, 118, 110, 0.12);
+  border-radius: 999px;
+  margin-inline: 0;
+  padding: 9px 4px;
+  align-self: center;
+  justify-self: center;
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.55),
+    inset 0 0 0 1px rgba(15, 118, 110, 0.12);
 }
 .tab-bar .tab.on:not(button) {
   justify-content: center;
 }
-.tab .ic { width: 22px; height: 22px; color: #94A3B8; }
+.b2b-tab-bar .tab {
+  position: relative;
+  z-index: 0;
+}
+.b2b-tab-bar .tab.on {
+  background: rgba(15, 118, 110, 0.12);
+  border-radius: 999px;
+  margin-inline: 0;
+  padding: 9px 4px;
+  align-self: center;
+  justify-self: center;
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.55),
+    inset 0 0 0 1px rgba(15, 118, 110, 0.12);
+}
+.b2b-tab-bar .tab.on:not(button) {
+  justify-content: center;
+}
+.tab .ic { width: 22px; height: 22px; color: #64748b; flex-shrink: 0; stroke-linecap: round; stroke-linejoin: round; }
 .tab.on .ic { color: var(--brand); }
 .label { font-size: 11px; letter-spacing: .04em; text-transform: uppercase; color: var(--muted); font-weight: 600; }
 .divider { height: 1px; background: #E2E8F0; }
@@ -1489,6 +1526,21 @@ details summary::-webkit-details-marker { display: none; }
 }
 [data-theme="dark"] .tab-bar .tab.on {
   background: rgba(45, 212, 191, 0.14);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.06),
+    inset 0 0 0 1px rgba(45, 212, 191, 0.2);
+}
+[data-theme="dark"] .b2b-tab-bar .tab.on {
+  background: rgba(45, 212, 191, 0.14);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.06),
+    inset 0 0 0 1px rgba(45, 212, 191, 0.2);
+}
+[data-theme="dark"] .tab-bar button.tab:hover:not(.on) {
+  background: rgba(255, 255, 255, 0.05);
+}
+[data-theme="dark"] .tab-bar button.tab:active:not(.on) {
+  background: rgba(255, 255, 255, 0.08);
 }
 [data-theme="dark"] .btn-ghost {
   background: #334155;
