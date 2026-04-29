@@ -577,6 +577,32 @@ button:focus-visible { outline: 2px solid rgba(15, 118, 110, 0.5); outline-offse
 .app-surface--plain {
   background: linear-gradient(180deg, #fff 0%, var(--surface) 100%);
 }
+
+/* Prefer thin, unobtrusive scrollbars inside phone preview (still visible on hover / track). */
+.proto-scroll {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(148, 163, 184, 0.42) transparent;
+}
+.proto-scroll::-webkit-scrollbar {
+  width: 6px;
+}
+.proto-scroll::-webkit-scrollbar-track {
+  background: transparent;
+}
+.proto-scroll::-webkit-scrollbar-thumb {
+  background: rgba(148, 163, 184, 0.45);
+  border-radius: 999px;
+}
+.proto-scroll::-webkit-scrollbar-thumb:hover {
+  background: rgba(100, 116, 139, 0.55);
+}
+[data-theme='dark'] .proto-scroll {
+  scrollbar-color: rgba(71, 85, 105, 0.55) transparent;
+}
+[data-theme='dark'] .proto-scroll::-webkit-scrollbar-thumb {
+  background: rgba(71, 85, 105, 0.65);
+}
+
 .app-panel {
   background: var(--elevated);
   border: 1px solid rgba(226, 232, 240, 0.95);

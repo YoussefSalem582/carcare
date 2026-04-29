@@ -587,6 +587,29 @@ export const STRINGS_AR_EG = {
   'acct.card.manual_saved': 'تم الحفظ محليًا — المرحلة 2 تربطه بالحجوزات.',
   'acct.card.manual_close_a11y': 'إغلاق',
 
+  'acct.card.identity_label': 'هذه المركبة',
+  'acct.card.identity_a11y': 'تعريف المركبة',
+  'acct.card.vin_hint': 'رقم الهيكل ينتهي بـ···9F8421',
+
+  'acct.card.demo_ref_b': '#CC-3891C',
+  'acct.card.demo_ref_c': '#CC-2019D',
+
+  'acct.card.history_hint': 'اضغط صفًا',
+  'acct.card.history_row_a11y': 'عرض التفاصيل · {service}',
+
+  'acct.card.auto_short': 'من الحجز',
+  'acct.card.manual_short': 'يدوي',
+
+  'acct.card.sheet_shop': 'مقدّم الخدمة',
+  'acct.card.sheet_amount': 'المبلغ',
+  'acct.card.sheet_close_bg': 'إغلاق',
+  'acct.card.sheet_done': 'تم',
+
+  'acct.card.hist_linked': 'مرتبط بحجز على كار كير',
+  'acct.card.hist_manual_blurb': 'مسجل خارج التطبيق — التعديل من الإيصالات في المرحلة 2.',
+  'acct.card.hist_view_booking': 'عرض حالة الحجز',
+  'acct.card.hist_close': 'تمام',
+
   'acct.card.stat.mileage': 'العداد',
   'acct.card.stat.bookings': 'حجوزات',
   'acct.card.stat.spent': 'مصروف',

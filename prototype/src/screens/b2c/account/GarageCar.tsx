@@ -5,6 +5,16 @@ import { ProtoIcon } from '../../../components/proto/Icon';
 import { useProto } from '../../../context/ProtoContext';
 import { ScreenWrap } from '../../shared/ScreenWrap';
 
+type CardHistItem = {
+  date: string;
+  service: string;
+  shop: string;
+  price: string;
+  auto: boolean;
+  /** Demo booking reference when auto-logged */
+  bookingRef?: string;
+};
+
 export function B2cGarage() {
   const { show, t } = useProto();
   return (
@@ -82,18 +92,22 @@ export function B2cGarage() {
 export function B2cCardetail() {
   const { show, t } = useProto();
   const [manualOpen, setManualOpen] = useState(false);
+  const [histDetail, setHistDetail] = useState<number | null>(null);
   const [toast, setToast] = useState(false);
   const [svcDraft, setSvcDraft] = useState('');
   const [priceDraft, setPriceDraft] = useState('');
 
   useEffect(() => {
-    if (!manualOpen) return;
+    if (!manualOpen && histDetail === null) return;
     const onKey = (e: KeyboardEvent) => {
-      if (e.key === 'Escape') setManualOpen(false);
+      if (e.key === 'Escape') {
+        setManualOpen(false);
+        setHistDetail(null);
+      }
     };
     window.addEventListener('keydown', onKey);
     return () => window.removeEventListener('keydown', onKey);
-  }, [manualOpen]);
+  }, [manualOpen, histDetail]);
 
   useEffect(() => {
     if (!toast) return;
@@ -103,46 +117,53 @@ export function B2cCardetail() {
 
   const saveManualDemo = () => {
     setManualOpen(false);
+    setHistDetail(null);
     setSvcDraft('');
     setPriceDraft('');
     setToast(true);
   };
 
-  const hist: [string, string, string, string, boolean][] = [
-    [
-      t('demo.card.hist1_date', '29 Mar'),
-      t('demo.card.hist1_svc', 'AC recharge'),
-      t('demo.card.hist1_shop', 'QuickFix Nasr City'),
-      t('demo.card.hist1_price', 'EGP 450'),
-      true,
-    ],
-    [
-      t('demo.card.hist2_date', '8 Feb'),
-      t('demo.card.hist2_svc', 'Oil + filter'),
-      t('demo.card.hist2_shop', 'AutoPro Heliopolis'),
-      t('demo.card.hist2_price', 'EGP 520'),
-      true,
-    ],
-    [
-      t('demo.card.hist3_date', '12 Dec'),
-      t('demo.card.hist3_svc', 'Front brake pads'),
-      t('demo.card.hist3_shop', 'Toyota Authorized'),
-      t('demo.card.hist3_price', 'EGP 950'),
-      true,
-    ],
-    [
-      t('demo.card.hist4_date', '3 Nov'),
-      t('demo.card.hist4_svc', 'Tire rotation'),
-      t('demo.card.hist4_shop', 'Cairo Motors (manual entry)'),
-      t('demo.card.hist4_price', 'EGP 120'),
-      false,
-    ],
+  const histItems: CardHistItem[] = [
+    {
+      date: t('demo.card.hist1_date', '29 Mar'),
+      service: t('demo.card.hist1_svc', 'AC recharge'),
+      shop: t('demo.card.hist1_shop', 'QuickFix Nasr City'),
+      price: t('demo.card.hist1_price', 'EGP 450'),
+      auto: true,
+      bookingRef: t('demo.track.booking_id', '#CC-4A1F9'),
+    },
+    {
+      date: t('demo.card.hist2_date', '8 Feb'),
+      service: t('demo.card.hist2_svc', 'Oil + filter'),
+      shop: t('demo.card.hist2_shop', 'AutoPro Heliopolis'),
+      price: t('demo.card.hist2_price', 'EGP 520'),
+      auto: true,
+      bookingRef: t('acct.card.demo_ref_b', '#CC-3891C'),
+    },
+    {
+      date: t('demo.card.hist3_date', '12 Dec'),
+      service: t('demo.card.hist3_svc', 'Front brake pads'),
+      shop: t('demo.card.hist3_shop', 'Toyota Authorized'),
+      price: t('demo.card.hist3_price', 'EGP 950'),
+      auto: true,
+      bookingRef: t('acct.card.demo_ref_c', '#CC-2019D'),
+    },
+    {
+      date: t('demo.card.hist4_date', '3 Nov'),
+      service: t('demo.card.hist4_svc', 'Tire rotation'),
+      shop: t('demo.card.hist4_shop', 'Cairo Motors (manual entry)'),
+      price: t('demo.card.hist4_price', 'EGP 120'),
+      auto: false,
+    },
   ];
   const stats = [
     [t('acct.card.stat.mileage', 'Mileage'), t('demo.card.stat_km', '82,450 km'), 'cyan'],
     [t('acct.card.stat.bookings', 'Bookings'), '14', 'violet'],
     [t('acct.card.stat.spent', 'Spent'), t('demo.card.stat_spent', 'EGP 7,820'), 'amber'],
   ];
+
+  const detailRow = histDetail !== null ? histItems[histDetail] : null;
+
   return (
     <ScreenWrap id="b2c-cardetail">
       <div className="flex flex-col flex-1 min-h-0 h-full relative">
@@ -160,85 +181,132 @@ export function B2cCardetail() {
           <button
             type="button"
             aria-label={t('acct.card.edit_a11y', 'Edit vehicle')}
-            className="tap w-10 h-10 rounded-xl bg-violet-50 dark:bg-violet-950/45 text-violet-700 dark:text-violet-300 flex items-center justify-center focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-violet-400"
+            className="tap w-10 h-10 rounded-xl bg-violet-50 dark:bg-violet-950/45 text-violet-700 dark:text-violet-300 flex items-center justify-center focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-violet-400 active:scale-[0.97]"
           >
             <ProtoIcon name="pencil" className="w-5 h-5" />
           </button>
         </div>
-        <div className="flex-1 overflow-y-auto px-5 pt-4 app-surface min-h-0 pb-24">
-          <div className="grid grid-cols-3 gap-2.5 mb-6">
-          {stats.map(([l, v, tone]) => (
-            <div
-              key={l}
-              className={`p-3.5 rounded-2xl text-center shadow-sm ring-1 ring-black/[0.04] dark:ring-white/[0.06] min-h-[4.75rem] flex flex-col justify-center ${
-                tone === 'cyan'
-                  ? 'bg-cyan-50 dark:bg-cyan-950/45 text-cyan-900 dark:text-cyan-100'
-                  : tone === 'violet'
-                    ? 'bg-violet-50 dark:bg-violet-950/45 text-violet-900 dark:text-violet-100'
-                    : 'bg-amber-50 dark:bg-amber-950/45 text-amber-900 dark:text-amber-100'
-              }`}
-            >
-              <div className="text-[10px] font-bold uppercase tracking-wide opacity-80 leading-none">{l}</div>
-              <div className="font-bold text-[15px] mt-2 leading-none tabular-nums">{v}</div>
-            </div>
-          ))}
-        </div>
 
-        <h2 className="label mb-2.5">{t('acct.card.reminders', 'Reminders')}</h2>
-        <div className="p-3.5 rounded-2xl bg-gradient-to-r from-orange-50 to-amber-50 dark:from-orange-950/50 dark:to-amber-950/45 border border-orange-200/80 dark:border-orange-800/55 flex items-start gap-3 shadow-sm">
-          <div className="w-10 h-10 rounded-full bg-gradient-to-br from-orange-500 to-amber-500 flex items-center justify-center flex-shrink-0 shadow-md" aria-hidden>
-            <ProtoIcon name="bell" className="w-[18px] h-[18px] text-white" />
-          </div>
-          <div className="flex-1 min-w-0">
-            <div className="font-semibold text-sm text-slate-900 dark:text-slate-100 leading-snug">{t('acct.card.oil_due', 'Oil change due in 1,200 km')}</div>
-            <div className="text-xs text-slate-600 dark:text-slate-400 mt-1 leading-relaxed">{t('acct.card.oil_sub', 'Based on your last change on 8 Feb')}</div>
-          </div>
-          <button
-            type="button"
-            className="text-xs font-bold text-orange-700 dark:text-orange-300 tap py-1 px-1 -mr-1 rounded-lg shrink-0 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-orange-400"
-            onClick={() => show('b2c-reminder')}
-          >
-            {t('acct.card.book', 'Book')}
-          </button>
-        </div>
-
-        <h2 className="label mt-7 mb-3">{t('acct.card.history', 'Service history')}</h2>
-        <ul className="space-y-3 list-none p-0 m-0">
-          {hist.map(([d, s, shop, p, auto], i) => (
-            <li
-              key={i}
-              className="p-4 rounded-2xl border border-slate-200/90 dark:border-slate-600/90 bg-white dark:bg-slate-900 shadow-sm ring-1 ring-black/[0.02] dark:ring-white/[0.04]"
-            >
-              <div className="flex justify-between gap-4 items-start">
-                <div className="min-w-0 flex-1">
-                  <div className="font-semibold text-[15px] text-slate-900 dark:text-slate-100 leading-snug">{s}</div>
-                  <div className="text-xs text-slate-500 dark:text-slate-400 mt-1.5 leading-snug">{shop}</div>
-                </div>
-                <div className="text-end shrink-0">
-                  <div className="font-bold text-[15px] text-slate-900 dark:text-slate-100 tabular-nums">{p}</div>
-                  <div className="text-xs text-slate-500 dark:text-slate-400 mt-1 tabular-nums">{d}</div>
-                </div>
-              </div>
-              {auto ? (
-                <div className="mt-3 pt-3 border-t border-slate-100 dark:border-slate-700/80 text-[10px] uppercase tracking-wider text-teal-700 dark:text-teal-400 font-bold flex items-center gap-1.5">
-                  <ProtoIcon name="zap" className="w-3.5 h-3.5 shrink-0" aria-hidden />
-                  {t('acct.card.auto', 'Auto-logged from booking')}
-                </div>
-              ) : (
-                <div className="mt-3 pt-3 border-t border-slate-100 dark:border-slate-700/80 text-[10px] uppercase tracking-wider text-slate-400 dark:text-slate-500 font-bold">
-                  {t('acct.card.manual', 'Manual entry')}
-                </div>
-              )}
-            </li>
-          ))}
-        </ul>
-        <button
-          type="button"
-          className="mt-5 w-full py-3.5 rounded-2xl border-2 border-dashed border-slate-200 dark:border-slate-600 text-sm font-semibold tap text-slate-800 dark:text-slate-100 bg-slate-50/80 dark:bg-slate-800/40 hover:bg-slate-100 dark:hover:bg-slate-800 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-teal-500 focus-visible:ring-offset-2"
-          onClick={() => setManualOpen(true)}
+        <div
+          className="mx-5 mt-3 mb-2 flex gap-3 rounded-2xl border border-slate-200/90 dark:border-slate-600/85 bg-white/90 dark:bg-slate-900/90 p-3.5 shadow-sm ring-1 ring-black/[0.03]"
+          aria-label={t('acct.card.identity_a11y', 'Vehicle identifiers')}
         >
-          {t('acct.card.add_manual', '+ Add manual entry')}
-        </button>
+          <div
+            className="w-[3.65rem] h-[3.65rem] rounded-xl bg-gradient-to-br from-slate-200 to-slate-300 dark:from-slate-700 dark:to-slate-600 flex items-center justify-center shrink-0 shadow-inner ring-1 ring-black/5"
+            aria-hidden
+          >
+            <ProtoIcon name="car" className="w-8 h-8 text-slate-600 dark:text-slate-200" />
+          </div>
+          <div className="min-w-0 flex-1">
+            <div className="text-[11px] font-semibold uppercase tracking-wide text-slate-500 dark:text-slate-400">{t('acct.card.identity_label', 'This vehicle')}</div>
+            <div className="text-sm font-semibold text-slate-900 dark:text-slate-100 mt-1 leading-snug truncate">{t('demo.garage.meta_line', '2019 · 82,450 km · س ب ج 7421')}</div>
+            <div className="flex flex-wrap gap-x-3 gap-y-1 mt-1.5 text-xs text-slate-600 dark:text-slate-400">
+              <span className="inline-flex items-center gap-1">
+                <ProtoIcon name="fingerprint" className="w-3.5 h-3.5 opacity-75 shrink-0" aria-hidden />
+                {t('acct.card.vin_hint', 'VIN ending ···9F8421')}
+              </span>
+            </div>
+          </div>
+        </div>
+
+        <div className="flex-1 overflow-y-auto overflow-x-hidden px-5 pt-2 app-surface proto-scroll min-h-0 pb-6">
+          <div className="grid grid-cols-3 gap-2.5 mb-6">
+            {stats.map(([l, v, tone]) => (
+              <div
+                key={l}
+                className={`p-3.5 rounded-2xl text-center shadow-sm ring-1 ring-black/[0.04] dark:ring-white/[0.06] min-h-[4.75rem] flex flex-col justify-center ${
+                  tone === 'cyan'
+                    ? 'bg-cyan-50 dark:bg-cyan-950/45 text-cyan-900 dark:text-cyan-100'
+                    : tone === 'violet'
+                      ? 'bg-violet-50 dark:bg-violet-950/45 text-violet-900 dark:text-violet-100'
+                      : 'bg-amber-50 dark:bg-amber-950/45 text-amber-900 dark:text-amber-100'
+                }`}
+              >
+                <div className="text-[10px] font-bold uppercase tracking-wide opacity-80 leading-none">{l}</div>
+                <div className="font-bold text-[15px] mt-2 leading-none tabular-nums">{v}</div>
+              </div>
+            ))}
+          </div>
+
+          <h2 className="label mb-2.5">{t('acct.card.reminders', 'Reminders')}</h2>
+          <div className="p-3.5 rounded-2xl bg-gradient-to-r from-orange-50 to-amber-50 dark:from-orange-950/50 dark:to-amber-950/45 border border-orange-200/80 dark:border-orange-800/55 flex items-start gap-3 shadow-sm">
+            <div className="w-10 h-10 rounded-full bg-gradient-to-br from-orange-500 to-amber-500 flex items-center justify-center flex-shrink-0 shadow-md" aria-hidden>
+              <ProtoIcon name="bell" className="w-[18px] h-[18px] text-white" />
+            </div>
+            <div className="flex-1 min-w-0">
+              <div className="font-semibold text-sm text-slate-900 dark:text-slate-100 leading-snug">{t('acct.card.oil_due', 'Oil change due in 1,200 km')}</div>
+              <div className="text-xs text-slate-600 dark:text-slate-400 mt-1 leading-relaxed">{t('acct.card.oil_sub', 'Based on your last change on 8 Feb')}</div>
+            </div>
+            <button
+              type="button"
+              className="text-xs font-bold text-orange-700 dark:text-orange-300 tap py-1 px-1 -mr-1 rounded-lg shrink-0 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-orange-400"
+              onClick={() => show('b2c-reminder')}
+            >
+              {t('acct.card.book', 'Book')}
+            </button>
+          </div>
+
+          <div className="flex items-center justify-between gap-2 mt-8 mb-3">
+            <h2 id="svc-history-heading" className="label m-0">
+              {t('acct.card.history', 'Service history')}
+            </h2>
+            <span className="text-[10px] font-medium text-slate-400 dark:text-slate-500">{t('acct.card.history_hint', 'Tap a row')}</span>
+          </div>
+          <ul className="space-y-3 list-none p-0 m-0" aria-labelledby="svc-history-heading">
+            {histItems.map((row, i) => (
+              <li key={`${row.service}-${row.date}`}>
+                <button
+                  type="button"
+                  onClick={() => setHistDetail(i)}
+                  className="w-full text-left rounded-2xl border border-slate-200/95 dark:border-slate-600/90 bg-white dark:bg-slate-900 px-4 py-3.5 shadow-sm ring-1 ring-black/[0.02] dark:ring-white/[0.04] tap transition-all hover:border-teal-200/90 dark:hover:border-teal-800/65 hover:shadow-md active:scale-[0.994] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-teal-500 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-100 dark:focus-visible:ring-offset-slate-950"
+                  aria-label={t('acct.card.history_row_a11y', 'View details · {service}').replace('{service}', row.service)}
+                >
+                  <div className="flex gap-3 items-start">
+                    <div className="min-w-0 flex-1">
+                      <div className="font-semibold text-[15px] text-slate-900 dark:text-slate-100 leading-snug pr-1">{row.service}</div>
+                      <div className="text-xs text-slate-500 dark:text-slate-400 mt-1 leading-snug">{row.shop}</div>
+                      <div className="flex flex-wrap items-center gap-x-2 gap-y-1.5 mt-2.5">
+                        <span
+                          className={`inline-flex items-center gap-1 rounded-md px-2 py-0.5 text-[10px] font-bold uppercase tracking-wide ${
+                            row.auto
+                              ? 'bg-teal-50 text-teal-800 dark:bg-teal-950/55 dark:text-teal-200 ring-1 ring-teal-200/70 dark:ring-teal-800/50'
+                              : 'bg-slate-100 text-slate-600 dark:bg-slate-800 dark:text-slate-300 ring-1 ring-slate-200/80 dark:ring-slate-600/80'
+                          }`}
+                        >
+                          {row.auto ? (
+                            <>
+                              <ProtoIcon name="zap" className="w-3 h-3 shrink-0 opacity-90" aria-hidden />
+                              {t('acct.card.auto_short', 'From booking')}
+                            </>
+                          ) : (
+                            t('acct.card.manual_short', 'Manual')
+                          )}
+                        </span>
+                        <span className="text-xs text-slate-400 dark:text-slate-500 tabular-nums">{row.date}</span>
+                      </div>
+                    </div>
+                    <div className="flex flex-col items-end justify-between shrink-0 gap-2 pt-0.5">
+                      <span className="text-lg font-bold tabular-nums text-slate-900 dark:text-slate-100 leading-none">{row.price}</span>
+                      <ProtoIcon name="chevron-right" className="w-5 h-5 text-slate-300 dark:text-slate-600" aria-hidden />
+                    </div>
+                  </div>
+                </button>
+              </li>
+            ))}
+          </ul>
+
+          <div className="sticky bottom-3 z-[4] mt-8 pt-2 pb-1 bg-gradient-to-t from-[#e8edf3] via-[#e8eef4]/92 to-transparent dark:from-slate-950 dark:via-slate-950/90 dark:to-transparent rounded-b-2xl">
+            <button
+              type="button"
+              className="w-full py-3.5 rounded-2xl border-2 border-dashed border-teal-300/85 dark:border-teal-700/65 text-sm font-semibold tap text-teal-900 dark:text-teal-100 bg-white/95 dark:bg-slate-900/95 shadow-md hover:border-teal-400 dark:hover:border-teal-600 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-teal-500 focus-visible:ring-offset-2"
+              onClick={() => {
+                setHistDetail(null);
+                setManualOpen(true);
+              }}
+            >
+              {t('acct.card.add_manual', '+ Add manual entry')}
+            </button>
+          </div>
         </div>
 
         {toast ? (
@@ -248,13 +316,83 @@ export function B2cCardetail() {
           >
             <ProtoIcon name="check-circle" className="w-5 h-5 shrink-0 text-teal-200" aria-hidden />
             <span className="leading-snug">{t('acct.card.manual_saved', 'Saved locally — Phase 2 will sync with your bookings.')}</span>
-            <button
-              type="button"
-              className="ml-auto text-xs font-semibold text-teal-200 tap shrink-0"
-              onClick={() => setToast(false)}
-            >
+            <button type="button" className="ml-auto text-xs font-semibold text-teal-200 tap shrink-0" onClick={() => setToast(false)}>
               {t('common.dismiss', 'Dismiss')}
             </button>
+          </div>
+        ) : null}
+
+        {histDetail !== null && detailRow ? (
+          <div className="absolute inset-0 z-[56] flex items-end justify-center sm:items-center p-4 sm:p-6">
+            <button
+              type="button"
+              aria-label={t('acct.card.sheet_close_bg', 'Close')}
+              className="absolute inset-0 bg-black/45 dark:bg-black/60 backdrop-blur-[2px]"
+              onClick={() => setHistDetail(null)}
+            />
+            <div
+              role="dialog"
+              aria-modal="true"
+              aria-labelledby="hist-sheet-title"
+              className="relative w-full max-w-[22rem] rounded-2xl border border-slate-200 dark:border-slate-600 bg-white dark:bg-slate-900 shadow-2xl p-5 max-h-[min(88vh,28rem)] overflow-y-auto proto-scroll text-start"
+              onClick={(e) => e.stopPropagation()}
+            >
+              <div className="flex items-start justify-between gap-3 mb-4">
+                <div>
+                  <div className="text-[10px] font-bold uppercase tracking-wide text-slate-400 dark:text-slate-500">{detailRow.date}</div>
+                  <h2 id="hist-sheet-title" className="text-lg font-bold text-slate-900 dark:text-slate-100 mt-1 leading-snug">
+                    {detailRow.service}
+                  </h2>
+                </div>
+                <button
+                  type="button"
+                  aria-label={t('acct.card.sheet_done', 'Done')}
+                  className="tap p-1.5 rounded-lg text-slate-500 hover:bg-slate-100 dark:hover:bg-slate-800 shrink-0"
+                  onClick={() => setHistDetail(null)}
+                >
+                  <ProtoIcon name="x" className="w-5 h-5" />
+                </button>
+              </div>
+              <dl className="space-y-3 text-sm">
+                <div className="flex justify-between gap-4 border-b border-slate-100 dark:border-slate-700/85 pb-3">
+                  <dt className="text-slate-500 dark:text-slate-400">{t('acct.card.sheet_shop', 'Provider')}</dt>
+                  <dd className="font-medium text-slate-900 dark:text-slate-100 text-end">{detailRow.shop}</dd>
+                </div>
+                <div className="flex justify-between gap-4 items-baseline">
+                  <dt className="text-slate-500 dark:text-slate-400">{t('acct.card.sheet_amount', 'Amount')}</dt>
+                  <dd className="font-bold tabular-nums text-lg text-slate-900 dark:text-slate-100">{detailRow.price}</dd>
+                </div>
+              </dl>
+              <div className="mt-4 rounded-xl bg-slate-50 dark:bg-slate-800/90 px-3 py-2.5 text-xs text-slate-600 dark:text-slate-300 leading-relaxed">
+                {detailRow.auto ? (
+                  <>
+                    <div className="font-semibold text-teal-800 dark:text-teal-200 flex items-center gap-1.5">
+                      <ProtoIcon name="link" className="w-3.5 h-3.5" aria-hidden />
+                      {t('acct.card.hist_linked', 'Linked to CarCare booking')}
+                    </div>
+                    {detailRow.bookingRef ? <div className="font-mono mt-1 text-slate-700 dark:text-slate-300">{detailRow.bookingRef}</div> : null}
+                  </>
+                ) : (
+                  <span>{t('acct.card.hist_manual_blurb', 'Recorded outside the app — edit from your receipts anytime in Phase 2.')}</span>
+                )}
+              </div>
+              {detailRow.auto ? (
+                <button
+                  type="button"
+                  className="mt-5 w-full py-3.5 rounded-xl font-semibold btn-primary tap shadow-md shadow-teal-900/15"
+                  onClick={() => {
+                    setHistDetail(null);
+                    show('b2c-progress');
+                  }}
+                >
+                  {t('acct.card.hist_view_booking', 'View booking status')}
+                </button>
+              ) : (
+                <button type="button" className="mt-5 w-full py-3.5 rounded-xl font-semibold border border-slate-200 dark:border-slate-600 tap text-slate-700 dark:text-slate-200" onClick={() => setHistDetail(null)}>
+                  {t('acct.card.hist_close', 'Got it')}
+                </button>
+              )}
+            </div>
           </div>
         ) : null}
 
@@ -270,7 +408,7 @@ export function B2cCardetail() {
               role="dialog"
               aria-modal="true"
               aria-labelledby="manual-sheet-title"
-              className="relative w-full max-w-[22rem] rounded-2xl border border-slate-200 dark:border-slate-600 bg-white dark:bg-slate-900 shadow-2xl p-5 max-h-[min(92vh,32rem)] overflow-y-auto"
+              className="relative w-full max-w-[22rem] rounded-2xl border border-slate-200 dark:border-slate-600 bg-white dark:bg-slate-900 shadow-2xl p-5 max-h-[min(92vh,32rem)] overflow-y-auto proto-scroll"
             >
               <div className="flex items-start justify-between gap-2 mb-4">
                 <h2 id="manual-sheet-title" className="text-lg font-bold text-slate-900 dark:text-slate-100 leading-tight">
