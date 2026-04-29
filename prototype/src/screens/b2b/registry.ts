@@ -1,22 +1,16 @@
 import type { FC } from 'react';
-import {
-  B2bAuth,
-  B2bLang,
-  B2bLogin,
-  B2bOnboarding,
-  B2bSignup,
-  B2bSplash,
-} from './Funnel';
-import { B2bOnboard1, B2bOnboard3, B2bPending } from './OnboardingShop';
-import {
-  B2bBooking,
-  B2bBookings,
-  B2bCatalog,
-  B2bDashboard,
-  B2bMore,
-  B2bPayouts,
-  B2bReviews,
-} from './Operations';
+import { B2bAuth, B2bLogin, B2bSignup } from './funnel/Auth';
+import { B2bLang, B2bOnboarding, B2bSplash } from './funnel/PreAuth';
+import { B2bOnboard1 } from './onboarding/BusinessInfo';
+import { B2bOnboard3 } from './onboarding/CatalogSetup';
+import { B2bPending } from './onboarding/VerificationPending';
+import { B2bBooking } from './operations/BookingDetail';
+import { B2bBookings } from './operations/Bookings';
+import { B2bCatalog } from './operations/Catalog';
+import { B2bDashboard } from './operations/Dashboard';
+import { B2bMore } from './operations/More';
+import { B2bPayouts } from './operations/Payouts';
+import { B2bReviews } from './operations/Reviews';
 
 export const b2bScreens: Record<string, FC> = {
   'b2b-splash': B2bSplash,

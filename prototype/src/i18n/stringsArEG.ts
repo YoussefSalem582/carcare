@@ -61,6 +61,7 @@ export const STRINGS_AR_EG = {
   'common.and': 'و',
   'common.phase_p2': 'المرحلة 2',
   'common.dismiss': 'إغلاق',
+  'common.cancel': 'إلغاء',
 
   'acct.dash.demo_first_name': 'يوسف',
   'acct.dash.demo_avatar_initial': 'ي',
@@ -768,6 +769,13 @@ export const STRINGS_AR_EG = {
   'b2b.dash.rev_banner': 'مراجعات',
   'b2b.dash.rev_need': 'محتاجة رد.',
   'b2b.dash.open': 'افتح',
+  'b2b.dash.kpi_detail.book': '٧ حجوزات على التقويم اليوم (+٢ عن امبارح).',
+  'b2b.dash.kpi_detail.rev': 'الإيراد المُحمّل للفترة من المدفوعات المكتملة.',
+  'b2b.dash.kpi_detail.rating': 'متوسط متجدد من تقييمات العملاء الموثّقة.',
+  'b2b.dash.kpi_detail.accept': 'نسبة الطلبات التي وافقت عليها بدون رفض.',
+  'b2b.dash.line_actions': 'إجراءات',
+  'b2b.dash.start_bay': 'ابدأ',
+  'b2b.dash.manage': 'إدارة',
 
   'b2b.cal.title': 'الحجوزات',
   'b2b.cal.week': 'أسبوع',
@@ -777,9 +785,21 @@ export const STRINGS_AR_EG = {
   'b2b.cal.legend.new': 'جديد',
   'b2b.cal.legend.active': 'نشط',
   'b2b.cal.legend.done': 'تم',
+  'b2b.cal.prev_week': 'الأسبوع السابق',
+  'b2b.cal.next_week': 'الأسبوع التالي',
+  'b2b.cal.day_pick': 'يوم واحد',
+  'b2b.cal.filter.all': 'كل الحالات',
+  'b2b.cal.empty_filter': 'لا حجوزات مطابقة — جرّب حالةً أخرى.',
+
   'b2b.ops.new': 'جديد',
   'b2b.ops.in_progress': 'جاري',
   'b2b.ops.done': 'تم',
+
+  'b2b.booking.badge_accepted': 'مقبول',
+  'b2b.booking.badge_live': 'قيد العمل',
+  'b2b.booking.accept_banner': 'الموعد مؤكّد — عيّن ميكانيكيًا أسفله، ثم اسحب السيارة عند الجاهزية.',
+  'b2b.booking.start_bay': 'ابدأ الرفع / قيد العمل',
+  'b2b.booking.live_banner': 'تم إشعار العميل — تظهر أوامر الفاتورة بعد اكتمال الحالة.',
 
   'b2b.on3.s1': 'تغيير زيت (عادي)',
   'b2b.on3.s1.dur': '45 د',
@@ -814,6 +834,7 @@ export const STRINGS_AR_EG = {
   'b2b.cat.import': 'استيراد',
   'b2b.cat.add_svc': '+ خدمة',
   'b2b.cat.per_mo': '/شهر',
+  'b2b.cat.none_filter': 'لا خدمات في هذا التصفية.',
 
   'b2b.rev.title': 'التقييمات',
   'b2b.rev.reviews_n': '312 تقييم',
@@ -822,6 +843,11 @@ export const STRINGS_AR_EG = {
   'b2b.rev.chip.pending': 'معلّقة',
   'b2b.rev.chip.5': '5★',
   'b2b.rev.reply': 'رد',
+  'b2b.rev.none_filter': 'لا تقييمات في هذا التصفية.',
+  'b2b.rev.placeholder': 'شكرًا لزيارتك — سعداء أننا ساعدناك.',
+  'b2b.rev.send_demo': 'إرسال الرد',
+  'b2b.rev.responded_demo': 'تم الرد',
+  'b2b.rev.sent_demo': 'مُرسل',
 
   'b2b.pay.title': 'التحويلات',
   'b2b.pay.available': 'متاح',
@@ -833,6 +859,9 @@ export const STRINGS_AR_EG = {
   'b2b.pay.to_bank': 'تحويل للبنك',
   'b2b.pay.status.paid': 'مدفوع',
   'b2b.pay.status.pending': 'معلّق',
+  'b2b.pay.request_queued': 'طلب التحويل مسجّل — المالية ستُرسِل إيصالًا بالبريد.',
+  'b2b.pay.requested_btn': 'تم الطلب',
+  'b2b.pay.row_expand': 'التسوية تشمل أسطرًا ضريبية ورسومًا',
 
   'b2b.more.title': 'المزيد',
   'b2b.more.account': 'الحساب',
