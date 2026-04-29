@@ -1,3 +1,4 @@
+import { useEffect, useState } from 'react';
 import { B2cTabBar } from '../../../components/proto/TabBars';
 import { ProtoHomeIndicator, ProtoStatusBar } from '../../../components/proto/Chrome';
 import { ProtoIcon } from '../../../components/proto/Icon';
@@ -20,12 +21,11 @@ export function B2cGarage() {
         </button>
       </div>
       <div className="flex-1 overflow-y-auto px-5 pt-4 space-y-3 app-surface min-h-0">
-        <div
-          className="tap p-4 rounded-2xl text-white shadow-lg shadow-teal-900/25 gradient-garage-primary ring-1 ring-white/20 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/80 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-900"
+        <button
+          type="button"
+          className="tap w-full text-left p-4 rounded-2xl text-white shadow-lg shadow-teal-900/25 gradient-garage-primary ring-1 ring-white/20 active:scale-[0.992] transition-transform focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/80 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-900"
           onClick={() => show('b2c-cardetail')}
-          onKeyDown={(e) => e.key === 'Enter' && show('b2c-cardetail')}
-          role="button"
-          tabIndex={0}
+          aria-label={t('acct.garage.primary_open', 'Open vehicle details: Toyota Corolla')}
         >
           <div className="flex justify-between items-start">
             <div>
@@ -33,7 +33,7 @@ export function B2cGarage() {
               <div className="text-xl font-bold mt-0.5">{t('demo.garage.corolla_title', 'Toyota Corolla')}</div>
               <div className="text-sm opacity-80">{t('demo.garage.meta_line', '2019 · 82,450 km · س ب ج 7421')}</div>
             </div>
-            <ProtoIcon name="car" className="w-10 h-10 opacity-70" />
+            <ProtoIcon name="car" className="w-10 h-10 opacity-70" aria-hidden />
           </div>
           <div className="divider my-3 opacity-30" />
           <div className="grid grid-cols-3 gap-2 text-xs">
@@ -50,16 +50,21 @@ export function B2cGarage() {
               <div className="font-semibold mt-0.5">{t('demo.garage.spent_ytd', 'EGP 2,430')}</div>
             </div>
           </div>
-        </div>
-        <div className="tap p-4 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-600/90 shadow-sm ring-1 ring-indigo-500/5">
-          <div className="flex justify-between items-start">
-            <div>
+        </button>
+        <button
+          type="button"
+          className="tap w-full text-left p-4 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-600/90 shadow-sm ring-1 ring-indigo-500/5 active:bg-slate-50/90 dark:active:bg-slate-800/80 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-teal-500"
+          onClick={() => show('b2c-cardetail')}
+          aria-label={t('acct.garage.secondary_open', 'Open vehicle details: Hyundai Tucson')}
+        >
+          <div className="flex justify-between items-center gap-2">
+            <div className="min-w-0">
               <div className="font-semibold text-slate-900 dark:text-slate-100">{t('demo.garage.tucson_title', 'Hyundai Tucson')}</div>
               <div className="text-sm text-slate-500 dark:text-slate-400">{t('demo.garage.tucson_meta', '2022 · 24,100 km')}</div>
             </div>
-            <ProtoIcon name="chevron-right" className="w-5 h-5 text-slate-400 dark:text-slate-500" />
+            <ProtoIcon name="chevron-right" className="w-5 h-5 text-slate-400 dark:text-slate-500 shrink-0" aria-hidden />
           </div>
-        </div>
+        </button>
         <button
           type="button"
           className="tap w-full p-4 rounded-2xl border-2 border-dashed border-teal-300/80 dark:border-teal-600/50 text-teal-800 dark:text-teal-200 bg-teal-50/40 dark:bg-teal-950/35 text-sm font-semibold flex items-center justify-center gap-2 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-teal-500 focus-visible:ring-offset-2"
@@ -76,6 +81,33 @@ export function B2cGarage() {
 
 export function B2cCardetail() {
   const { show, t } = useProto();
+  const [manualOpen, setManualOpen] = useState(false);
+  const [toast, setToast] = useState(false);
+  const [svcDraft, setSvcDraft] = useState('');
+  const [priceDraft, setPriceDraft] = useState('');
+
+  useEffect(() => {
+    if (!manualOpen) return;
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') setManualOpen(false);
+    };
+    window.addEventListener('keydown', onKey);
+    return () => window.removeEventListener('keydown', onKey);
+  }, [manualOpen]);
+
+  useEffect(() => {
+    if (!toast) return;
+    const tm = window.setTimeout(() => setToast(false), 4400);
+    return () => window.clearTimeout(tm);
+  }, [toast]);
+
+  const saveManualDemo = () => {
+    setManualOpen(false);
+    setSvcDraft('');
+    setPriceDraft('');
+    setToast(true);
+  };
+
   const hist: [string, string, string, string, boolean][] = [
     [
       t('demo.card.hist1_date', '29 Mar'),
@@ -113,27 +145,28 @@ export function B2cCardetail() {
   ];
   return (
     <ScreenWrap id="b2c-cardetail">
-      <ProtoStatusBar />
-      <div className="screen-topbar">
-        <button
-          type="button"
-          className="funnel-back tap -ml-1 rounded-xl focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-teal-500"
-          onClick={() => show('b2c-garage')}
-          aria-label={t('a11y.back', 'Back')}
-        >
-          <ProtoIcon name="arrow-left" className="w-5 h-5" />
-        </button>
-        <div className="font-semibold text-slate-900 dark:text-slate-100 truncate">{t('acct.card.title_bar', 'Toyota Corolla 2019')}</div>
-        <button
-          type="button"
-          aria-label={t('acct.card.edit_a11y', 'Edit vehicle')}
-          className="tap w-10 h-10 rounded-xl bg-violet-50 dark:bg-violet-950/45 text-violet-700 dark:text-violet-300 flex items-center justify-center focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-violet-400"
-        >
-          <ProtoIcon name="pencil" className="w-5 h-5" />
-        </button>
-      </div>
-      <div className="flex-1 overflow-y-auto px-5 pt-4 app-surface min-h-0 pb-6">
-        <div className="grid grid-cols-3 gap-2.5 mb-6">
+      <div className="flex flex-col flex-1 min-h-0 h-full relative">
+        <ProtoStatusBar />
+        <div className="screen-topbar">
+          <button
+            type="button"
+            className="funnel-back tap -ml-1 rounded-xl focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-teal-500"
+            onClick={() => show('b2c-garage')}
+            aria-label={t('a11y.back', 'Back')}
+          >
+            <ProtoIcon name="arrow-left" className="w-5 h-5" />
+          </button>
+          <div className="font-semibold text-slate-900 dark:text-slate-100 truncate">{t('acct.card.title_bar', 'Toyota Corolla 2019')}</div>
+          <button
+            type="button"
+            aria-label={t('acct.card.edit_a11y', 'Edit vehicle')}
+            className="tap w-10 h-10 rounded-xl bg-violet-50 dark:bg-violet-950/45 text-violet-700 dark:text-violet-300 flex items-center justify-center focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-violet-400"
+          >
+            <ProtoIcon name="pencil" className="w-5 h-5" />
+          </button>
+        </div>
+        <div className="flex-1 overflow-y-auto px-5 pt-4 app-surface min-h-0 pb-24">
+          <div className="grid grid-cols-3 gap-2.5 mb-6">
           {stats.map(([l, v, tone]) => (
             <div
               key={l}
@@ -202,11 +235,97 @@ export function B2cCardetail() {
         <button
           type="button"
           className="mt-5 w-full py-3.5 rounded-2xl border-2 border-dashed border-slate-200 dark:border-slate-600 text-sm font-semibold tap text-slate-800 dark:text-slate-100 bg-slate-50/80 dark:bg-slate-800/40 hover:bg-slate-100 dark:hover:bg-slate-800 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-teal-500 focus-visible:ring-offset-2"
+          onClick={() => setManualOpen(true)}
         >
           {t('acct.card.add_manual', '+ Add manual entry')}
         </button>
+        </div>
+
+        {toast ? (
+          <div
+            role="status"
+            className="absolute bottom-[5.25rem] left-5 right-5 z-[60] px-4 py-3 rounded-2xl bg-teal-900 text-white shadow-xl text-sm flex items-start gap-2 ring-2 ring-teal-500/35"
+          >
+            <ProtoIcon name="check-circle" className="w-5 h-5 shrink-0 text-teal-200" aria-hidden />
+            <span className="leading-snug">{t('acct.card.manual_saved', 'Saved locally — Phase 2 will sync with your bookings.')}</span>
+            <button
+              type="button"
+              className="ml-auto text-xs font-semibold text-teal-200 tap shrink-0"
+              onClick={() => setToast(false)}
+            >
+              {t('common.dismiss', 'Dismiss')}
+            </button>
+          </div>
+        ) : null}
+
+        {manualOpen ? (
+          <div className="absolute inset-0 z-[55] flex items-end justify-center sm:items-center p-4 sm:p-6">
+            <button
+              type="button"
+              aria-label={t('acct.card.manual_close_a11y', 'Close')}
+              className="absolute inset-0 bg-black/45 dark:bg-black/60 backdrop-blur-[2px]"
+              onClick={() => setManualOpen(false)}
+            />
+            <div
+              role="dialog"
+              aria-modal="true"
+              aria-labelledby="manual-sheet-title"
+              className="relative w-full max-w-[22rem] rounded-2xl border border-slate-200 dark:border-slate-600 bg-white dark:bg-slate-900 shadow-2xl p-5 max-h-[min(92vh,32rem)] overflow-y-auto"
+            >
+              <div className="flex items-start justify-between gap-2 mb-4">
+                <h2 id="manual-sheet-title" className="text-lg font-bold text-slate-900 dark:text-slate-100 leading-tight">
+                  {t('acct.card.manual_sheet_title', 'Add service (manual)')}
+                </h2>
+                <button
+                  type="button"
+                  aria-label={t('acct.card.manual_close_a11y', 'Close')}
+                  className="tap p-1.5 rounded-lg text-slate-500 hover:bg-slate-100 dark:hover:bg-slate-800 focus-visible:ring-2 focus-visible:ring-teal-500"
+                  onClick={() => setManualOpen(false)}
+                >
+                  <ProtoIcon name="x" className="w-5 h-5" />
+                </button>
+              </div>
+              <label className="block text-xs font-semibold uppercase tracking-wide text-slate-500 dark:text-slate-400 mb-1.5" htmlFor="manual-svc">
+                {t('acct.card.manual_svc_label', 'Service name')}
+              </label>
+              <input
+                id="manual-svc"
+                autoComplete="off"
+                placeholder={t('acct.card.manual_svc_ph', 'e.g. Coolant flush')}
+                value={svcDraft}
+                onChange={(e) => setSvcDraft(e.target.value)}
+                className="w-full mb-4 px-3.5 py-2.5 rounded-xl border border-slate-200 dark:border-slate-600 bg-slate-50/80 dark:bg-slate-800/80 text-slate-900 dark:text-slate-100 text-[15px] focus:outline-none focus:ring-2 focus:ring-teal-500/80"
+              />
+              <label className="block text-xs font-semibold uppercase tracking-wide text-slate-500 dark:text-slate-400 mb-1.5" htmlFor="manual-price">
+                {t('acct.card.manual_price_label', 'Amount (EGP)')}
+              </label>
+              <input
+                id="manual-price"
+                inputMode="decimal"
+                autoComplete="off"
+                placeholder="0"
+                value={priceDraft}
+                onChange={(e) => setPriceDraft(e.target.value)}
+                className="w-full mb-6 px-3.5 py-2.5 rounded-xl border border-slate-200 dark:border-slate-600 bg-slate-50/80 dark:bg-slate-800/80 text-slate-900 dark:text-slate-100 text-[15px] focus:outline-none focus:ring-2 focus:ring-teal-500/80 tabular-nums"
+              />
+              <div className="flex gap-2">
+                <button
+                  type="button"
+                  className="flex-1 py-3 rounded-xl font-semibold border border-slate-200 dark:border-slate-600 tap text-slate-800 dark:text-slate-100"
+                  onClick={() => setManualOpen(false)}
+                >
+                  {t('acct.card.manual_cancel', 'Cancel')}
+                </button>
+                <button type="button" className="flex-1 py-3 rounded-xl font-semibold btn-accent tap shadow-md" onClick={saveManualDemo}>
+                  {t('acct.card.manual_save', 'Save')}
+                </button>
+              </div>
+              <p className="text-[11px] text-slate-500 dark:text-slate-400 mt-3 leading-relaxed">{t('acct.card.manual_footnote', 'Demo — not stored.')}</p>
+            </div>
+          </div>
+        ) : null}
+        <ProtoHomeIndicator />
       </div>
-      <ProtoHomeIndicator />
     </ScreenWrap>
   );
 }

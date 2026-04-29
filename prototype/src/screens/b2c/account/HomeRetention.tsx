@@ -4,14 +4,29 @@ import { ProtoIcon } from '../../../components/proto/Icon';
 import { useProto } from '../../../context/ProtoContext';
 import { ScreenWrap } from '../../shared/ScreenWrap';
 
+function greetingKey(): 'acct.dash.greet_morning' | 'acct.dash.greet_afternoon' | 'acct.dash.greet_evening' {
+  const h = new Date().getHours();
+  if (h < 12) return 'acct.dash.greet_morning';
+  if (h < 17) return 'acct.dash.greet_afternoon';
+  return 'acct.dash.greet_evening';
+}
+
 export function B2cDashboard() {
   const { show, t } = useProto();
+  const greetK = greetingKey();
+  const greetFallback =
+    greetK === 'acct.dash.greet_morning'
+      ? 'Good morning,'
+      : greetK === 'acct.dash.greet_afternoon'
+        ? 'Good afternoon,'
+        : 'Good evening,';
   return (
     <ScreenWrap id="b2c-dashboard">
       <ProtoStatusBar />
       <div className="px-5 pt-3 pb-3 flex items-center justify-between bg-gradient-to-r from-white via-teal-50/30 to-indigo-50/40 dark:from-slate-900 dark:via-slate-900 dark:to-slate-800 border-b border-slate-100 dark:border-slate-700/80">
         <div>
-          <div className="text-sm text-slate-600 dark:text-slate-400">{t('acct.dash.greet', 'Good morning,')}</div>
+          <div className="text-sm text-slate-600 dark:text-slate-400">
+            {t(greetK, greetFallback)}          </div>
           <div className="font-bold text-xl tracking-tight text-slate-900 dark:text-slate-100">{t('acct.dash.demo_first_name', 'Youssef')}</div>
         </div>
         <button
@@ -45,6 +60,33 @@ export function B2cDashboard() {
           </button>
         </section>
 
+        <nav aria-label={t('acct.dash.quick_nav_a11y', 'Shortcuts')} className="grid grid-cols-3 gap-2">
+          <button
+            type="button"
+            onClick={() => show('b2c-map')}
+            className="flex flex-col items-center justify-center gap-1.5 rounded-2xl border border-slate-200/90 dark:border-slate-600/85 bg-white/90 dark:bg-slate-900/90 py-3 px-2 tap shadow-sm hover:border-teal-300/70 dark:hover:border-teal-700/65 active:scale-[0.98] transition-transform focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-teal-500"
+          >
+            <ProtoIcon name="map" className="w-[22px] h-[22px] text-teal-600 dark:text-teal-400" aria-hidden />
+            <span className="text-[10px] font-bold uppercase tracking-wide text-slate-700 dark:text-slate-200">{t('acct.dash.quick_map', 'Map')}</span>
+          </button>
+          <button
+            type="button"
+            onClick={() => show('b2c-reminder')}
+            className="flex flex-col items-center justify-center gap-1.5 rounded-2xl border border-slate-200/90 dark:border-slate-600/85 bg-white/90 dark:bg-slate-900/90 py-3 px-2 tap shadow-sm hover:border-orange-300/70 dark:hover:border-orange-800/65 active:scale-[0.98] transition-transform focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-orange-400"
+          >
+            <ProtoIcon name="calendar-check" className="w-[22px] h-[22px] text-orange-600 dark:text-orange-400" aria-hidden />
+            <span className="text-[10px] font-bold uppercase tracking-wide text-slate-700 dark:text-slate-200">{t('acct.dash.quick_book', 'Book oil')}</span>
+          </button>
+          <button
+            type="button"
+            onClick={() => show('b2c-garage')}
+            className="flex flex-col items-center justify-center gap-1.5 rounded-2xl border border-slate-200/90 dark:border-slate-600/85 bg-white/90 dark:bg-slate-900/90 py-3 px-2 tap shadow-sm hover:border-teal-300/70 dark:hover:border-teal-700/65 active:scale-[0.98] transition-transform focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-teal-500"
+          >
+            <ProtoIcon name="car" className="w-[22px] h-[22px] text-teal-600 dark:text-teal-400" aria-hidden />
+            <span className="text-[10px] font-bold uppercase tracking-wide text-slate-700 dark:text-slate-200">{t('acct.dash.quick_garage', 'Garage')}</span>
+          </button>
+        </nav>
+
         <section className="app-panel p-4 shadow-sm ring-1 ring-black/[0.03] dark:ring-white/[0.06]" aria-labelledby="dash-health-title">
           <h2 id="dash-health-title" className="label mb-3">
             {t('acct.dash.health', 'Car health')}
@@ -64,9 +106,14 @@ export function B2cDashboard() {
             <div className="p-2.5 rounded-xl bg-emerald-50 dark:bg-emerald-950/45 text-emerald-900 dark:text-emerald-100 font-semibold border border-emerald-100 dark:border-emerald-800/55">
               {t('acct.dash.eng_ok', 'Engine: OK')}
             </div>
-            <div className="p-2.5 rounded-xl bg-amber-50 dark:bg-amber-950/45 text-amber-900 dark:text-amber-100 font-semibold border border-amber-100 dark:border-amber-800/55">
+            <button
+              type="button"
+              onClick={() => show('b2c-reminder')}
+              className="p-2.5 rounded-xl bg-amber-50 dark:bg-amber-950/45 text-amber-900 dark:text-amber-100 font-semibold border border-amber-200 dark:border-amber-800/55 tap hover:bg-amber-100/90 dark:hover:bg-amber-900/55 active:scale-[0.98] transition-transform focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-amber-500 ring-offset-1 ring-offset-white dark:ring-offset-slate-900"
+              aria-label={t('acct.dash.oil_chip_a11y', 'Book oil change reminder')}
+            >
               {t('acct.dash.oil_due', 'Oil: Due')}
-            </div>
+            </button>
             <div className="p-2.5 rounded-xl bg-cyan-50 dark:bg-cyan-950/45 text-cyan-900 dark:text-cyan-100 font-semibold border border-cyan-100 dark:border-cyan-800/55">
               {t('acct.dash.tires_ok', 'Tires: OK')}
             </div>
@@ -174,8 +221,8 @@ export function B2cReminder() {
         <div className="w-10" />
       </div>
       <div className="flex-1 overflow-y-auto px-5 pt-4 app-surface min-h-0">
-        <div className="callout-success p-4 flex items-start gap-3 mb-4 border border-emerald-200/60 dark:border-emerald-700/45">
-          <ProtoIcon name="sparkles" className="w-5 h-5 text-emerald-700 dark:text-emerald-400 mt-0.5" />
+        <div className="callout-success p-4 flex items-start gap-3 mb-3 border border-emerald-200/60 dark:border-emerald-700/45">
+          <ProtoIcon name="sparkles" className="w-5 h-5 text-emerald-700 dark:text-emerald-400 mt-0.5 shrink-0" aria-hidden />
           <div className="text-sm text-emerald-950 dark:text-emerald-100">
             <b>{t('acct.remind.rec_title', 'Recommended for you')}</b>
             <br />
@@ -184,40 +231,58 @@ export function B2cReminder() {
             </span>
           </div>
         </div>
-        {recs.map(([n, d, r, p, s, i]) => (
-          <div
-            key={`${n}-${i}`}
-            className={`tap p-3 rounded-2xl border mb-2 ${
-              i === 0
-                ? 'border-teal-500 bg-teal-50 dark:bg-teal-950/40 dark:border-teal-500'
-                : 'border-slate-200 dark:border-slate-600'
-            }`}
-            onClick={() => show('b2c-shop')}
-            onKeyDown={(e) => e.key === 'Enter' && show('b2c-shop')}
-            role="button"
-            tabIndex={0}
-          >
-            <div className="flex items-center gap-3">
-              <div className="w-11 h-11 rounded-xl bg-slate-200 dark:bg-slate-700" />
-              <div className="flex-1">
-                <div className="flex items-center gap-1 font-semibold text-sm text-slate-900 dark:text-slate-100">
-                  {n}
-                  {i < 2 ? <ProtoIcon name="badge-check" className="w-4 h-4 text-teal-700 dark:text-teal-400" /> : null}
+        <p className="label mb-2">{t('acct.remind.nearby_heading', 'Nearby picks')}</p>
+        {recs.map(([n, d, r, p, s, i]) => {
+          const tileBg =
+            i === 0
+              ? 'from-teal-500 via-teal-600 to-cyan-600'
+              : i === 1
+                ? 'from-slate-500 via-slate-600 to-slate-700'
+                : 'from-violet-500 via-purple-600 to-indigo-600';
+          return (
+            <button
+              key={`${n}-${i}`}
+              type="button"
+              className={`w-full text-start tap p-3.5 rounded-2xl border mb-2 active:scale-[0.992] transition-transform focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-teal-500 focus-visible:ring-offset-2 ${
+                i === 0
+                  ? 'border-teal-500 bg-teal-50 dark:bg-teal-950/40 dark:border-teal-500 shadow-sm'
+                  : 'border-slate-200 dark:border-slate-600 hover:bg-slate-50/90 dark:hover:bg-slate-800/60'
+              }`}
+              onClick={() => show('b2c-shop')}
+            >
+              <div className="flex items-center gap-3">
+                <div
+                  aria-hidden
+                  className={`w-11 h-11 rounded-xl bg-gradient-to-br ${tileBg} shrink-0 opacity-90 shadow-inner ring-1 ring-white/20`}
+                />
+                <div className="flex-1 min-w-0">
+                  <div className="flex items-center gap-1 font-semibold text-sm text-slate-900 dark:text-slate-100">
+                    <span className="truncate">{n}</span>
+                    {i < 2 ? <ProtoIcon name="badge-check" className="w-4 h-4 text-teal-700 dark:text-teal-400 shrink-0" /> : null}
+                  </div>
+                  <div className="text-xs text-slate-500 dark:text-slate-400 mt-1">
+                    {d}
+                    <span aria-hidden className="mx-1">
+                      ·
+                    </span>
+                    <ProtoIcon name="star" className="w-3 h-3 text-amber-500 fill-amber-500 inline-block align-middle -mt-px" />
+                    <span>{r}</span>
+                    <span aria-hidden className="mx-1">
+                      ·
+                    </span>
+                    {s}
+                  </div>
                 </div>
-                <div className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
-                  {d} · <ProtoIcon name="star" className="w-3 h-3 text-amber-500 fill-amber-500 inline -mt-0.5" />
-                  {r} · {s}
+                <div className="text-right shrink-0">
+                  <div className="font-bold text-sm text-slate-900 dark:text-slate-100 tabular-nums">{p}</div>
+                  {i === 0 ? (
+                    <div className="text-[10px] font-bold text-teal-700 dark:text-teal-400 uppercase">{t('acct.remind.best', 'Best pick')}</div>
+                  ) : null}
                 </div>
               </div>
-              <div className="text-right">
-                <div className="font-bold text-sm text-slate-900 dark:text-slate-100">{p}</div>
-                {i === 0 ? (
-                  <div className="text-[10px] font-bold text-teal-700 dark:text-teal-400 uppercase">{t('acct.remind.best', 'Best')}</div>
-                ) : null}
-              </div>
-            </div>
-          </div>
-        ))}
+            </button>
+          );
+        })}
         <button type="button" className="btn-primary w-full tap mt-3" onClick={() => show('b2c-slot')}>
           {t('acct.remind.cta', 'Book at AutoPro · EGP 350')}
         </button>
@@ -249,7 +314,12 @@ export function B2cExpenses() {
     <ScreenWrap id="b2c-expenses">
       <ProtoStatusBar />
       <div className="screen-topbar">
-        <button type="button" className="funnel-back tap -ml-1" onClick={() => show('b2c-dashboard')}>
+        <button
+          type="button"
+          className="funnel-back tap -ml-1 rounded-xl focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-teal-500"
+          onClick={() => show('b2c-dashboard')}
+          aria-label={t('a11y.back', 'Back')}
+        >
           <ProtoIcon name="arrow-left" className="w-5 h-5" />
         </button>
         <div className="font-semibold text-slate-900 dark:text-slate-100">{t('acct.exp.title', 'Expenses')}</div>
