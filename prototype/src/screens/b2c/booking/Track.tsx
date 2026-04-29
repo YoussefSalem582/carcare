@@ -9,29 +9,59 @@ export function B2cBookings() {
   return (
     <ScreenWrap id="b2c-bookings">
       <ProtoStatusBar />
-      <div className="px-5 pt-3 pb-3 flex items-center justify-between bg-white dark:bg-slate-900/90 border-b border-slate-100 dark:border-slate-700/80">
-        <div className="font-bold text-xl tracking-tight text-slate-900 dark:text-slate-100">{t('book.list.title', 'Bookings')}</div>
+      <div className="px-5 pt-3 pb-3 flex items-center justify-between bg-gradient-to-b from-white via-white to-slate-50/70 dark:from-slate-900 dark:via-slate-900 dark:to-slate-950/80 border-b border-slate-100 dark:border-slate-700/80">
+        <div>
+          <div className="font-bold text-xl tracking-tight text-slate-900 dark:text-slate-100">{t('book.list.title', 'Bookings')}</div>
+          <div className="text-[11px] text-slate-500 dark:text-slate-400 mt-0.5">{t('book.list.sub', 'Upcoming jobs & history')}</div>
+        </div>
         <button
           type="button"
-          className="w-10 h-10 rounded-xl bg-gradient-to-br from-slate-100 to-indigo-50 dark:from-slate-800 dark:to-indigo-950/40 border border-slate-200 dark:border-slate-600/80 flex items-center justify-center tap"
+          aria-label={t('book.list.search_a11y', 'Search bookings')}
+          className="w-10 h-10 rounded-xl bg-gradient-to-br from-slate-100 to-indigo-50 dark:from-slate-800 dark:to-indigo-950/40 border border-slate-200 dark:border-slate-600/80 flex items-center justify-center tap hover:ring-2 hover:ring-teal-500/50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-teal-500"
         >
-          <ProtoIcon name="search" className="w-4 h-4 text-indigo-600 dark:text-indigo-400" />
+          <ProtoIcon name="search" className="w-4 h-4 text-indigo-600 dark:text-indigo-400" aria-hidden />
         </button>
       </div>
-      <div className="px-5 flex gap-6 border-b border-slate-200 dark:border-slate-600 text-sm font-semibold bg-white dark:bg-slate-900">
-        <div className="pb-3 border-b-2 border-teal-600 text-teal-700 dark:text-teal-400">{t('book.list.upcoming', 'Upcoming')}</div>
-        <div className="pb-3 text-slate-500 dark:text-slate-400">{t('book.list.progress', 'In progress')}</div>
-        <div className="pb-3 text-slate-500 dark:text-slate-400">{t('book.list.past', 'Past')}</div>
+      <div className="px-5 flex gap-1 border-b border-slate-100 dark:border-slate-700 bg-white dark:bg-slate-900 pb-0" role="tablist" aria-label={t('book.list.tabs_a11y', 'Booking filters')}>
+        {(
+          [
+            ['upcoming', t('book.list.upcoming', 'Upcoming')],
+            ['progress', t('book.list.progress', 'In progress')],
+            ['past', t('book.list.past', 'Past')],
+          ] as const
+        ).map(([id, label], i) => (
+          <button
+            key={id}
+            id={`book-tab-${id}`}
+            type="button"
+            role="tab"
+            aria-selected={i === 0}
+            className={`flex-1 pb-3 pt-3 text-sm font-semibold rounded-t-xl tap transition-colors ${
+              i === 0
+                ? 'text-teal-700 dark:text-teal-400 border-b-2 border-teal-600 bg-teal-50/50 dark:bg-teal-950/25'
+                : 'text-slate-500 dark:text-slate-400 border-b-2 border-transparent hover:text-slate-700 dark:hover:text-slate-300'
+            }`}
+          >
+            {label}
+          </button>
+        ))}
       </div>
       <div className="flex-1 overflow-y-auto px-5 pt-4 space-y-3 app-surface min-h-0">
         <div
-          className="tap p-4 rounded-2xl bg-white dark:bg-slate-900 border border-teal-100 dark:border-teal-800/55 shadow-md shadow-teal-900/5 ring-1 ring-teal-500/10"
+          className="tap p-4 rounded-2xl bg-white dark:bg-slate-900 border border-teal-100 dark:border-teal-800/55 shadow-lg shadow-teal-900/15 ring-1 ring-teal-500/15 relative overflow-hidden focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-teal-500"
           onClick={() => show('b2c-progress')}
           onKeyDown={(e) => e.key === 'Enter' && show('b2c-progress')}
           role="button"
           tabIndex={0}
+          aria-describedby="book-live-hint"
         >
-          <div className="flex justify-between items-start">
+          <div className="absolute top-3 end-3 text-slate-300 dark:text-slate-600" aria-hidden>
+            <ProtoIcon name="chevron-right" className="w-5 h-5" />
+          </div>
+          <span id="book-live-hint" className="sr-only">
+            {t('book.list.open_detail_a11y', 'Opens live booking status')}
+          </span>
+          <div className="flex justify-between items-start pe-8">
             <div>
               <div className="text-xs text-teal-700 dark:text-teal-400 font-bold uppercase tracking-wide mb-1">{t('book.list.today', 'Today · 11:00')}</div>
               <div className="font-semibold text-slate-900 dark:text-slate-100">{t('demo.track.job_oil_corolla', 'Oil change — Toyota Corolla')}</div>
@@ -246,8 +276,15 @@ export function B2cReview() {
             </div>
           </div>
         ))}
-        <div className="label mt-4 mb-2">{t('book.rev.tell', 'Tell others (optional)')}</div>
-        <textarea className="proto-input w-full p-3 text-sm h-24 resize-none" placeholder={t('book.rev.comment_ph', 'What stood out?')} />
+        <div className="label mt-4 mb-2" id="book-rev-comment-label">
+          {t('book.rev.tell', 'Tell others (optional)')}
+        </div>
+        <textarea
+          id="book-rev-comment"
+          aria-labelledby="book-rev-comment-label"
+          className="proto-input w-full p-3 text-sm h-24 resize-none rounded-2xl border-slate-200 dark:border-slate-600"
+          placeholder={t('book.rev.comment_ph', 'What stood out?')}
+        />
         <div className="label mt-4 mb-2">{t('book.rev.photos', 'Add photos')}</div>
         <div className="flex gap-2">
           <div className="w-16 h-16 rounded-xl border-2 border-dashed border-slate-300 dark:border-slate-600 flex items-center justify-center">

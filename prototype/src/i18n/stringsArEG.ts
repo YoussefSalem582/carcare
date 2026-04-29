@@ -191,6 +191,44 @@ export const STRINGS_AR_EG = {
   'book.detail.title': 'الحجز',
   'book.review.title': 'قيّم الخدمة',
 
+  'book.flow.nav_service': 'الخدمة',
+  'book.flow.nav_slot': 'الوقت',
+  'book.flow.nav_pay': 'الدفع',
+  'book.flow.nav_done': 'تم',
+  'book.flow.hint_service': 'اختَر عربيتك وبنود الخدمة',
+  'book.flow.hint_slot': 'حدّد اليوم وزمن الوصول',
+  'book.flow.hint_pay': 'راجع الإجمالي وادفع بأمان',
+  'book.flow.hint_done': 'تم الحفظ — سنذكّرك قبل الموعد',
+  'book.flow.shop_name': 'أوتو برو مصر الجديدة',
+  'book.flow.shop_meta': '٠٫٨ كم · مصر الجديدة · مفتوح لحد ١٠مساءً',
+  'book.flow.shop_verified': 'موثَّق',
+  'book.flow.pricing_estimate': 'تقدير',
+  'book.flow.change_vehicle': 'الكراج',
+  'book.flow.help_demo': 'كيف يُحسب السعر في العرض',
+  'book.flow.running_total': 'الإجمالي الجاري',
+  'book.flow.next_schedule': 'التالي: جدولة الحضور',
+  'book.flow.currency_prefix': 'جنيه',
+  'book.flow.cta_continue': 'متابعة',
+  'book.flow.cta_quote': 'متابعة لجدولة التعرفة',
+  'book.flow.addon_blocked': 'الإضافات تفعّل بعد خدمة بسعر.',
+  'book.flow.slot_summary_label': 'المختار حاليًا',
+  'book.confirmed.badge': 'تم التأكيد',
+
+  'book.proto.quote_short': 'عرض سعر',
+
+  'book.slot.choose_day': 'التاريخ',
+  'book.slot.view_week': 'عرض أسبوع',
+  'book.slot.day_strip_a11y': 'أيام متاحة للحجز',
+  'book.slot.live_hold': 'القفل ساري',
+  'book.slot.no_capacity_hint': 'اختَر يومًا آخر بالأعلى لفتح الدفع.',
+  'book.slot.cta_blocked': 'لا مواعيد — غيّر التاريخ',
+
+  'demo.flow.quote_pending': 'بانتظار التعرفة',
+
+  'demo.pay.total_at_shop': '٣١٥ ج.م عند المركز',
+
+  'book.pay_vf_soon': 'قريبًا في النموذج',
+
   /* —— Map chrome —— */
   'map.search_ph': 'تغيير زيت، فرامل، تكييف…',
   'map.chip.verified': 'موثّق',
@@ -471,6 +509,10 @@ export const STRINGS_AR_EG = {
   'book.confirmed.map': 'ارجع للخريطة',
 
   'book.list.title': 'حجوزاتي',
+  'book.list.sub': 'القادمة والسجل',
+  'book.list.search_a11y': 'ابحث عن حجز',
+  'book.list.tabs_a11y': 'تبويبات الحجوزات',
+  'book.list.open_detail_a11y': 'يفتح حالة الحجز المباشرة',
   'book.list.upcoming': 'قادم',
   'book.list.progress': 'جاري',
   'book.list.past': 'سابق',
