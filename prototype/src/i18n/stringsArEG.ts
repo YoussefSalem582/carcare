@@ -244,6 +244,9 @@ export const STRINGS_AR_EG = {
 
   /* —— Map chrome —— */
   'map.search_ph': 'تغيير زيت، فرامل، تكييف…',
+  'map.filters.a11y': 'فتح الفلاتر',
+  'map.list.a11y': 'عرض القائمة',
+  'map.locate.a11y': 'إعادة توسيط الخريطة على موقعي',
   'map.chip.verified': 'موثّق',
   'map.chip.open_now': 'مفتوح الآن',
   'map.chip.star': '4★+',
@@ -260,6 +263,7 @@ export const STRINGS_AR_EG = {
   'map.sheet.view': 'عرض',
 
   'map.proto_strip.label': 'سيناريو العرض التجريبي',
+  'map.proto_strip.compact_label': 'عرض',
   'map.proto_strip.a11y': 'سيناريو خريطة للعرض فقط',
   'map.proto_strip.default': 'دبابيس',
   'map.proto_strip.loading': 'تحميل',

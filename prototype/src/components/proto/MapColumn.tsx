@@ -1,62 +1,88 @@
 import { useState } from 'react';
 import { useProto } from '../../context/ProtoContext';
 import { ProtoIcon } from './Icon';
-import { ProtoStateStrip } from './ProtoStateStrip';
 
 type MapScenario = 'default' | 'loading' | 'empty' | 'denied' | 'emergency';
+
+const MAP_SCENARIOS: { key: MapScenario; icon: string; labelKey: string; fallback: string }[] = [
+  { key: 'default', icon: 'map-pin', labelKey: 'map.proto_strip.default', fallback: 'Pins' },
+  { key: 'loading', icon: 'loader-2', labelKey: 'map.proto_strip.loading', fallback: 'Loading' },
+  { key: 'empty', icon: 'search-x', labelKey: 'map.proto_strip.empty', fallback: 'No results' },
+  { key: 'denied', icon: 'map-pin-off', labelKey: 'map.proto_strip.denied', fallback: 'Location off' },
+  { key: 'emergency', icon: 'zap', labelKey: 'map.proto_strip.emergency', fallback: 'Emergency' },
+];
 
 export function B2cMapMainColumn() {
   const { show, t } = useProto();
   const [mapScenario, setMapScenario] = useState<MapScenario>('default');
+  const selectedScenario = MAP_SCENARIOS.find((item) => item.key === mapScenario) ?? MAP_SCENARIOS[0];
 
   return (
     <>
-      <div className="map-search-header px-4 pt-2 pb-0 bg-white dark:bg-slate-900 relative z-30">
-        <ProtoStateStrip<MapScenario>
-          ariaLabel={t('map.proto_strip.a11y', 'Map prototype scenario')}
-          label={t('map.proto_strip.label', 'Demo scenario')}
-          value={mapScenario}
-          onChange={setMapScenario}
-          options={[
-            { key: 'default', label: t('map.proto_strip.default', 'Pins') },
-            { key: 'loading', label: t('map.proto_strip.loading', 'Loading') },
-            { key: 'empty', label: t('map.proto_strip.empty', 'No results') },
-            { key: 'denied', label: t('map.proto_strip.denied', 'Location off') },
-            { key: 'emergency', label: t('map.proto_strip.emergency', 'Emergency') },
-          ]}
-        />
+      <div className="map-search-header map-search-header--mobile bg-white dark:bg-slate-900 relative z-30">
+        <div className="map-demo-toolbar" role="group" aria-label={t('map.proto_strip.a11y', 'Map prototype scenario')}>
+          <span className="map-demo-toolbar__label">
+            {t('map.proto_strip.compact_label', 'Demo')}
+            <span className="map-demo-toolbar__current">
+              <ProtoIcon name={selectedScenario.icon} className="w-3 h-3" aria-hidden />
+              {t(selectedScenario.labelKey, selectedScenario.fallback)}
+            </span>
+          </span>
+          <div className="map-demo-toolbar__options no-scrollbar">
+            {MAP_SCENARIOS.map((scenario) => {
+              const isOn = scenario.key === mapScenario;
+              return (
+                <button
+                  key={scenario.key}
+                  type="button"
+                  aria-pressed={isOn}
+                  className={`map-demo-toolbar__button tap ${isOn ? 'is-on' : ''}`}
+                  onClick={() => setMapScenario(scenario.key)}
+                >
+                  <ProtoIcon name={scenario.icon} className="w-3.5 h-3.5" aria-hidden />
+                  <span>{t(scenario.labelKey, scenario.fallback)}</span>
+                </button>
+              );
+            })}
+          </div>
+        </div>
+
         {mapScenario === 'denied' ? (
-          <div className="rounded-xl border border-amber-200 bg-amber-50 dark:bg-amber-950/40 dark:border-amber-700/55 px-3 py-2 mb-3 flex gap-2 items-start">
+          <div className="map-context-alert border-amber-200 bg-amber-50 dark:bg-amber-950/40 dark:border-amber-700/55">
             <ProtoIcon name="map-pin-off" className="w-4 h-4 text-amber-700 dark:text-amber-400 mt-0.5 shrink-0" />
             <p className="text-xs text-amber-950 dark:text-amber-100 leading-snug">
-              {t('map.proto.denied_msg', 'Location is off — showing Cairo city center until you grant access or pick an area manually.')}
+              {t('map.proto.denied_msg', 'Location is off - showing Cairo city center until you grant access or pick an area manually.')}
             </p>
           </div>
         ) : null}
         {mapScenario === 'emergency' ? (
-          <div className="rounded-xl border border-orange-400/70 bg-orange-500/15 dark:bg-orange-950/55 dark:border-orange-600/65 px-3 py-2 mb-3 flex gap-2 items-start">
+          <div className="map-context-alert border-orange-400/70 bg-orange-500/15 dark:bg-orange-950/55 dark:border-orange-600/65">
             <ProtoIcon name="zap" className="w-4 h-4 text-orange-600 dark:text-orange-400 mt-0.5 shrink-0" />
-            <p className="text-xs text-orange-950 dark:text-orange-100 leading-snug">{t('map.proto.emergency_msg', 'Emergency mode prioritizes towing + 24/7 verified shops within range.')}</p>
+            <p className="text-xs text-orange-950 dark:text-orange-100 leading-snug">
+              {t('map.proto.emergency_msg', 'Emergency mode prioritizes towing + 24/7 verified shops within range.')}
+            </p>
           </div>
         ) : null}
-        <div className="flex items-center gap-2.5 pb-3">
-          <div className="flex-1 rounded-2xl border border-slate-200 dark:border-slate-600/90 bg-white dark:bg-slate-900 px-3.5 py-3 flex items-center gap-2 shadow-sm">
+
+        <div className="map-search-row">
+          <div className="map-search-field">
             <ProtoIcon name="search" className="w-4 h-4 text-slate-400 dark:text-slate-500 flex-shrink-0" />
             <input
               className="flex-1 bg-transparent text-sm text-slate-900 dark:text-slate-100 outline-none placeholder:text-slate-400 dark:placeholder:text-slate-500"
-              placeholder={t('map.search_ph', 'Oil change, brakes, AC…')}
+              placeholder={t('map.search_ph', 'Oil change, brakes, AC...')}
             />
             <ProtoIcon name="mic" className="w-4 h-4 text-slate-400 dark:text-slate-500 flex-shrink-0 tap" />
           </div>
           <button
             type="button"
-            className="map-fab rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-600/90 flex items-center justify-center tap flex-shrink-0"
-            style={{ width: 48, height: 48, borderRadius: 16 }}
+            className="map-filter-button map-fab bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-600/90 flex items-center justify-center tap flex-shrink-0"
             onClick={() => show('b2c-filters')}
+            aria-label={t('map.filters.a11y', 'Open filters')}
           >
             <ProtoIcon name="sliders-horizontal" className="w-[18px] h-[18px] text-slate-600 dark:text-slate-400" />
           </button>
         </div>
+
         <div className="chip-scroll-wrap -mx-1 px-1">
           <div className="chip-scroll-row no-scrollbar">
             <span className="chip on flex-shrink-0">
@@ -69,7 +95,7 @@ export function B2cMapMainColumn() {
             </span>
             <span className="chip flex-shrink-0">
               <ProtoIcon name="star" className="w-3.5 h-3.5" />
-              {t('map.chip.star', '4★+')}
+              {t('map.chip.star', '4+ stars')}
             </span>
             <span className="chip flex-shrink-0">
               <ProtoIcon name="map-pin" className="w-3.5 h-3.5" />
@@ -167,21 +193,23 @@ export function B2cMapMainColumn() {
           </>
         ) : null}
 
-        <button
-          type="button"
-          className="absolute right-3 map-fab rounded-full bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-600 shadow-sm flex items-center justify-center tap"
-          style={{ bottom: 300 }}
-        >
-          <ProtoIcon name="locate-fixed" className="w-[18px] h-[18px] text-teal-700 dark:text-teal-400" />
-        </button>
-        <button
-          type="button"
-          className="absolute right-3 map-fab rounded-full bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-600 shadow-sm flex items-center justify-center tap"
-          style={{ bottom: 352 }}
-          onClick={() => show('b2c-search')}
-        >
-          <ProtoIcon name="list" className="w-[18px] h-[18px] text-slate-700 dark:text-slate-300" />
-        </button>
+        <div className="map-control-stack">
+          <button
+            type="button"
+            className="map-fab rounded-full bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-600 shadow-sm flex items-center justify-center tap"
+            onClick={() => show('b2c-search')}
+            aria-label={t('map.list.a11y', 'Show list view')}
+          >
+            <ProtoIcon name="list" className="w-[18px] h-[18px] text-slate-700 dark:text-slate-300" />
+          </button>
+          <button
+            type="button"
+            className="map-fab rounded-full bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-600 shadow-sm flex items-center justify-center tap"
+            aria-label={t('map.locate.a11y', 'Recenter map on my location')}
+          >
+            <ProtoIcon name="locate-fixed" className="w-[18px] h-[18px] text-teal-700 dark:text-teal-400" />
+          </button>
+        </div>
 
         {mapScenario === 'loading' ? (
           <div
@@ -189,27 +217,27 @@ export function B2cMapMainColumn() {
             aria-hidden
           >
             <ProtoIcon name="loader-2" className="w-10 h-10 text-teal-600 dark:text-teal-400 animate-spin" />
-            <div className="text-sm font-semibold text-slate-700 dark:text-slate-300">{t('map.proto.loading_label', 'Loading nearby centers…')}</div>
+            <div className="text-sm font-semibold text-slate-700 dark:text-slate-300">{t('map.proto.loading_label', 'Loading nearby centers...')}</div>
           </div>
         ) : null}
 
-        <div className="sheet sheet-elevated absolute left-0 right-0 bottom-0" style={{ minHeight: 292 }}>
+        <div className="sheet sheet-elevated map-results-sheet absolute left-0 right-0 bottom-0">
           <div className="sheet-handle" />
-          <div className="px-4 pt-3 pb-2 flex justify-between items-end">
-            <div>
+          <div className="map-results-sheet__header">
+            <div className="min-w-0">
               <div className="text-[17px] font-bold text-slate-900 dark:text-slate-100 tracking-tight">
                 {mapScenario === 'empty'
                   ? t('map.proto.sheet_empty_title', 'Nothing in this radius yet')
                   : t('map.sheet.title', 'Nearest to you')}
               </div>
-              <div className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
+              <div className="text-xs text-slate-500 dark:text-slate-400 mt-0.5 truncate">
                 {mapScenario === 'empty'
                   ? t('map.proto.sheet_empty_sub', 'Loosen filters, zoom out, or move the map.')
-                  : t('map.sheet.sub', 'Sorted by distance · live availability')}
+                  : t('map.sheet.sub', 'Sorted by distance - live availability')}
               </div>
             </div>
             <span
-              className={`text-[11px] font-semibold px-2.5 py-1 rounded-full border ${
+              className={`text-[11px] font-semibold px-2.5 py-1 rounded-full border flex-shrink-0 ${
                 mapScenario === 'empty'
                   ? 'text-amber-900 dark:text-amber-100 bg-amber-50 dark:bg-amber-950/45 border-amber-200 dark:border-amber-800/60'
                   : 'text-teal-800 dark:text-teal-100 bg-teal-50 dark:bg-teal-950/45 border-teal-100 dark:border-teal-800/60'
@@ -218,22 +246,22 @@ export function B2cMapMainColumn() {
               {mapScenario === 'empty' ? t('map.proto.sheet_badge_none', '0 centers') : t('map.sheet.badge', '17 centers')}
             </span>
           </div>
-          <div className="px-4 pb-3 space-y-2.5 overflow-y-auto" style={{ maxHeight: 218 }}>
+          <div className="map-results-sheet__body proto-scroll">
             {mapScenario === 'empty' ? (
-              <div className="text-center py-8 px-2">
-                <ProtoIcon name="search-x" className="w-14 h-14 mx-auto text-slate-300 dark:text-slate-600 mb-4" aria-hidden />
+              <div className="text-center py-7 px-2">
+                <ProtoIcon name="search-x" className="w-12 h-12 mx-auto text-slate-300 dark:text-slate-600 mb-3" aria-hidden />
                 <p className="text-sm font-semibold text-slate-800 dark:text-slate-200 mb-2">
                   {t('map.proto.no_results_title', 'No verified centers yet')}
                 </p>
                 <p className="text-xs text-slate-600 dark:text-slate-400 leading-relaxed max-w-[240px] mx-auto">
                   {t(
                     'map.proto.no_results_body',
-                    'PostGIS nearby_centers returned 0 rows for your filters — try resetting service filters or widening distance.',
+                    'PostGIS nearby_centers returned 0 rows for your filters - try resetting service filters or widening distance.',
                   )}
                 </p>
                 <button
                   type="button"
-                  className="btn-secondary text-xs font-semibold mt-6 tap rounded-xl px-4 py-2.5"
+                  className="btn-secondary text-xs font-semibold mt-5 tap rounded-xl px-4 py-2.5"
                   onClick={() => show('b2c-filters')}
                 >
                   {t('map.proto.adjust_filters', 'Adjust filters')}
@@ -241,73 +269,85 @@ export function B2cMapMainColumn() {
               </div>
             ) : (
               <>
-            <button
-              type="button"
-              className="listing-card tap flex items-center gap-3 p-3.5 rounded-2xl border-2 border-teal-300/80 dark:border-teal-600/70 bg-gradient-to-br from-teal-50 to-white dark:from-teal-950/45 dark:to-slate-900 shadow-sm w-full border-solid text-left font-inherit"
-              onClick={() => show('b2c-shop')}
-            >
-              <div className="w-12 h-12 rounded-xl bg-slate-100 dark:bg-slate-800/80 flex items-center justify-center ring-1 ring-slate-200/80 dark:ring-slate-600/80">
-                <ProtoIcon name="wrench" className="w-5 h-5 text-slate-600 dark:text-slate-400" />
-              </div>
-              <div className="flex-1 min-w-0">
-                <div className="flex items-center gap-1.5">
-                  <span className="font-semibold text-slate-900 dark:text-slate-100 truncate">
-                    {t('demo.search.r1_name', 'AutoPro Heliopolis')}
-                  </span>
-                  <ProtoIcon name="badge-check" className="w-4 h-4 text-teal-700 dark:text-teal-400 flex-shrink-0" />
+                <button
+                  type="button"
+                  className="listing-card map-listing-card map-listing-card--featured tap border-2 border-teal-300/80 dark:border-teal-600/70 bg-gradient-to-br from-teal-50 to-white dark:from-teal-950/45 dark:to-slate-900 shadow-sm w-full border-solid text-left font-inherit"
+                  onClick={() => show('b2c-shop')}
+                >
+                  <div className="map-listing-card__icon ring-1 ring-slate-200/80 dark:ring-slate-600/80">
+                    <ProtoIcon name="wrench" className="w-5 h-5 text-slate-600 dark:text-slate-400" />
+                  </div>
+                  <div className="flex-1 min-w-0">
+                    <div className="flex items-center gap-1.5">
+                      <span className="font-semibold text-slate-900 dark:text-slate-100 truncate">
+                        {t('demo.search.r1_name', 'AutoPro Heliopolis')}
+                      </span>
+                      <ProtoIcon name="badge-check" className="w-4 h-4 text-teal-700 dark:text-teal-400 flex-shrink-0" />
+                    </div>
+                    <div className="map-listing-meta">
+                      <span>{t('demo.search.r1_dist', '0.8 km')}</span>
+                      <span className="map-listing-dot" aria-hidden />
+                      <span className="text-emerald-600 dark:text-emerald-400 font-semibold">{t('map.sheet.open', 'Open')}</span>
+                      <span className="map-listing-dot" aria-hidden />
+                      <span>
+                        {t('map.sheet.next_slot', 'Next slot')}{' '}
+                        <span className="font-semibold text-slate-700 dark:text-slate-300">{t('demo.search.r1_next', '11:30')}</span>
+                      </span>
+                    </div>
+                    <div className="flex items-center gap-2 mt-1.5 text-xs">
+                      <span className="flex items-center gap-0.5 font-semibold text-slate-800 dark:text-slate-200">
+                        <ProtoIcon name="star" className="w-3 h-3 text-amber-500 fill-amber-500" />
+                        {t('demo.search.r1_stars', '4.8')}
+                      </span>
+                      <span className="text-slate-400 dark:text-slate-500">({t('demo.search.r1_rev_n', '312')})</span>
+                      <span className="map-listing-dot" aria-hidden />
+                      <span className="text-slate-600 dark:text-slate-400 font-medium">{t('demo.search.r1_price', 'EGP 350-900')}</span>
+                    </div>
+                  </div>
+                  <span className="map-listing-card__action btn-primary shadow-sm">{t('map.sheet.book', 'Book')}</span>
+                </button>
+
+                <div className="listing-card map-listing-card border border-slate-200 dark:border-slate-600 bg-white dark:bg-slate-900 shadow-sm">
+                  <div className="map-listing-card__icon">
+                    <ProtoIcon name="wrench" className="w-5 h-5 text-slate-600 dark:text-slate-400" />
+                  </div>
+                  <div className="flex-1 min-w-0">
+                    <div className="flex items-center gap-1.5">
+                      <span className="font-semibold text-slate-900 dark:text-slate-100 truncate">
+                        {t('demo.search.r2_name', 'QuickFix Nasr City')}
+                      </span>
+                      <ProtoIcon name="badge-check" className="w-4 h-4 text-teal-700 dark:text-teal-400 flex-shrink-0" />
+                    </div>
+                    <div className="map-listing-meta">
+                      <span>{t('demo.search.r2_dist', '1.6 km')}</span>
+                      <span className="map-listing-dot" aria-hidden />
+                      <span className="text-emerald-600 dark:text-emerald-400 font-semibold">{t('map.sheet.open', 'Open')}</span>
+                      <span className="map-listing-dot" aria-hidden />
+                      <span>
+                        {t('map.sheet.next_slot', 'Next slot')}{' '}
+                        <span className="font-semibold text-slate-700 dark:text-slate-300">{t('demo.search.r2_next', '12:15')}</span>
+                      </span>
+                    </div>
+                    <div className="flex items-center gap-2 mt-1.5 text-xs">
+                      <span className="flex items-center gap-0.5 font-semibold text-slate-800 dark:text-slate-200">
+                        <ProtoIcon name="star" className="w-3 h-3 text-amber-500 fill-amber-500" />
+                        {t('demo.search.r2_stars', '4.6')}
+                      </span>
+                      <span className="text-slate-400 dark:text-slate-500">({t('demo.search.r2_rev_n', '188')})</span>
+                      <span className="map-listing-dot" aria-hidden />
+                      <span className="text-slate-600 dark:text-slate-400 font-medium">{t('demo.search.r2_price', 'EGP 250-1200')}</span>
+                    </div>
+                  </div>
+                  <span className="map-listing-card__action btn-secondary">{t('map.sheet.view', 'View')}</span>
                 </div>
-                <div className="text-xs text-slate-600 dark:text-slate-400 mt-1">
-                  {t('demo.search.r1_dist', '0.8 km')} · <span className="text-emerald-600 dark:text-emerald-400 font-medium">{t('map.sheet.open', 'Open')}</span> ·{' '}
-                  {t('map.sheet.next_slot', 'Next slot')}{' '}
-                  <span className="font-semibold text-slate-700 dark:text-slate-300">{t('demo.search.r1_next', '11:30')}</span>
-                </div>
-                <div className="flex items-center gap-2 mt-1.5 text-xs">
-                  <span className="flex items-center gap-0.5 font-semibold text-slate-800 dark:text-slate-200">
-                    <ProtoIcon name="star" className="w-3 h-3 text-amber-500 fill-amber-500" />
-                    {t('demo.search.r1_stars', '4.8')}
-                  </span>
-                  <span className="text-slate-400 dark:text-slate-500">({t('demo.search.r1_rev_n', '312')})</span>
-                  <span className="text-slate-400 dark:text-slate-500">·</span>
-                  <span className="text-slate-600 dark:text-slate-400 font-medium">{t('demo.search.r1_price', 'EGP 350–900')}</span>
-                </div>
-              </div>
-              <span className="btn-primary py-2.5 px-4 text-xs rounded-xl shadow-sm">{t('map.sheet.book', 'Book')}</span>
-            </button>
-            <div className="listing-card flex items-center gap-3 p-3.5 rounded-2xl border border-slate-200 dark:border-slate-600 bg-white dark:bg-slate-900 shadow-sm">
-              <div className="w-12 h-12 rounded-xl bg-slate-100 dark:bg-slate-800/80 flex items-center justify-center">
-                <ProtoIcon name="wrench" className="w-5 h-5 text-slate-600 dark:text-slate-400" />
-              </div>
-              <div className="flex-1 min-w-0">
-                <div className="flex items-center gap-1.5">
-                  <span className="font-semibold text-slate-900 dark:text-slate-100 truncate">
-                    {t('demo.search.r2_name', 'QuickFix Nasr City')}
-                  </span>
-                  <ProtoIcon name="badge-check" className="w-4 h-4 text-teal-700 dark:text-teal-400 flex-shrink-0" />
-                </div>
-                <div className="text-xs text-slate-600 dark:text-slate-400 mt-1">
-                  {t('demo.search.r2_dist', '1.6 km')} · <span className="text-emerald-600 dark:text-emerald-400 font-medium">{t('map.sheet.open', 'Open')}</span> ·{' '}
-                  {t('map.sheet.next_slot', 'Next slot')}{' '}
-                  <span className="font-semibold text-slate-700 dark:text-slate-300">{t('demo.search.r2_next', '12:15')}</span>
-                </div>
-                <div className="flex items-center gap-2 mt-1.5 text-xs">
-                  <span className="flex items-center gap-0.5 font-semibold text-slate-800 dark:text-slate-200">
-                    <ProtoIcon name="star" className="w-3 h-3 text-amber-500 fill-amber-500" />
-                    {t('demo.search.r2_stars', '4.6')}
-                  </span>
-                  <span className="text-slate-400 dark:text-slate-500">({t('demo.search.r2_rev_n', '188')})</span>
-                  <span className="text-slate-400 dark:text-slate-500">·</span>
-                  <span className="text-slate-600 dark:text-slate-400 font-medium">{t('demo.search.r2_price', 'EGP 250–1200')}</span>
-                </div>
-              </div>
-              <span className="btn-secondary py-2.5 px-4 text-xs">{t('map.sheet.view', 'View')}</span>
-            </div>
-            <button
-              type="button"
-              className="w-full py-2.5 text-xs font-semibold text-teal-700 dark:text-teal-300 tap rounded-xl border border-dashed border-teal-200/80 dark:border-teal-700/60 bg-teal-50/30 dark:bg-teal-950/30"
-              onClick={() => show('b2c-search')}
-            >
-              {t('map.sheet.more', '+ 15 more centers · see full list')}
-            </button>
+
+                <button
+                  type="button"
+                  className="map-more-results tap"
+                  onClick={() => show('b2c-search')}
+                >
+                  {t('map.sheet.more', '+ 15 more centers - see full list')}
+                </button>
               </>
             )}
           </div>
