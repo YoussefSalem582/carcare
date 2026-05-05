@@ -1,0 +1,49 @@
+graph TD
+    subgraph "Client Applications"
+        B2C[B2C App<br/>Flutter iOS/Android]
+        B2B[B2B App<br/>Flutter iOS/Android]
+        Admin[Admin App<br/>Flutter]
+    end
+    
+    subgraph "Backend Services (Supabase)"
+        Auth[Supabase Auth<br/>Phone/Email OTP]
+        DB[(PostgreSQL + PostGIS<br/>Geospatial Queries)]
+        RF[Edge Functions<br/>Deno/TypeScript]
+        RT[Realtime<br/>Live Updates]
+        ST[Storage<br/>Images/Docs]
+    end
+    
+    subgraph "External Integrations"
+        Maps[Google Maps / Mapbox]
+        Pay[Payment Gateway<br/>Stripe]
+        Push[FCM Push Notifications]
+        SMS[SMS Provider]
+    end
+    
+    B2C --> Auth
+    B2B --> Auth
+    Admin --> Auth
+    
+    B2C --> DB
+    B2B --> DB
+    Admin --> DB
+    
+    B2C --> RF
+    B2B --> RF
+    Admin --> RF
+    
+    B2C --> RT
+    B2B --> RT
+    
+    B2C --> ST
+    B2B --> ST
+    
+    B2C --> Maps
+    B2C --> Pay
+    B2C --> Push
+    B2B --> Push
+    B2B --> Pay
+    B2B --> SMS
+    
+    RF --> Pay
+    RF --> SMS

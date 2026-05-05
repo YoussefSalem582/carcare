@@ -1,0 +1,30 @@
+usecaseDiagram
+    actor CarOwner
+    actor ServiceCenter
+    actor Admin
+    actor Mechanic
+    
+    CarOwner --> (Search Service Centers)
+    CarOwner --> (Book Service)
+    CarOwner --> (View Service Center Profile)
+    CarOwner --> (Manage Vehicles)
+    CarOwner --> (Track Maintenance)
+    CarOwner --> (Rate and Review)
+    CarOwner --> (Make Payment)
+    
+    ServiceCenter --> (Manage Catalog)
+    ServiceCenter --> (Manage Bookings)
+    ServiceCenter --> (View Dashboard)
+    ServiceCenter --> (Respond to Reviews)
+    ServiceCenter --> (Manage Customers)
+    
+    Admin --> (Verify Service Centers)
+    Admin --> (Resolve Disputes)
+    Admin --> (Manage Payouts)
+    Admin --> (Moderate Content)
+    
+    Mechanic --> (Update Job Status)
+    Mechanic --> (View Assigned Jobs)
+    
+    (Book Service) --> (Make Payment)
+    (Manage Bookings) --> (Update Job Status)

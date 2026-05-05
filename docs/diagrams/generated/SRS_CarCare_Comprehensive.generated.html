@@ -1,0 +1,2357 @@
+﻿<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8" />
+  <title>CarCare SRS</title>
+  <style>
+    @page { size: A4; margin: 18mm 16mm; }
+    body { color: #172033; font-family: "Segoe UI", Arial, sans-serif; font-size: 10.5pt; line-height: 1.45; }
+    h1 { color: #0f3f5f; font-size: 24pt; margin: 0 0 18pt; padding-bottom: 8pt; border-bottom: 2px solid #1f6f8b; }
+    h2 { color: #0f3f5f; font-size: 16pt; margin: 22pt 0 8pt; page-break-after: avoid; }
+    h3 { color: #214b63; font-size: 12.5pt; margin: 16pt 0 6pt; page-break-after: avoid; }
+    h4 { color: #2f5265; font-size: 11pt; margin: 12pt 0 4pt; page-break-after: avoid; }
+    p { margin: 0 0 7pt; }
+    ul { margin: 0 0 8pt 18pt; padding: 0; }
+    li { margin: 2pt 0; }
+    table { width: 100%; border-collapse: collapse; margin: 8pt 0 12pt; page-break-inside: auto; font-size: 8.4pt; }
+    th { background: #e9f2f6; color: #17384a; font-weight: 700; }
+    th, td { border: 1px solid #aebdc7; padding: 4pt 5pt; vertical-align: top; overflow-wrap: anywhere; }
+    pre { background: #f5f7f9; border: 1px solid #d7e0e7; border-radius: 4px; padding: 8pt; white-space: pre-wrap; font-size: 8pt; page-break-inside: avoid; }
+    code { font-family: Consolas, "Courier New", monospace; font-size: 0.92em; }
+    img { max-width: 100%; height: auto; display: block; margin: 8pt auto; }
+    figure { margin: 10pt 0 14pt; page-break-inside: avoid; }
+    figcaption { color: #4f6270; font-size: 8.5pt; text-align: center; }
+    hr { border: 0; border-top: 1px solid #cdd7df; margin: 14pt 0; }
+  </style>
+</head>
+<body>
+<h1>Software Requirements Specification for CarCare</h1>
+<p><strong>Version:</strong> 2.0</p>
+<p><strong>Date:</strong> 2026-05-05</p>
+<p><strong>Author:</strong> CarCare Development Team</p>
+<p><strong>Status:</strong> Final</p>
+<p>This document defines the comprehensive software requirements for CarCare, a map-first automotive maintenance platform connecting car owners (B2C) with verified service centers (B2B). It covers all three product surfaces: B2C App, B2B Business App, and Admin App, built on Flutter with a Supabase backend.</p>
+<hr />
+<h2>1. Introduction</h2>
+<h3>1.1 Purpose</h3>
+<p>This SRS describes the complete scope, functional and non-functional requirements, interfaces, data definitions, use cases, and acceptance criteria for the CarCare system. It is intended for:</p>
+<ul>
+<li>Software development team (5 Flutter engineers, tech lead)</li>
+<li>Product management and stakeholders</li>
+<li>QA and testing team</li>
+<li>Future maintainers and contributors</li>
+</ul>
+<h3>1.2 Scope</h3>
+<p><strong>Product:</strong> Map-first automotive maintenance marketplace platform</p>
+<p><strong>In-Scope:</strong></p>
+<ul>
+<li>Three Flutter mobile applications (iOS/Android):</li>
+<li>B2C App (car owners) - 26 screens</li>
+<li>B2B App (service centers) - 16 screens</li>
+<li>Admin App (operations) - minimal Flutter app</li>
+<li>Supabase backend (Postgres+PostGIS, Auth, Realtime, Edge Functions, Storage)</li>
+<li>Map-based service center discovery with geospatial queries</li>
+<li>Booking system with slot management and payment integration</li>
+<li>B2B dashboard with booking management and analytics</li>
+<li>Verification pipeline for service centers</li>
+<li>Bilingual support (English + Egyptian Arabic with RTL)</li>
+<li>Phased delivery across 6 phases (MVP + 5 expansion phases)</li>
+</ul>
+<p><strong>Out-of-Scope for MVP:</strong></p>
+<ul>
+<li>Custom web clients (B2C, B2B, or admin)</li>
+<li>Self-hosted infrastructure</li>
+<li>Native iOS/Android code outside Flutter</li>
+<li>Advanced AI features (Phase 5)</li>
+<li>OBD-II integration (Phase 5)</li>
+<li>Parts marketplace (Phase 6)</li>
+<li>Multi-city expansion (Phase 6)</li>
+</ul>
+<h3>1.3 Definitions, Acronyms, Abbreviations</h3>
+<table>
+<tr><th>Term</th><th>Definition</th></tr>
+<tr><td>B2C</td><td>Business-to-Consumer (car owners)</td></tr>
+<tr><td>B2B</td><td>Business-to-Business (service centers)</td></tr>
+<tr><td>MVP</td><td>Minimum Viable Product</td></tr>
+<tr><td>GMV</td><td>Gross Merchandise Value (total booking value)</td></tr>
+<tr><td>SLA</td><td>Service Level Agreement</td></tr>
+<tr><td>RLS</td><td>Row-Level Security (Supabase)</td></tr>
+<tr><td>PostGIS</td><td>PostgreSQL extension for geospatial queries</td></tr>
+<tr><td>RBAC</td><td>Role-Based Access Control</td></tr>
+<tr><td>JWT</td><td>JSON Web Token</td></tr>
+<tr><td>PCI-DSS</td><td>Payment Card Industry Data Security Standard</td></tr>
+<tr><td>GDPR</td><td>General Data Protection Regulation</td></tr>
+<tr><td>CI/CD</td><td>Continuous Integration/Continuous Deployment</td></tr>
+<tr><td>ER</td><td>Entity-Relationship (database model)</td></tr>
+<tr><td>PDP</td><td>Product Detail Page</td></tr>
+<tr><td>ETA</td><td>Estimated Time of Arrival</td></tr>
+<tr><td>MAU</td><td>Monthly Active Users</td></tr>
+<tr><td>NPS</td><td>Net Promoter Score</td></tr>
+<tr><td>RTM</td><td>Requirements Traceability Matrix</td></tr>
+<tr><td>PRD</td><td>Product Requirements Document</td></tr>
+<tr><td>FR</td><td>Functional Requirement</td></tr>
+<tr><td>NFR</td><td>Non-Functional Requirement</td></tr>
+</table>
+<h3>1.4 References</h3>
+<p>1. CarCare PRD v2 (docs/CarCare_PRD_v2.md) - Product Requirements Document</p>
+<p>2. CarCare MVP Plan (docs/MVP_PLAN.md) - Sprint planning and milestones</p>
+<p>3. Requirements Traceability Matrix (docs/RTM.md)</p>
+<p>4. CarCare App Flow PDF (docs/CarCare App Flow.pdf)</p>
+<p>5. CarCare App Plan PDF (docs/CarCare App Plan.pdf)</p>
+<p>6. Supabase Documentation (https://supabase.com/docs)</p>
+<p>7. Flutter Documentation (https://docs.flutter.dev)</p>
+<p>8. Google Maps Platform Documentation</p>
+<p>9. Stripe API Documentation (payment processing)</p>
+<p>10. WCAG 2.1 Guidelines (accessibility)</p>
+<h3>1.5 Overview</h3>
+<p>CarCare is a two-sided marketplace platform with a strategic focus on map-first discovery. The platform connects car owners who need maintenance services with verified service centers. The core value proposition is: <em>&quot;Your car needs service — we&#39;ll show you where, when, and for how much.&quot;</em></p>
+<p>The system consists of:</p>
+<ul>
+<li><strong>B2C App:</strong> Map-based discovery → booking → service → review workflow</li>
+<li><strong>B2B App:</strong> Service center management → booking fulfillment → customer relationship management</li>
+<li><strong>Admin App:</strong> Verification, dispute resolution, payout management</li>
+</ul>
+<h3>1.6 Diagrams</h3>
+<p><strong>Use Case Diagram (Mermaid code)</strong></p>
+<pre><code>usecaseDiagram
+    actor CarOwner
+    actor ServiceCenter
+    actor Admin
+    actor Mechanic
+    
+    CarOwner --&gt; (Search Service Centers)
+    CarOwner --&gt; (Book Service)
+    CarOwner --&gt; (View Service Center Profile)
+    CarOwner --&gt; (Manage Vehicles)
+    CarOwner --&gt; (Track Maintenance)
+    CarOwner --&gt; (Rate and Review)
+    CarOwner --&gt; (Make Payment)
+    
+    ServiceCenter --&gt; (Manage Catalog)
+    ServiceCenter --&gt; (Manage Bookings)
+    ServiceCenter --&gt; (View Dashboard)
+    ServiceCenter --&gt; (Respond to Reviews)
+    ServiceCenter --&gt; (Manage Customers)
+    
+    Admin --&gt; (Verify Service Centers)
+    Admin --&gt; (Resolve Disputes)
+    Admin --&gt; (Manage Payouts)
+    Admin --&gt; (Moderate Content)
+    
+    Mechanic --&gt; (Update Job Status)
+    Mechanic --&gt; (View Assigned Jobs)
+    
+    (Book Service) --&gt; (Make Payment)
+    (Manage Bookings) --&gt; (Update Job Status)</code></pre>
+<p><strong>Booking Sequence Diagram (Mermaid code)</strong></p>
+<pre><code>sequenceDiagram
+    participant C as Car Owner
+    participant A as B2C App
+    participant B as Backend (Supabase)
+    participant D as Database
+    participant S as Service Center
+    participant N as Push Notification
+    
+    C-&gt;&gt;A: Open App (Map View)
+    A-&gt;&gt;B: GET /service-centers?lat=x&amp;lng=y&amp;radius=5
+    B-&gt;&gt;D: PostGIS query (centers within 5km)
+    D--&gt;&gt;B: Service center list
+    B--&gt;&gt;A: Centers with pins
+    A-&gt;&gt;C: Display map with pins
+    
+    C-&gt;&gt;A: Tap pin → View Profile
+    A-&gt;&gt;B: GET /center/{id}/services
+    B--&gt;&gt;A: Services + available slots
+    A-&gt;&gt;C: Show profile + booking options
+    
+    C-&gt;&gt;A: Select Service + Slot
+    A-&gt;&gt;B: POST /bookings (with 10-min hold)
+    B-&gt;&gt;D: Insert booking (status: pending)
+    B-&gt;&gt;B: Edge Function: Set hold timer
+    D--&gt;&gt;B: BookingID
+    B--&gt;&gt;A: Booking Confirmed (hold active)
+    
+    A-&gt;&gt;C: Show confirmation + payment
+    C-&gt;&gt;A: Confirm &amp; Pay
+    A-&gt;&gt;B: POST /payments
+    B-&gt;&gt;PaymentGateway: Process payment
+    PaymentGateway--&gt;&gt;B: Payment success
+    B-&gt;&gt;D: Update booking (status: confirmed)
+    B-&gt;&gt;N: Trigger notification
+    N-&gt;&gt;S: New booking alert
+    B--&gt;&gt;A: Payment confirmed
+    A-&gt;&gt;C: Booking complete</code></pre>
+<p><strong>System Architecture Diagram (Mermaid code)</strong></p>
+<pre><code>graph TD
+    subgraph &quot;Client Applications&quot;
+        B2C[B2C App&lt;br/&gt;Flutter iOS/Android]
+        B2B[B2B App&lt;br/&gt;Flutter iOS/Android]
+        Admin[Admin App&lt;br/&gt;Flutter]
+    end
+    
+    subgraph &quot;Backend Services (Supabase)&quot;
+        Auth[Supabase Auth&lt;br/&gt;Phone/Email OTP]
+        DB[(PostgreSQL + PostGIS&lt;br/&gt;Geospatial Queries)]
+        RF[Edge Functions&lt;br/&gt;Deno/TypeScript]
+        RT[Realtime&lt;br/&gt;Live Updates]
+        ST[Storage&lt;br/&gt;Images/Docs]
+    end
+    
+    subgraph &quot;External Integrations&quot;
+        Maps[Google Maps / Mapbox]
+        Pay[Payment Gateway&lt;br/&gt;Stripe]
+        Push[FCM Push Notifications]
+        SMS[SMS Provider]
+    end
+    
+    B2C --&gt; Auth
+    B2B --&gt; Auth
+    Admin --&gt; Auth
+    
+    B2C --&gt; DB
+    B2B --&gt; DB
+    Admin --&gt; DB
+    
+    B2C --&gt; RF
+    B2B --&gt; RF
+    Admin --&gt; RF
+    
+    B2C --&gt; RT
+    B2B --&gt; RT
+    
+    B2C --&gt; ST
+    B2B --&gt; ST
+    
+    B2C --&gt; Maps
+    B2C --&gt; Pay
+    B2C --&gt; Push
+    B2B --&gt; Push
+    B2B --&gt; Pay
+    B2B --&gt; SMS
+    
+    RF --&gt; Pay
+    RF --&gt; SMS</code></pre>
+<p><strong>Clean Architecture Layers (Mermaid code)</strong></p>
+<pre><code>graph TD
+    subgraph &quot;Presentation Layer&quot;
+        UI[UI Widgets]
+        NM[Notifiers/Blocs&lt;br/&gt;State Management]
+        RV[Route Views]
+    end
+    
+    subgraph &quot;Application Layer&quot;
+        UC[Use Cases]
+        DTO[DTOs]
+    end
+    
+    subgraph &quot;Domain Layer&quot;
+        ENT[Entities]
+        REP[Repository Interfaces]
+        RUL[Business Rules]
+    end
+    
+    subgraph &quot;Data Layer&quot;
+        RI[Repository Implementations]
+        API[API Clients&lt;br/&gt;Supabase]
+        LOC[Local Storage]
+        MOD[Data Models]
+    end
+    
+    UI --&gt; NM
+    NM --&gt; UC
+    UC --&gt; REP
+    REP --&gt; RI
+    RI --&gt; API
+    RI --&gt; LOC
+    UC --&gt; ENT
+    API --&gt; MOD</code></pre>
+<hr />
+<h2>2. Overall Description</h2>
+<h3>2.1 Product Perspective</h3>
+<p>CarCare is a stand-alone mobile-first application ecosystem with:</p>
+<ul>
+<li><strong>Three Flutter mobile applications</strong> sharing a common codebase structure</li>
+<li><strong>Supabase backend</strong> (recommended) providing database, authentication, realtime, and serverless functions</li>
+<li><strong>No web clients</strong> - all interactions happen via mobile apps</li>
+<li><strong>Third-party integrations</strong> for maps, payments, notifications</li>
+</ul>
+<p>The system may optionally use Firebase as an alternative backend, with trade-offs in geospatial query capabilities.</p>
+<h3>2.2 Product Functions</h3>
+<h4>B2C App Functions (26 Screens)</h4>
+<table>
+<tr><th>Function</th><th>Description</th><th>Priority</th></tr>
+<tr><td>Map-First Home</td><td>Real-time map with nearby service centers, filters, search</td><td>Core MVP</td></tr>
+<tr><td>Service Center Profiles</td><td>Verified badge, services, prices, ratings, reviews</td><td>Core MVP</td></tr>
+<tr><td>Booking System</td><td>Pick service → slot → confirm → pay → review</td><td>Core MVP</td></tr>
+<tr><td>Car Management</td><td>Add/edit/delete vehicles (multi-car support)</td><td>MVP</td></tr>
+<tr><td>Maintenance Tracker</td><td>Auto-logged from bookings + manual entries</td><td>MVP</td></tr>
+<tr><td>Smart Reminders</td><td>Mileage/time-based notifications</td><td>Phase 2</td></tr>
+<tr><td>Expense Tracker</td><td>Fuel, maintenance, insurance tracking</td><td>Phase 2</td></tr>
+<tr><td>Dashboard</td><td>Health snapshot, upcoming maintenance</td><td>MVP</td></tr>
+<tr><td>Authentication</td><td>Email/phone login, bilingual support</td><td>MVP</td></tr>
+<tr><td>Parts Marketplace</td><td>Browse/purchase car parts</td><td>Phase 4+</td></tr>
+</table>
+<h4>B2B App Functions (16 Screens)</h4>
+<table>
+<tr><th>Function</th><th>Description</th><th>Priority</th></tr>
+<tr><td>Onboarding</td><td>Business registration, document upload, verification</td><td>Core MVP</td></tr>
+<tr><td>Business Dashboard</td><td>Today&#39;s bookings, KPIs, revenue stats</td><td>Core MVP</td></tr>
+<tr><td>Booking Management</td><td>Accept/reject, assign mechanics, update status</td><td>Core MVP</td></tr>
+<tr><td>Catalog &amp; Pricing</td><td>Service menu CRUD, promotions</td><td>Core MVP</td></tr>
+<tr><td>Customer CRM</td><td>History, follow-ups, broadcast offers</td><td>Phase 2</td></tr>
+<tr><td>Reviews Management</td><td>Respond to reviews, dispute flagging</td><td>MVP</td></tr>
+<tr><td>Payments &amp; Payouts</td><td>In-app collection, commission calculation</td><td>Phase 2</td></tr>
+<tr><td>Analytics</td><td>Conversion funnel, revenue breakdown</td><td>Phase 2</td></tr>
+<tr><td>Business Tiers</td><td>Free/Pro/Partner subscription management</td><td>Phase 2</td></tr>
+</table>
+<h4>Admin App Functions</h4>
+<table>
+<tr><th>Function</th><th>Description</th><th>Priority</th></tr>
+<tr><td>Verification Queue</td><td>Review and approve service centers</td><td>Core MVP</td></tr>
+<tr><td>Dispute Resolution</td><td>Handle customer complaints</td><td>Core MVP</td></tr>
+<tr><td>Payout Management</td><td>Process B2B payouts</td><td>Phase 2</td></tr>
+<tr><td>Content Moderation</td><td>Review ratings, photos, descriptions</td><td>MVP</td></tr>
+</table>
+<h3>2.3 User Characteristics</h3>
+<h4>Car Owners (B2C)</h4>
+<ul>
+<li><strong>Demographics:</strong> Car owners in target markets (initially one city)</li>
+<li><strong>Technical skills:</strong> Basic smartphone usage</li>
+<li><strong>Pain points:</strong> Finding reliable service centers, price transparency, tracking maintenance</li>
+<li><strong>Goals:</strong> Quickly find and book trusted service centers, track car health</li>
+</ul>
+<h4>Service Centers (B2B)</h4>
+<ul>
+<li><strong>Types:</strong> Authorized dealers, independent garages, mobile mechanics</li>
+<li><strong>Roles:</strong> Shop owners, reception staff, mechanics</li>
+<li><strong>Technical skills:</strong> Basic to intermediate tablet/phone usage</li>
+<li><strong>Goals:</strong> Steady booking flow, digital presence, customer management</li>
+</ul>
+<h4>Admin Users</h4>
+<ul>
+<li><strong>Roles:</strong> Operations team, verification team, dispute resolution</li>
+<li><strong>Technical skills:</strong> Intermediate to advanced</li>
+<li><strong>Goals:</strong> Maintain platform quality, resolve issues, manage payouts</li>
+</ul>
+<h4>Development Team</h4>
+<ul>
+<li><strong>Size:</strong> 5 Flutter engineers</li>
+<li><strong>Split:</strong> ~2 B2C, ~2 B2B, 1 tech lead (shared packages, BaaS, admin)</li>
+<li><strong>Constraints:</strong> No dedicated backend, web, or native engineers</li>
+</ul>
+<h3>2.4 Constraints</h3>
+<p>1. <strong>Team Constraints:</strong></p>
+<ul>
+<li>5 Flutter engineers only (no backend/web/native specialists)</li>
+<li>Must use managed backend (BaaS) - Supabase or Firebase</li>
+<li>Single codebase per surface with shared packages</li>
+</ul>
+<p>2. <strong>Platform Constraints:</strong></p>
+<ul>
+<li>Flutter mobile apps only (iOS + Android)</li>
+<li>No web clients in roadmap</li>
+<li>Adaptive layouts for phone + tablet (B2B)</li>
+</ul>
+<p>3. <strong>Data Privacy &amp; Security:</strong></p>
+<ul>
+<li>GDPR compliance for user data</li>
+<li>PCI-DSS compliance for payment processing</li>
+<li>Data encryption at rest and in transit</li>
+</ul>
+<p>4. <strong>External Dependencies:</strong></p>
+<ul>
+<li>Supabase/Firebase availability</li>
+<li>Payment gateway (Stripe or equivalent)</li>
+<li>Google Maps/Mapbox API</li>
+<li>FCM for push notifications</li>
+<li>Stable network connectivity</li>
+</ul>
+<p>5. <strong>Performance:</strong></p>
+<ul>
+<li>App and API respond within 2 seconds on primary screens</li>
+<li>API responses under 500ms for core flows (p95)</li>
+</ul>
+<h3>2.5 Assumptions and Dependencies</h3>
+<p><strong>Assumptions:</strong></p>
+<ul>
+<li>Users have smartphones with GPS capability</li>
+<li>Stable internet connectivity available for core flows</li>
+<li>Service centers have tablets or phones for B2B app</li>
+<li>Target market has sufficient car density for marketplace liquidity</li>
+</ul>
+<p><strong>Dependencies:</strong></p>
+<ul>
+<li>Supabase/Firebase platform stability and feature availability</li>
+<li>Third-party APIs (Maps, Payments, Notifications) remain operational</li>
+<li>App store approval processes for iOS and Android</li>
+<li>Payment gateway supports target market currencies and methods</li>
+</ul>
+<hr />
+<h2>3. System Features (Functional Requirements)</h2>
+<h3>3.1 Feature: User Management (B2C + B2B)</h3>
+<h4>Description</h4>
+<p>Manage user accounts, roles, authentication, and profile information across all three apps.</p>
+<h4>Actors</h4>
+<p>Car Owner, Service Center Owner, Mechanic, Admin</p>
+<h4>Functional Requirements</h4>
+<p><strong>FR-1.1:</strong> Users can register with email or phone number</p>
+<ul>
+<li>System sends OTP verification for phone registration</li>
+<li>Email registration requires email verification link</li>
+<li>Optional OAuth providers (Google, Apple) for MVP</li>
+</ul>
+<p><strong>FR-1.2:</strong> Users can log in/log out with email/phone and password</p>
+<ul>
+<li>JWT-based session management with short-lived access tokens</li>
+<li>Refresh token mechanism for session renewal</li>
+<li>Secure token storage using flutter_secure_storage</li>
+</ul>
+<p><strong>FR-1.3:</strong> Role-based access control (RBAC)</p>
+<ul>
+<li>Roles: Customer (B2C), Shop Owner (B2B), Mechanic (B2B), Admin</li>
+<li>Row-Level Security (RLS) policies in Supabase enforce data access</li>
+<li>UI adapts based on user role</li>
+</ul>
+<p><strong>FR-1.4:</strong> Password recovery</p>
+<ul>
+<li>Email-based password reset flow</li>
+<li>Phone-based password reset via OTP</li>
+<li>Multi-factor authentication optional for MVP</li>
+</ul>
+<p><strong>FR-1.5:</strong> Profile management</p>
+<ul>
+<li>Update personal information (name, phone, email)</li>
+<li>Upload profile photo</li>
+<li>Manage saved addresses</li>
+<li>Language preference (English/Arabic)</li>
+</ul>
+<p><strong>FR-1.6:</strong> Bilingual support</p>
+<ul>
+<li>Full UI localization in English and Egyptian Arabic</li>
+<li>RTL layout support for Arabic</li>
+<li>Language selection at onboarding with ability to switch later</li>
+</ul>
+<h3>3.2 Feature: Map-First Discovery (B2C Core)</h3>
+<h4>Description</h4>
+<p>Real-time map interface showing nearby service centers with search, filters, and quick booking capabilities.</p>
+<h4>Actors</h4>
+<p>Car Owner</p>
+<h4>Functional Requirements</h4>
+<p><strong>FR-2.1:</strong> Display nearby service centers on map</p>
+<ul>
+<li>PostGIS query to find centers within configurable radius (default 5km)</li>
+<li>Service center pins with rating, distance, price tier, ETA</li>
+<li>Auto-refresh map when user pans/zoomes</li>
+</ul>
+<p><strong>FR-2.2:</strong> Search functionality</p>
+<ul>
+<li>Search by service type (e.g., &quot;oil change&quot;, &quot;brake pads&quot;, &quot;AC repair&quot;)</li>
+<li>Search by service center name</li>
+<li>Autocomplete suggestions</li>
+<li>Recent searches history</li>
+</ul>
+<p><strong>FR-2.3:</strong> Filter options</p>
+<ul>
+<li>Service type (multi-select)</li>
+<li>Price range (slider or min-max)</li>
+<li>Rating (minimum star rating)</li>
+<li>Distance (configurable radius)</li>
+<li>Open now toggle</li>
+<li>Verified/Authorized badge filter</li>
+<li>Emergency service toggle (24/7 providers)</li>
+</ul>
+<p><strong>FR-2.4:</strong> Service center quick preview</p>
+<ul>
+<li>Tap pin → show bottom sheet with:</li>
+<li>Name, rating, distance</li>
+<li>Price range for common services</li>
+<li>Next available slot</li>
+<li>Verified badge status</li>
+<li>Quick action buttons (Call, Directions, Book)</li>
+</ul>
+<p><strong>FR-2.5:</strong> List view alternative</p>
+<ul>
+<li>Toggle between map view and list view</li>
+<li>Sort by: distance, rating, price, availability</li>
+<li>Infinite scroll with pagination</li>
+</ul>
+<p><strong>FR-2.6:</strong> Directions and contact</p>
+<ul>
+<li>One-tap directions via native maps app</li>
+<li>One-tap call to service center</li>
+<li>Share service center profile</li>
+</ul>
+<p><strong>FR-2.7:</strong> Emergency service mode</p>
+<ul>
+<li>Toggle to show only 24/7 service providers</li>
+<li>Highlight emergency services (tow, battery, mobile mechanic) - Phase 4</li>
+</ul>
+<h3>3.3 Feature: Service Center Profiles (B2C)</h3>
+<h4>Description</h4>
+<p>Detailed service center information including services, pricing, reviews, and booking integration.</p>
+<h4>Actors</h4>
+<p>Car Owner</p>
+<h4>Functional Requirements</h4>
+<p><strong>FR-3.1:</strong> Profile header</p>
+<ul>
+<li>Service center name, verified badge, overall rating</li>
+<li>Address, working hours, contact info</li>
+<li>Cover photo and gallery (multiple photos)</li>
+<li>Team info (mechanics, years in business)</li>
+</ul>
+<p><strong>FR-3.2:</strong> Services and pricing</p>
+<ul>
+<li>List of services with fixed prices or price ranges</li>
+<li>Service categories (Maintenance, Repair, Bodywork, etc.)</li>
+<li>&quot;Get a quote&quot; option for custom jobs</li>
+<li>Expandable service details (duration, what&#39;s included)</li>
+</ul>
+<p><strong>FR-3.3:</strong> Ratings and reviews</p>
+<ul>
+<li>Overall rating (1-5 stars)</li>
+<li>Category-based ratings: quality, price, speed, honesty</li>
+<li>Review list with pagination</li>
+<li>Review photos</li>
+<li>Helpful/unhelpful voting on reviews</li>
+</ul>
+<p><strong>FR-3.4:</strong> Live availability</p>
+<ul>
+<li>Next available slot display</li>
+<li>Real-time slot updates via Supabase Realtime</li>
+<li>&quot;Book now&quot; button with quick booking flow</li>
+</ul>
+<p><strong>FR-3.5:</strong> Business information</p>
+<ul>
+<li>Year established, number of mechanics</li>
+<li>Authorized dealer badges (if applicable)</li>
+<li>Service center type: authorized, independent, mobile</li>
+</ul>
+<h3>3.4 Feature: Booking System (B2C + B2B Core)</h3>
+<h4>Description</h4>
+<p>End-to-end booking flow from service selection to payment and review.</p>
+<h4>Actors</h4>
+<p>Car Owner, Service Center, Mechanic</p>
+<h4>Functional Requirements</h4>
+<p><strong>FR-4.1:</strong> Create booking (B2C)</p>
+<ul>
+<li>Select service from catalog or profile</li>
+<li>Choose available time slot</li>
+<li>Select vehicle from garage</li>
+<li>Add notes/special requests</li>
+<li>10-minute slot hold via Edge Function to prevent double-booking</li>
+</ul>
+<p><strong>FR-4.2:</strong> Booking confirmation</p>
+<ul>
+<li>Review booking details (service, slot, price, vehicle)</li>
+<li>Accept cancellation policy</li>
+<li>Confirm booking</li>
+<li>Receive confirmation via push notification and in-app</li>
+</ul>
+<p><strong>FR-4.3:</strong> Payment integration</p>
+<ul>
+<li>Card payment via Stripe (or equivalent)</li>
+<li>Cash on service option</li>
+<li>Wallet payment (future)</li>
+<li>Generate invoice on completion</li>
+</ul>
+<p><strong>FR-4.4:</strong> Modify booking</p>
+<ul>
+<li>Reschedule with policy enforcement (e.g., 2 hours before)</li>
+<li>Cancel booking with refund rules</li>
+<li>Add/modify notes</li>
+</ul>
+<p><strong>FR-4.5:</strong> Booking management (B2C)</p>
+<ul>
+<li>View upcoming and past bookings</li>
+<li>Booking status tracking: pending → confirmed → in progress → completed → invoiced</li>
+<li>Live progress updates from B2B side</li>
+</ul>
+<p><strong>FR-4.6:</strong> Receive booking (B2B)</p>
+<ul>
+<li>Real-time notification of new booking (Supabase Realtime)</li>
+<li>View booking details (customer, vehicle, service, slot)</li>
+<li>Accept or reject with reason</li>
+<li>Propose alternative slot if needed</li>
+</ul>
+<p><strong>FR-4.7:</strong> Job status updates (B2B)</p>
+<ul>
+<li>Update status: received → in progress → completed → invoiced</li>
+<li>Assign specific mechanic to job</li>
+<li>Add internal notes per booking</li>
+<li>Notify customer of status changes automatically</li>
+</ul>
+<p><strong>FR-4.8:</strong> In-app chat (Phase 2, replaced by call+SMS in MVP)</p>
+<ul>
+<li>Message thread between customer and service center</li>
+<li>Push notifications for new messages</li>
+<li>Attachment support (photos)</li>
+</ul>
+<p><strong>FR-4.9:</strong> Post-service flow</p>
+<ul>
+<li>Generate invoice on job completion</li>
+<li>Send digital invoice to customer in-app</li>
+<li>Prompt customer for rating and review</li>
+<li>Auto-log service to maintenance tracker</li>
+</ul>
+<h3>3.5 Feature: Car Management (B2C)</h3>
+<h4>Description</h4>
+<p>Manage multiple vehicles with detailed information and service history.</p>
+<h4>Actors</h4>
+<p>Car Owner</p>
+<h4>Functional Requirements</h4>
+<p><strong>FR-5.1:</strong> Add vehicle</p>
+<ul>
+<li>Brand, model, year, mileage, plate number</li>
+<li>VIN (optional)</li>
+<li>Vehicle photo</li>
+<li>Color, transmission type, fuel type</li>
+</ul>
+<p><strong>FR-5.2:</strong> Edit/Delete vehicle</p>
+<ul>
+<li>Update vehicle information</li>
+<li>Delete vehicle (with confirmation)</li>
+<li>Soft delete to preserve booking history</li>
+</ul>
+<p><strong>FR-5.3:</strong> Multi-car support</p>
+<ul>
+<li>Users can add unlimited vehicles</li>
+<li>Set primary/default vehicle</li>
+<li>Quick switch between vehicles in booking flow</li>
+</ul>
+<p><strong>FR-5.4:</strong> Vehicle detail view</p>
+<ul>
+<li>Complete vehicle information</li>
+<li>Service history timeline (auto-logged + manual)</li>
+<li>Upcoming maintenance reminders</li>
+<li>Fuel and expense summary</li>
+</ul>
+<h3>3.6 Feature: Maintenance Tracker (B2C)</h3>
+<h4>Description</h4>
+<p>Automatic and manual logging of all vehicle maintenance activities.</p>
+<h4>Actors</h4>
+<p>Car Owner</p>
+<h4>Functional Requirements</h4>
+<p><strong>FR-6.1:</strong> Auto-logged entries</p>
+<ul>
+<li>Completed bookings automatically create maintenance records</li>
+<li>Auto-populate: service type, date, mileage, cost, service center</li>
+<li>Link to original booking and invoice</li>
+</ul>
+<p><strong>FR-6.2:</strong> Manual entries</p>
+<ul>
+<li>Add services done elsewhere</li>
+<li>Input: service type, date, mileage, cost, notes</li>
+<li>Upload receipt photo</li>
+</ul>
+<p><strong>FR-6.3:</strong> Timeline view</p>
+<ul>
+<li>Chronological list of all maintenance activities per vehicle</li>
+<li>Filter by service type</li>
+<li>Search by date range or service</li>
+</ul>
+<p><strong>FR-6.4:</strong> Service types</p>
+<ul>
+<li>Predefined common services (oil change, tire rotation, etc.)</li>
+<li>Custom service type creation</li>
+<li>Categorized display (routine, repair, bodywork, etc.)</li>
+</ul>
+<p><strong>FR-6.5:</strong> Export and sharing</p>
+<ul>
+<li>Export maintenance history as PDF</li>
+<li>Share with potential buyers (future resale feature)</li>
+<li>Email to insurance or warranty providers</li>
+</ul>
+<h3>3.7 Feature: Smart Reminders (B2C - Phase 2)</h3>
+<h4>Description</h4>
+<p>Intelligent reminders for scheduled maintenance based on mileage and time.</p>
+<h4>Actors</h4>
+<p>Car Owner</p>
+<h4>Functional Requirements</h4>
+<p><strong>FR-7.1:</strong> Mileage-based reminders</p>
+<ul>
+<li>Calculate based on last service mileage + standard intervals</li>
+<li>Example: &quot;Oil change due in 200 km&quot; (based on 5,000 km interval)</li>
+<li>Update mileage automatically from bookings or manual entry</li>
+</ul>
+<p><strong>FR-7.2:</strong> Time-based reminders</p>
+<ul>
+<li>Reminders based on time since last service</li>
+<li>Example: &quot;6-month checkup due&quot;</li>
+<li>Configurable reminder intervals per service type</li>
+</ul>
+<p><strong>FR-7.3:</strong> Push notifications</p>
+<ul>
+<li>Deliver reminders via FCM push notifications</li>
+<li>In-app inbox for reminders</li>
+<li>Tap notification → quick booking flow with 3 recommended centers</li>
+</ul>
+<p><strong>FR-7.4:</strong> Reminder settings</p>
+<ul>
+<li>Enable/disable reminder types</li>
+<li>Customize reminder thresholds</li>
+<li>Set preferred notification time</li>
+</ul>
+<p><strong>FR-7.5:</strong> Predictive reminders (Phase 3)</p>
+<ul>
+<li>AI-based predictions using booking history</li>
+<li>Seasonal maintenance suggestions</li>
+<li>Tire change reminders based on weather</li>
+</ul>
+<h3>3.8 Feature: Expense &amp; Fuel Tracker (B2C - Phase 2)</h3>
+<h4>Description</h4>
+<p>Track all vehicle-related expenses with categorization and analytics.</p>
+<h4>Actors</h4>
+<p>Car Owner</p>
+<h4>Functional Requirements</h4>
+<p><strong>FR-8.1:</strong> Expense categories</p>
+<ul>
+<li>Fuel, maintenance, insurance, fines, registration, other</li>
+<li>Custom category creation</li>
+<li>Predefined subcategories</li>
+</ul>
+<p><strong>FR-8.2:</strong> Manual expense entry</p>
+<ul>
+<li>Amount, date, category, description</li>
+<li>Attach receipt photo</li>
+<li>Link to booking (if applicable)</li>
+</ul>
+<p><strong>FR-8.3:</strong> Auto-expense from bookings</p>
+<ul>
+<li>Completed bookings auto-create expense entries</li>
+<li>Auto-categorize as &quot;maintenance&quot;</li>
+<li>Preserve invoice details</li>
+</ul>
+<p><strong>FR-8.4:</strong> Fuel tracking</p>
+<ul>
+<li>Fuel amount, cost, odometer reading</li>
+<li>Calculate fuel efficiency (km/L or L/100km)</li>
+<li>Fuel station tracking (optional)</li>
+</ul>
+<p><strong>FR-8.5:</strong> Analytics and reports</p>
+<ul>
+<li>Monthly/yearly expense summaries</li>
+<li>Cost per km calculation</li>
+<li>Fuel consumption trends</li>
+<li>Category breakdown (pie chart)</li>
+</ul>
+<h3>3.9 Feature: B2B Onboarding (Business App)</h3>
+<h4>Description</h4>
+<p>Service center registration, document upload, and verification process.</p>
+<h4>Actors</h4>
+<p>Service Center Owner, Admin</p>
+<h4>Functional Requirements</h4>
+<p><strong>FR-9.1:</strong> Business registration</p>
+<ul>
+<li>Business name, address, tax ID, commercial registration</li>
+<li>Contact information (phone, email, website)</li>
+<li>Service center type: authorized dealer, independent, mobile</li>
+<li>Working hours setup (per day, with breaks)</li>
+</ul>
+<p><strong>FR-9.2:</strong> Document upload</p>
+<ul>
+<li>Commercial registration certificate</li>
+<li>Tax ID document</li>
+<li>Owner ID document</li>
+<li>Photos of facility (exterior, interior, workshop)</li>
+<li>Upload via Supabase Storage</li>
+<li>Support for PDF, JPG, PNG formats</li>
+</ul>
+<p><strong>FR-9.3:</strong> Service catalog setup</p>
+<ul>
+<li>Add services with name, description, category, price, duration</li>
+<li>Bulk import option (CSV/Excel)</li>
+<li>Set pricing: fixed price, price range, or &quot;get a quote&quot;</li>
+</ul>
+<p><strong>FR-9.4:</strong> Capacity and slot configuration</p>
+<ul>
+<li>Define working bays/mechanics count</li>
+<li>Set slot duration (default 30 minutes)</li>
+<li>Buffer time between appointments</li>
+<li>Blackout dates/holidays</li>
+</ul>
+<p><strong>FR-9.5:</strong> Verification process</p>
+<ul>
+<li>Admin reviews submitted documents (24-48h SLA)</li>
+<li>Approve, reject with reason, or request more info</li>
+<li>Email notifications to service center</li>
+<li>Verification pending screen blocks marketplace listing until approved</li>
+</ul>
+<p><strong>FR-9.6:</strong> Go live</p>
+<ul>
+<li>On approval, service center appears on B2C map</li>
+<li>Welcome email with tips for first booking</li>
+<li>Activation of booking management features</li>
+</ul>
+<h3>3.10 Feature: B2B Dashboard (Business App)</h3>
+<h4>Description</h4>
+<p>Real-time dashboard for service centers showing bookings, KPIs, and revenue.</p>
+<h4>Actors</h4>
+<p>Service Center Owner, Mechanic</p>
+<h4>Functional Requirements</h4>
+<p><strong>FR-10.1:</strong> Today&#39;s dashboard</p>
+<ul>
+<li>Live bookings count (pending, in progress, completed)</li>
+<li>Revenue today, this week, this month</li>
+<li>Upcoming bookings list (chronological)</li>
+<li>New booking notifications (realtime via Supabase)</li>
+</ul>
+<p><strong>FR-10.2:</strong> Booking calendar</p>
+<ul>
+<li>Weekly/monthly calendar view</li>
+<li>Color-coded by status</li>
+<li>Tap to view booking details</li>
+<li>Drag-and-drop rescheduling (future)</li>
+</ul>
+<p><strong>FR-10.3:</strong> KPI metrics</p>
+<ul>
+<li>Average rating</li>
+<li>Acceptance rate</li>
+<li>On-time completion rate</li>
+<li>Customer retention rate (new vs. returning)</li>
+<li>Revenue per mechanic</li>
+</ul>
+<p><strong>FR-10.4:</strong> Revenue analytics</p>
+<ul>
+<li>Daily, weekly, monthly revenue charts</li>
+<li>Service-level revenue breakdown</li>
+<li>Commission calculation transparency</li>
+<li>Export reports (CSV, PDF)</li>
+</ul>
+<p><strong>FR-10.5:</strong> Customer stats</p>
+<ul>
+<li>Total customers served</li>
+<li>New vs. returning customers</li>
+<li>Top customers by booking count</li>
+<li>Customer acquisition trends</li>
+</ul>
+<h3>3.11 Feature: B2B Catalog &amp; Pricing (Business App)</h3>
+<h4>Description</h4>
+<p>Manage service offerings, pricing, and promotions.</p>
+<h4>Actors</h4>
+<p>Service Center Owner</p>
+<h4>Functional Requirements</h4>
+<p><strong>FR-11.1:</strong> Service CRUD</p>
+<ul>
+<li>Create, read, update, delete services</li>
+<li>Fields: name, description, category, price, duration, isActive</li>
+<li>Bulk pricing updates</li>
+<li>Duplicate service for quick creation</li>
+</ul>
+<p><strong>FR-11.2:</strong> Pricing models</p>
+<ul>
+<li>Fixed price (e.g., &quot;Oil change - $30&quot;)</li>
+<li>Price range (e.g., &quot;Brake repair - $50-$150&quot;)</li>
+<li>Quote on request (for complex jobs)</li>
+<li>Labor rate + parts pricing</li>
+</ul>
+<p><strong>FR-11.3:</strong> Service categories</p>
+<ul>
+<li>Predefined categories: Maintenance, Repair, Bodywork, Electrical, etc.</li>
+<li>Custom category creation</li>
+<li>Category ordering/display priority</li>
+</ul>
+<p><strong>FR-11.4:</strong> Promotions and discounts</p>
+<ul>
+<li>Create promotional offers (e.g., &quot;20% off oil change&quot;)</li>
+<li>Set validity period</li>
+<li>Apply to specific services or entire catalog</li>
+<li>Promo code generation (future)</li>
+</ul>
+<p><strong>FR-11.5:</strong> Seasonal campaigns</p>
+<ul>
+<li>Holiday specials</li>
+<li>Seasonal maintenance packages (e.g., &quot;Winter checkup&quot;)</li>
+<li>Bundle multiple services with discount</li>
+</ul>
+<h3>3.12 Feature: B2B Customer CRM (Business App - Phase 2)</h3>
+<h4>Description</h4>
+<p>Customer relationship management for service centers.</p>
+<h4>Actors</h4>
+<p>Service Center Owner, Mechanic</p>
+<h4>Functional Requirements</h4>
+<p><strong>FR-12.1:</strong> Customer history</p>
+<ul>
+<li>All bookings per customer</li>
+<li>Vehicles owned by customer</li>
+<li>Total spent, average ticket size</li>
+<li>Last visit date</li>
+</ul>
+<p><strong>FR-12.2:</strong> Vehicle service history</p>
+<ul>
+<li>Complete service record per vehicle at this center</li>
+<li>Link to invoices and receipts</li>
+<li>Notes per vehicle (preferences, issues)</li>
+</ul>
+<p><strong>FR-12.3:</strong> Follow-up reminders</p>
+<ul>
+<li>Auto-reminder: &quot;Customer&#39;s next oil change due&quot;</li>
+<li>Manual follow-up scheduling</li>
+<li>Reminder notifications to staff</li>
+</ul>
+<p><strong>FR-12.4:</strong> Broadcast offers</p>
+<ul>
+<li>Send promotional offers to past customers</li>
+<li>Filter by: last visit date, vehicle type, service history</li>
+<li>SMS or push notification (future)</li>
+<li>Track offer redemption rate</li>
+</ul>
+<p><strong>FR-12.5:</strong> Customer notes</p>
+<ul>
+<li>Internal notes per customer (preferences, complaints)</li>
+<li>Staff-only visibility</li>
+<li>Audit trail of note additions</li>
+</ul>
+<h3>3.13 Feature: B2B Reviews &amp; Reputation (Business App)</h3>
+<h4>Description</h4>
+<p>Manage customer reviews and maintain service center reputation.</p>
+<h4>Actors</h4>
+<p>Service Center Owner, Mechanic</p>
+<h4>Functional Requirements</h4>
+<p><strong>FR-13.1:</strong> Review inbox</p>
+<ul>
+<li>List all customer reviews (new, responded, pending)</li>
+<li>Filter by rating, date, service</li>
+<li>Review details with photos</li>
+</ul>
+<p><strong>FR-13.2:</strong> Respond to reviews</p>
+<ul>
+<li>Text response to customer reviews</li>
+<li>Public visibility (shown on B2C profile)</li>
+<li>Response time tracking</li>
+</ul>
+<p><strong>FR-13.3:</strong> Dispute flagging</p>
+<ul>
+<li>Flag inappropriate or fake reviews</li>
+<li>Provide reason and evidence</li>
+<li>Admin review process</li>
+</ul>
+<p><strong>FR-13.4:</strong> Performance score</p>
+<ul>
+<li>Calculated metrics: acceptance rate, on-time rate, rating</li>
+<li>Displayed on B2C profile</li>
+<li>Benchmark vs. local centers (anonymized, Phase 3)</li>
+</ul>
+<p><strong>FR-13.5:</strong> Review analytics</p>
+<ul>
+<li>Rating trends over time</li>
+<li>Category-based rating breakdown</li>
+<li>Impact on booking conversion</li>
+</ul>
+<h3>3.14 Feature: B2B Payments &amp; Payouts (Business App - Phase 2)</h3>
+<h4>Description</h4>
+<p>Payment collection, commission calculation, and payout management.</p>
+<h4>Actors</h4>
+<p>Service Center Owner, Admin</p>
+<h4>Functional Requirements</h4>
+<p><strong>FR-14.1:</strong> In-app payment collection</p>
+<ul>
+<li>Accept card payments via Stripe</li>
+<li>Generate payment links for customers</li>
+<li>Cash payment recording (with confirmation)</li>
+<li>Partial payment support</li>
+</ul>
+<p><strong>FR-14.2:</strong> Commission calculation</p>
+<ul>
+<li>Transparent commission display per booking</li>
+<li>Tiered commission rates: Free (15%), Pro (10%), Partner (8%)</li>
+<li>Commission deducted automatically from payouts</li>
+</ul>
+<p><strong>FR-14.3:</strong> Invoice generation</p>
+<ul>
+<li>Auto-generate invoice on job completion</li>
+<li>Invoice details: services, parts, labor, taxes, total</li>
+<li>PDF invoice generation and sharing</li>
+<li>Invoice numbering and tracking</li>
+</ul>
+<p><strong>FR-14.4:</strong> Payout schedule</p>
+<ul>
+<li>Weekly or monthly payout options</li>
+<li>Minimum payout threshold</li>
+<li>Payout method: bank transfer, wallet</li>
+<li>Payout history and statements</li>
+</ul>
+<p><strong>FR-14.5:</strong> Financial reports</p>
+<ul>
+<li>Revenue, commissions, payouts summary</li>
+<li>Tax reporting support</li>
+<li>Export financial data (CSV, PDF)</li>
+</ul>
+<h3>3.15 Feature: B2B Business Tiers (Phase 2)</h3>
+<h4>Description</h4>
+<p>Subscription tiers for service centers with different features and benefits.</p>
+<h4>Actors</h4>
+<p>Service Center Owner, Admin</p>
+<h4>Functional Requirements</h4>
+<p><strong>FR-15.1:</strong> Free tier</p>
+<ul>
+<li>Basic listing on map</li>
+<li>Limited bookings per month (e.g., 20)</li>
+<li>Standard commission (15%)</li>
+<li>Basic analytics</li>
+</ul>
+<p><strong>FR-15.2:</strong> Pro tier (monthly subscription)</p>
+<ul>
+<li>Priority in search results</li>
+<li>Unlimited bookings</li>
+<li>Lower commission (10%)</li>
+<li>Advanced analytics dashboard</li>
+<li>Customer CRM access</li>
+<li>Promotional tools</li>
+</ul>
+<p><strong>FR-15.3:</strong> Authorized Partner tier (annual contract)</p>
+<ul>
+<li>Verified badge on profile</li>
+<li>Featured placement in map search</li>
+<li>Dedicated account manager</li>
+<li>Lowest commission (8%)</li>
+<li>Custom integration support</li>
+<li>Priority support</li>
+</ul>
+<p><strong>FR-15.4:</strong> Subscription management</p>
+<ul>
+<li>Upgrade/downgrade tiers</li>
+<li>Payment for subscription</li>
+<li>Prorated billing</li>
+<li>Cancellation with notice period</li>
+</ul>
+<h3>3.16 Feature: Admin Verification Queue</h3>
+<h4>Description</h4>
+<p>Review and approve service center registrations and documents.</p>
+<h4>Actors</h4>
+<p>Admin</p>
+<h4>Functional Requirements</h4>
+<p><strong>FR-16.1:</strong> Pending verifications list</p>
+<ul>
+<li>List all service centers awaiting verification</li>
+<li>Sort by submission date (oldest first)</li>
+<li>Filter by: document status, business type, location</li>
+</ul>
+<p><strong>FR-16.2:</strong> Document review</p>
+<ul>
+<li>View all uploaded documents</li>
+<li>Zoom and download capabilities</li>
+<li>Verify authenticity and completeness</li>
+<li>Request additional documents if needed</li>
+</ul>
+<p><strong>FR-16.3:</strong> Verification decision</p>
+<ul>
+<li>Approve: service center goes live on map</li>
+<li>Reject: provide reason, service center can reapply</li>
+<li>Request info: ask for specific additional documents</li>
+<li>24-48h SLA for verification</li>
+</ul>
+<p><strong>FR-16.4:</strong> Verification checklist</p>
+<ul>
+<li>Standardized checklist for reviewers</li>
+<li>Commercial registration valid</li>
+<li>Tax ID matches business name</li>
+<li>Photos show legitimate facility</li>
+<li>Contact info verified</li>
+</ul>
+<p><strong>FR-16.5:</strong> Email notifications</p>
+<ul>
+<li>Auto-email on approval with welcome tips</li>
+<li>Rejection email with reason and next steps</li>
+<li>Request info email with specific instructions</li>
+</ul>
+<h3>3.17 Feature: Admin Dispute Resolution</h3>
+<h4>Description</h4>
+<p>Handle customer complaints and disputes between B2C and B2B users.</p>
+<h4>Actors</h4>
+<p>Admin</p>
+<h4>Functional Requirements</h4>
+<p><strong>FR-17.1:</strong> Dispute submission (B2C)</p>
+<ul>
+<li>Customer can flag issue with booking</li>
+<li>Categories: poor service, overcharging, incomplete work, no-show</li>
+<li>Attach photos/evidence</li>
+<li>Request refund or resolution</li>
+</ul>
+<p><strong>FR-17.2:</strong> Dispute inbox (Admin)</p>
+<ul>
+<li>List all open disputes</li>
+<li>Priority flagging for urgent issues</li>
+<li>Filter by status, date, amount</li>
+</ul>
+<p><strong>FR-17.3:</strong> Dispute investigation</p>
+<ul>
+<li>View booking details, invoices, communications</li>
+<li>Contact both parties for information</li>
+<li>Request additional evidence</li>
+</ul>
+<p><strong>FR-17.4:</strong> Resolution actions</p>
+<ul>
+<li>Issue refund (partial or full)</li>
+<li>Deduct from B2B payout</li>
+<li>Warn or suspend service center</li>
+<li>Dismiss dispute if unfounded</li>
+<li>Money-back guarantee enforcement</li>
+</ul>
+<p><strong>FR-17.5:</strong> Dispute analytics</p>
+<ul>
+<li>Dispute rate per service center</li>
+<li>Common dispute reasons</li>
+<li>Resolution time tracking</li>
+</ul>
+<h3>3.18 Feature: Admin Payout Management (Phase 2)</h3>
+<h4>Description</h4>
+<p>Process and manage B2B service center payouts.</p>
+<h4>Actors</h4>
+<p>Admin</p>
+<h4>Functional Requirements</h4>
+<p><strong>FR-18.1:</strong> Payout queue</p>
+<ul>
+<li>List service centers eligible for payout</li>
+<li>Calculate payout amount (revenue - commissions - refunds)</li>
+<li>Minimum threshold check</li>
+</ul>
+<p><strong>FR-18.2:</strong> Payout processing</p>
+<ul>
+<li>Initiate bank transfers or wallet payouts</li>
+<li>Bulk payout support</li>
+<li>Transaction fee handling</li>
+<li>Payout confirmation and receipts</li>
+</ul>
+<p><strong>FR-18.3:</strong> Payout history</p>
+<ul>
+<li>Track all past payouts</li>
+<li>Payout status: pending, processing, completed, failed</li>
+<li>Retry failed payouts</li>
+<li>Generate payout reports</li>
+</ul>
+<p><strong>FR-18.4:</strong> Manual adjustments</p>
+<ul>
+<li>Adjust payout for disputes or refunds</li>
+<li>Bonus or penalty applications</li>
+<li>Audit trail for all adjustments</li>
+</ul>
+<h3>3.19 Feature: Notifications (All Apps)</h3>
+<h4>Description</h4>
+<p>Communicate events via push notifications, email, and SMS.</p>
+<h4>Actors</h4>
+<p>Car Owner, Service Center, Mechanic, Admin</p>
+<h4>Functional Requirements</h4>
+<p><strong>FR-19.1:</strong> Push notifications (FCM)</p>
+<ul>
+<li>Booking confirmed/cancelled</li>
+<li>Booking status updates (B2B → B2C)</li>
+<li>New booking alert (B2C → B2B)</li>
+<li>Reminder notifications (maintenance due)</li>
+<li>Review request after service</li>
+<li>Payment confirmations</li>
+<li>Payout notifications (B2B)</li>
+</ul>
+<p><strong>FR-19.2:</strong> Email notifications</p>
+<ul>
+<li>Registration verification</li>
+<li>Booking confirmation with details</li>
+<li>Invoice delivery</li>
+<li>Password reset</li>
+<li>Verification approval/rejection</li>
+<li>Dispute updates</li>
+</ul>
+<p><strong>FR-19.3:</strong> SMS notifications (B2B)</p>
+<ul>
+<li>New booking alert (fallback if no push)</li>
+<li>OTP verification</li>
+<li>Critical alerts</li>
+</ul>
+<p><strong>FR-19.4:</strong> In-app notifications</p>
+<ul>
+<li>Notification inbox in all apps</li>
+<li>Mark as read/unread</li>
+<li>Notification preferences</li>
+<li>Localized notification content (English/Arabic)</li>
+</ul>
+<p><strong>FR-19.5:</strong> Notification templates</p>
+<ul>
+<li>Configurable templates per notification type</li>
+<li>Support for variables (name, booking ID, etc.)</li>
+<li>Localization support</li>
+</ul>
+<h3>3.20 Feature: Parts Marketplace (Phase 4+)</h3>
+<h4>Description</h4>
+<p>Browse and purchase car parts from service centers or dedicated sellers.</p>
+<h4>Actors</h4>
+<p>Car Owner, Service Center (as seller)</p>
+<h4>Functional Requirements</h4>
+<p><strong>FR-20.1:</strong> Parts browsing (B2C)</p>
+<ul>
+<li>Search parts by name, part number, or car model</li>
+<li>Filter by: brand, price, availability, rating</li>
+<li>Product detail pages with specs, compatibility, reviews</li>
+</ul>
+<p><strong>FR-20.2:</strong> Parts catalog (B2B as seller)</p>
+<ul>
+<li>Add parts with SKU, name, description, price, quantity</li>
+<li>Set compatibility (car makes/models/years)</li>
+<li>Upload product photos</li>
+</ul>
+<p><strong>FR-20.3:</strong> Purchase flow</p>
+<ul>
+<li>Add to cart, checkout</li>
+<li>Payment processing</li>
+<li>Delivery or pickup options</li>
+<li>Order tracking</li>
+</ul>
+<p><strong>FR-20.4:</strong> Reviews and ratings</p>
+<ul>
+<li>Rate purchased parts</li>
+<li>Q&amp;A section for products</li>
+<li>Seller ratings</li>
+</ul>
+<hr />
+<h2>4. External Interfaces</h2>
+<h3>4.1 User Interfaces</h3>
+<h4>B2C App (Flutter iOS/Android)</h4>
+<ul>
+<li><strong>Map Home Screen:</strong> Full-screen map with bottom sheet for search/filters</li>
+<li><strong>Service Center Profile:</strong> Scrollable detail view with sticky booking button</li>
+<li><strong>Booking Flow:</strong> 3-step wizard (service → slot → confirm)</li>
+<li><strong>My Bookings:</strong> Tabbed view (upcoming/past) with status indicators</li>
+<li><strong>Garage:</strong> Card-based vehicle list with quick actions</li>
+<li><strong>Dashboard:</strong> Widget-based home with health snapshot</li>
+<li><strong>Design System:</strong> Material Design 3 with custom CarCare branding</li>
+<li><strong>Responsive:</strong> Phone-optimized, 375px-428px width range</li>
+</ul>
+<h4>B2B App (Flutter iOS/Android)</h4>
+<ul>
+<li><strong>Dashboard:</strong> Tablet-optimized with side navigation, phone-adaptive</li>
+<li><strong>Booking Management:</strong> List + detail views with status workflow</li>
+<li><strong>Catalog Editor:</strong> Form-based CRUD with bulk actions</li>
+<li><strong>Analytics:</strong> Charts and KPI cards</li>
+<li><strong>Design System:</strong> Shared with B2C, business-oriented color scheme</li>
+<li><strong>Responsive:</strong> Adaptive layouts for 7-10&quot; tablets and phones</li>
+</ul>
+<h4>Admin App (Flutter)</h4>
+<ul>
+<li><strong>Verification Queue:</strong> List with document preview panels</li>
+<li><strong>Dispute Inbox:</strong> Threaded view with action buttons</li>
+<li><strong>Payout Management:</strong> Table view with filters and bulk actions</li>
+<li><strong>Minimal UI:</strong> Functional over polished, efficient workflows</li>
+</ul>
+<h3>4.2 Hardware Interfaces</h3>
+<table>
+<tr><th>Hardware</th><th>Purpose</th><th>Platform</th></tr>
+<tr><td>GPS</td><td>Map location, nearby center discovery</td><td>iOS/Android (B2C)</td></tr>
+<tr><td>Camera</td><td>Document upload (B2B onboarding), receipt photos, review photos</td><td>iOS/Android (all apps)</td></tr>
+<tr><td>Push Notifications</td><td>FCM token registration and receipt</td><td>iOS/Android (all apps)</td></tr>
+<tr><td>Biometric (future)</td><td>Fingerprint/FaceID for login</td><td>iOS/Android (all apps)</td></tr>
+<tr><td>OBD-II (Phase 5)</td><td>Real-time car diagnostics</td><td>Android (B2C, future)</td></tr>
+</table>
+<h3>4.3 Software Interfaces</h3>
+<h4>Supabase Backend (Recommended)</h4>
+<table>
+<tr><th>Interface</th><th>Purpose</th><th>Details</th></tr>
+<tr><td>Postgres + PostGIS</td><td>Database with geospatial queries</td><td><code>postgis</code> extension for &quot;centers within X km&quot; queries</td></tr>
+<tr><td>Supabase Auth</td><td>User authentication</td><td>Phone OTP, email, optional OAuth (Google, Apple)</td></tr>
+<tr><td>Supabase Realtime</td><td>Live updates</td><td>Booking notifications, dashboard updates</td></tr>
+<tr><td>Edge Functions (Deno)</td><td>Serverless logic</td><td>Slot-hold (10-min timer), webhook handlers, SLA timers</td></tr>
+<tr><td>Supabase Storage</td><td>File storage</td><td>Center photos, verification docs, review photos, receipts</td></tr>
+<tr><td>Row-Level Security</td><td>Data access control</td><td>Enforce B2C vs B2B vs Admin boundaries</td></tr>
+<tr><td>Supabase Studio</td><td>Admin data work</td><td>Ad-hoc queries, user management, data fixes</td></tr>
+</table>
+<h4>Alternative: Firebase Backend</h4>
+<table>
+<tr><th>Interface</th><th>Purpose</th><th>Details</th></tr>
+<tr><td>Firestore</td><td>NoSQL database</td><td>Requires GeoFlutterFire or geohash for spatial queries</td></tr>
+<tr><td>Firebase Auth</td><td>User authentication</td><td>Phone OTP, email, OAuth providers</td></tr>
+<tr><td>Cloud Functions</td><td>Serverless logic</td><td>Equivalent to Edge Functions</td></tr>
+<tr><td>Cloud Storage</td><td>File storage</td><td>Similar to Supabase Storage</td></tr>
+<tr><td>FCM</td><td>Push notifications</td><td>Primary push provider (also used with Supabase)</td></tr>
+<tr><td>Firebase Console</td><td>Admin data work</td><td>Alternative to Supabase Studio</td></tr>
+</table>
+<h4>Third-Party Integrations</h4>
+<table>
+<tr><th>Service</th><th>Purpose</th><th>API/SDK</th></tr>
+<tr><td>Google Maps / Mapbox</td><td>Map display, geocoding, directions</td><td>Google Maps Flutter plugin / Mapbox Maps SDK</td></tr>
+<tr><td>Stripe (or equivalent)</td><td>Payment processing</td><td>Stripe SDK, REST API</td></tr>
+<tr><td>FCM (Firebase Cloud Messaging)</td><td>Push notifications</td><td>firebase_messaging Flutter plugin</td></tr>
+<tr><td>SMS Provider (optional)</td><td>SMS notifications</td><td>Twilio or local provider API</td></tr>
+</table>
+<h3>4.4 Communications Interfaces</h3>
+<table>
+<tr><th>Interface</th><th>Protocol</th><th>Purpose</th></tr>
+<tr><td>Client-Server</td><td>HTTPS (REST)</td><td>All API communication, encrypted in transit</td></tr>
+<tr><td>Realtime</td><td>WebSockets (WSS)</td><td>Supabase Realtime for live booking updates</td></tr>
+<tr><td>Push</td><td>FCM (HTTPS)</td><td>Push notification delivery</td></tr>
+<tr><td>Maps</td><td>HTTPS</td><td>Map tile loading, geocoding requests</td></tr>
+<tr><td>Payments</td><td>HTTPS</td><td>Payment gateway API calls</td></tr>
+<tr><td>Email</td><td>SMTP/API</td><td>Transactional email delivery (SendGrid, etc.)</td></tr>
+<tr><td>SMS</td><td>HTTPS API</td><td>SMS delivery (Twilio, etc.)</td></tr>
+</table>
+<hr />
+<h2>5. Non-Functional Requirements</h2>
+<h3>5.1 Performance</h3>
+<table>
+<tr><th>Metric</th><th>Target</th><th>Measurement</th></tr>
+<tr><td>App launch time</td><td>&lt; 2 seconds (cold start)</td><td>Measured on mid-range devices</td></tr>
+<tr><td>Map load time</td><td>&lt; 2 seconds (initial pins)</td><td>From map open to pins visible</td></tr>
+<tr><td>Screen transition</td><td>&lt; 300ms</td><td>Between screens in app</td></tr>
+<tr><td>API response time</td><td>&lt; 500ms (p95)</td><td>For core flows under normal load</td></tr>
+<tr><td>PostGIS query (5km)</td><td>&lt; 200ms</td><td>Nearby centers query</td></tr>
+<tr><td>Search results</td><td>&lt; 1 second</td><td>With filters applied</td></tr>
+<tr><td>Booking creation</td><td>&lt; 2 seconds (end-to-end)</td><td>From confirm to confirmation</td></tr>
+<tr><td>Image upload</td><td>&lt; 3 seconds (5MB photo)</td><td>Over 4G/WiFi</td></tr>
+</table>
+<p><strong>Load Targets (MVP):</strong></p>
+<ul>
+<li>1,000+ active car owners</li>
+<li>50+ verified service centers</li>
+<li>500+ bookings/month</li>
+<li>Concurrent users: 100+ during peak</li>
+</ul>
+<h3>5.2 Security</h3>
+<h4>Authentication &amp; Authorization</h4>
+<ul>
+<li>JWT-based authentication with short-lived access tokens (15 min)</li>
+<li>Refresh token rotation for session renewal</li>
+<li>Row-Level Security (RLS) policies in Supabase for data isolation</li>
+<li>Role-based access control (RBAC) enforced in UI and backend</li>
+</ul>
+<h4>Data Protection</h4>
+<ul>
+<li>Encryption at rest: Supabase/Postgres encryption enabled</li>
+<li>Encryption in transit: TLS 1.3 for all HTTPS communications</li>
+<li>Sensitive data: Passwords hashed (bcrypt), payment data tokenized (Stripe)</li>
+<li>PII (Personally Identifiable Information) access logging</li>
+</ul>
+<h4>Payment Security</h4>
+<ul>
+<li>PCI-DSS compliance via Stripe (no card data stored locally)</li>
+<li>Payment tokens used for transactions</li>
+<li>CVV never stored</li>
+<li>3D Secure for card payments where applicable</li>
+</ul>
+<h4>Input Validation</h4>
+<ul>
+<li>All user inputs validated client-side and server-side</li>
+<li>SQL injection prevention via parameterized queries (Supabase)</li>
+<li>XSS prevention via Flutter&#39;s built-in sanitization</li>
+<li>File upload validation (type, size, malware scan future)</li>
+</ul>
+<h4>GDPR Compliance</h4>
+<ul>
+<li>User consent for data collection (onboarding)</li>
+<li>Right to access: export user data</li>
+<li>Right to delete: account deletion with data purge</li>
+<li>Data retention policies: bookings kept 7 years for tax, then anonymized</li>
+<li>Privacy policy and terms of service acceptance</li>
+</ul>
+<h3>5.3 Reliability &amp; Availability</h3>
+<table>
+<tr><th>Metric</th><th>Target</th><th>Notes</th></tr>
+<tr><td>System uptime</td><td>99.9%</td><td>Excluding planned maintenance</td></tr>
+<tr><td>API availability</td><td>99.9%</td><td>Supabase SLA or equivalent</td></tr>
+<tr><td>Data durability</td><td>99.999%</td><td>Supabase Postgres with backups</td></tr>
+<tr><td>Backup frequency</td><td>Daily</td><td>Automated Supabase backups</td></tr>
+<tr><td>Disaster recovery</td><td>&lt; 4 hours RTO</td><td>Recovery Time Objective</td></tr>
+<tr><td>Graceful degradation</td><td>Core flows work offline</td><td>Booking history, garage (cached)</td></tr>
+</table>
+<p><strong>Retry Logic:</strong></p>
+<ul>
+<li>API calls: exponential backoff retry (3 attempts)</li>
+<li>Payment: idempotency keys to prevent double-charging</li>
+<li>Push notifications: fallback to email/SMS if FCM fails</li>
+</ul>
+<h3>5.4 Maintainability &amp; Supportability</h3>
+<h4>Code Structure</h4>
+<ul>
+<li>Feature-first with Clean Architecture</li>
+<li>Clear separation: Presentation → Application → Domain → Data</li>
+<li>Shared packages for common code (design system, API client, models)</li>
+<li>Dependency injection via Riverpod or Bloc</li>
+</ul>
+<h4>Documentation</h4>
+<ul>
+<li>Inline code comments for complex logic</li>
+<li>README per package/feature</li>
+<li>API documentation (Swagger/OpenAPI if custom backend)</li>
+<li>Architecture decision records (ADRs)</li>
+</ul>
+<h4>Observability</h4>
+<ul>
+<li>Logging: structured logs (Supabase or Sentry)</li>
+<li>Metrics: performance monitoring (Sentry or Firebase Performance)</li>
+<li>Tracing: distributed tracing for API calls (future)</li>
+<li>Crash reporting: Sentry or Crashlytics</li>
+</ul>
+<h4>Versioning</h4>
+<ul>
+<li>Semantic versioning for apps (e.g., 1.2.3)</li>
+<li>API versioning: Supabase auto-handles schema migrations</li>
+<li>Database migrations: versioned SQL files in <code>supabase/migrations/</code></li>
+<li>Backward compatibility for at least 2 previous app versions</li>
+</ul>
+<h3>5.5 Portability</h3>
+<table>
+<tr><th>Aspect</th><th>Requirement</th></tr>
+<tr><td>Mobile platforms</td><td>iOS 14+, Android 8.0+ (API 26+)</td></tr>
+<tr><td>Deployment</td><td>Cloud-hosted (Supabase/Firebase managed)</td></tr>
+<tr><td>Containerization</td><td>Docker for local development (Supabase local)</td></tr>
+<tr><td>Multi-cloud</td><td>Avoid vendor lock-in where possible (use abstractions)</td></tr>
+<tr><td>Device compatibility</td><td>Support for phones (5-7&quot;) and tablets (7-10&quot; for B2B)</td></tr>
+</table>
+<h3>5.6 Accessibility</h3>
+<ul>
+<li>WCAG 2.1 AA compliance for app UI</li>
+<li>Screen reader support (TalkBack/VoiceOver)</li>
+<li>Sufficient color contrast (4.5:1 minimum)</li>
+<li>Touch target size: minimum 44x44 points</li>
+<li>Text scaling support (up to 200%)</li>
+<li>RTL layout support for Arabic</li>
+<li>Keyboard navigation support (future web)</li>
+</ul>
+<h3>5.7 Localization/Internationalization</h3>
+<table>
+<tr><th>Feature</th><th>Requirement</th></tr>
+<tr><td>Languages</td><td>English (default), Egyptian Arabic</td></tr>
+<tr><td>RTL support</td><td>Full RTL layout for Arabic</td></tr>
+<tr><td>Date/time formats</td><td>Locale-specific (12/24h, DD/MM vs MM/DD)</td></tr>
+<tr><td>Number formats</td><td>Locale-specific (decimal separator, digit grouping)</td></tr>
+<tr><td>Currency</td><td>EGP (Egyptian Pound) for MVP, multi-currency future</td></tr>
+<tr><td>Text expansion</td><td>Arabic text ~30% longer than English, UI must accommodate</td></tr>
+<tr><td>Pluralization</td><td>Proper plural forms per language</td></tr>
+</table>
+<hr />
+<h2>6. Data Requirements</h2>
+<h3>6.1 Data Model Overview</h3>
+<p><strong>Core Entities:</strong></p>
+<p>1. <strong>User</strong> - All users (B2C, B2B, Admin) with roles</p>
+<p>2. <strong>ServiceCenter</strong> - B2B businesses with profile, location, verification status</p>
+<p>3. <strong>Service</strong> - Catalog items with pricing and duration</p>
+<p>4. <strong>Booking</strong> - Core transaction between B2C and B2B</p>
+<p>5. <strong>Vehicle</strong> - B2C user&#39;s cars with details</p>
+<p>6. <strong>MaintenanceRecord</strong> - Auto-logged and manual service history</p>
+<p>7. <strong>Review</strong> - Ratings and reviews for service centers</p>
+<p>8. <strong>Payment</strong> - Payment transactions with status</p>
+<p>9. <strong>Invoice</strong> - Generated invoices for completed jobs</p>
+<p>10. <strong>Notification</strong> - Push/email/SMS notifications log</p>
+<p>11. <strong>Promotion</strong> - B2B promotional offers</p>
+<p>12. <strong>Expense</strong> - B2C expense tracking (fuel, maintenance, etc.)</p>
+<h3>6.2 Data Dictionary (Sample Core Tables)</h3>
+<h4>User</h4>
+<table>
+<tr><th>Field</th><th>Type</th><th>Constraints</th><th>Description</th></tr>
+<tr><td>user_id</td><td>UUID</td><td>PK</td><td>Unique identifier</td></tr>
+<tr><td>email</td><td>VARCHAR(255)</td><td>UNIQUE, NULL</td><td>Email address</td></tr>
+<tr><td>phone</td><td>VARCHAR(20)</td><td>UNIQUE, NULL</td><td>Phone number with country code</td></tr>
+<tr><td>password_hash</td><td>VARCHAR(255)</td><td>NOT NULL</td><td>Bcrypt hashed password</td></tr>
+<tr><td>role</td><td>ENUM</td><td>NOT NULL</td><td>&#39;customer&#39;, &#39;shop_owner&#39;, &#39;mechanic&#39;, &#39;admin&#39;</td></tr>
+<tr><td>first_name</td><td>VARCHAR(100)</td><td>NOT NULL</td><td>User&#39;s first name</td></tr>
+<tr><td>last_name</td><td>VARCHAR(100)</td><td>NOT NULL</td><td>User&#39;s last name</td></tr>
+<tr><td>profile_photo_url</td><td>TEXT</td><td>NULL</td><td>Supabase Storage URL</td></tr>
+<tr><td>language_preference</td><td>VARCHAR(10)</td><td>DEFAULT &#39;en&#39;</td><td>&#39;en&#39; or &#39;ar&#39;</td></tr>
+<tr><td>is_active</td><td>BOOLEAN</td><td>DEFAULT true</td><td>Account status</td></tr>
+<tr><td>created_at</td><td>TIMESTAMP</td><td>DEFAULT now()</td><td>Registration timestamp</td></tr>
+<tr><td>updated_at</td><td>TIMESTAMP</td><td>NULL</td><td>Last update timestamp</td></tr>
+</table>
+<h4>ServiceCenter</h4>
+<table>
+<tr><th>Field</th><th>Type</th><th>Constraints</th><th>Description</th></tr>
+<tr><td>center_id</td><td>UUID</td><td>PK</td><td>Unique identifier</td></tr>
+<tr><td>owner_id</td><td>UUID</td><td>FK → User</td><td>Link to shop owner</td></tr>
+<tr><td>name</td><td>VARCHAR(255)</td><td>NOT NULL</td><td>Business name</td></tr>
+<tr><td>description</td><td>TEXT</td><td>NULL</td><td>Business description</td></tr>
+<tr><td>address</td><td>TEXT</td><td>NOT NULL</td><td>Full address</td></tr>
+<tr><td>location</td><td>GEOGRAPHY(POINT)</td><td>NOT NULL</td><td>PostGIS point (lat,lng)</td></tr>
+<tr><td>phone</td><td>VARCHAR(20)</td><td>NOT NULL</td><td>Contact phone</td></tr>
+<tr><td>email</td><td>VARCHAR(255)</td><td>NULL</td><td>Contact email</td></tr>
+<tr><td>website</td><td>VARCHAR(255)</td><td>NULL</td><td>Website URL</td></tr>
+<tr><td>working_hours</td><td>JSONB</td><td>NOT NULL</td><td>Weekly schedule {mon: {open, close, breaks}}</td></tr>
+<tr><td>center_type</td><td>ENUM</td><td>NOT NULL</td><td>&#39;authorized&#39;, &#39;independent&#39;, &#39;mobile&#39;</td></tr>
+<tr><td>is_verified</td><td>BOOLEAN</td><td>DEFAULT false</td><td>Verification status</td></tr>
+<tr><td>verified_at</td><td>TIMESTAMP</td><td>NULL</td><td>Verification timestamp</td></tr>
+<tr><td>rating_average</td><td>DECIMAL(2,1)</td><td>DEFAULT 0.0</td><td>Overall rating (0.0-5.0)</td></tr>
+<tr><td>rating_count</td><td>INT</td><td>DEFAULT 0</td><td>Total number of reviews</td></tr>
+<tr><td>price_tier</td><td>ENUM</td><td>NULL</td><td>&#39;$&#39;, &#39;$$&#39;, &#39;$$$&#39; for quick filtering</td></tr>
+<tr><td>is_24_7</td><td>BOOLEAN</td><td>DEFAULT false</td><td>Emergency service flag</td></tr>
+<tr><td>capacity_slots</td><td>INT</td><td>DEFAULT 1</td><td>Concurrent booking capacity</td></tr>
+<tr><td>subscription_tier</td><td>ENUM</td><td>DEFAULT &#39;free&#39;</td><td>&#39;free&#39;, &#39;pro&#39;, &#39;partner&#39;</td></tr>
+<tr><td>commission_rate</td><td>DECIMAL(4,2)</td><td>DEFAULT 15.00</td><td>Commission percentage</td></tr>
+<tr><td>created_at</td><td>TIMESTAMP</td><td>DEFAULT now()</td><td>Registration timestamp</td></tr>
+<tr><td>updated_at</td><td>TIMESTAMP</td><td>NULL</td><td>Last update timestamp</td></tr>
+</table>
+<h4>Booking</h4>
+<table>
+<tr><th>Field</th><th>Type</th><th>Constraints</th><th>Description</th></tr>
+<tr><td>booking_id</td><td>UUID</td><td>PK</td><td>Unique identifier</td></tr>
+<tr><td>customer_id</td><td>UUID</td><td>FK → User</td><td>B2C customer</td></tr>
+<tr><td>center_id</td><td>UUID</td><td>FK → ServiceCenter</td><td>B2B service center</td></tr>
+<tr><td>vehicle_id</td><td>UUID</td><td>FK → Vehicle</td><td>Customer&#39;s vehicle</td></tr>
+<tr><td>service_id</td><td>UUID</td><td>FK → Service</td><td>Booked service</td></tr>
+<tr><td>mechanic_id</td><td>UUID</td><td>FK → User, NULL</td><td>Assigned mechanic</td></tr>
+<tr><td>slot_start</td><td>TIMESTAMP</td><td>NOT NULL</td><td>Appointment start time</td></tr>
+<tr><td>slot_end</td><td>TIMESTAMP</td><td>NOT NULL</td><td>Appointment end time</td></tr>
+<tr><td>status</td><td>ENUM</td><td>NOT NULL</td><td>&#39;pending&#39;, &#39;confirmed&#39;, &#39;in_progress&#39;, &#39;completed&#39;, &#39;cancelled&#39;, &#39;invoiced&#39;</td></tr>
+<tr><td>total_amount</td><td>DECIMAL(10,2)</td><td>NULL</td><td>Final price (may differ from service price)</td></tr>
+<tr><td>notes</td><td>TEXT</td><td>NULL</td><td>Customer notes/requests</td></tr>
+<tr><td>internal_notes</td><td>TEXT</td><td>NULL</td><td>B2B internal notes</td></tr>
+<tr><td>hold_expires_at</td><td>TIMESTAMP</td><td>NULL</td><td>10-min hold expiration</td></tr>
+<tr><td>created_at</td><td>TIMESTAMP</td><td>DEFAULT now()</td><td>Booking creation</td></tr>
+<tr><td>updated_at</td><td>TIMESTAMP</td><td>NULL</td><td>Last status change</td></tr>
+</table>
+<h4>Vehicle</h4>
+<table>
+<tr><th>Field</th><th>Type</th><th>Constraints</th><th>Description</th></tr>
+<tr><td>vehicle_id</td><td>UUID</td><td>PK</td><td>Unique identifier</td></tr>
+<tr><td>owner_id</td><td>UUID</td><td>FK → User</td><td>B2C owner</td></tr>
+<tr><td>brand</td><td>VARCHAR(100)</td><td>NOT NULL</td><td>Car brand (Toyota, BMW, etc.)</td></tr>
+<tr><td>model</td><td>VARCHAR(100)</td><td>NOT NULL</td><td>Car model</td></tr>
+<tr><td>year</td><td>INT</td><td>NOT NULL</td><td>Manufacturing year</td></tr>
+<tr><td>mileage</td><td>INT</td><td>DEFAULT 0</td><td>Current odometer reading</td></tr>
+<tr><td>plate_number</td><td>VARCHAR(20)</td><td>NULL</td><td>License plate</td></tr>
+<tr><td>vin</td><td>VARCHAR(50)</td><td>NULL</td><td>VIN (optional)</td></tr>
+<tr><td>color</td><td>VARCHAR(50)</td><td>NULL</td><td>Vehicle color</td></tr>
+<tr><td>fuel_type</td><td>ENUM</td><td>NULL</td><td>&#39;petrol&#39;, &#39;diesel&#39;, &#39;hybrid&#39;, &#39;electric&#39;</td></tr>
+<tr><td>transmission</td><td>ENUM</td><td>NULL</td><td>&#39;manual&#39;, &#39;automatic&#39;</td></tr>
+<tr><td>photo_url</td><td>TEXT</td><td>NULL</td><td>Vehicle photo URL</td></tr>
+<tr><td>is_primary</td><td>BOOLEAN</td><td>DEFAULT false</td><td>Default vehicle flag</td></tr>
+<tr><td>created_at</td><td>TIMESTAMP</td><td>DEFAULT now()</td><td>Added timestamp</td></tr>
+<tr><td>updated_at</td><td>TIMESTAMP</td><td>NULL</td><td>Last update timestamp</td></tr>
+</table>
+<h4>Service</h4>
+<table>
+<tr><th>Field</th><th>Type</th><th>Constraints</th><th>Description</th></tr>
+<tr><td>service_id</td><td>UUID</td><td>PK</td><td>Unique identifier</td></tr>
+<tr><td>center_id</td><td>UUID</td><td>FK → ServiceCenter</td><td>Owning service center</td></tr>
+<tr><td>name</td><td>VARCHAR(255)</td><td>NOT NULL</td><td>Service name</td></tr>
+<tr><td>name_ar</td><td>VARCHAR(255)</td><td>NULL</td><td>Arabic service name</td></tr>
+<tr><td>description</td><td>TEXT</td><td>NULL</td><td>Service description</td></tr>
+<tr><td>description_ar</td><td>TEXT</td><td>NULL</td><td>Arabic description</td></tr>
+<tr><td>category</td><td>VARCHAR(100)</td><td>NOT NULL</td><td>Maintenance, Repair, Bodywork, etc.</td></tr>
+<tr><td>price_type</td><td>ENUM</td><td>NOT NULL</td><td>&#39;fixed&#39;, &#39;range&#39;, &#39;quote&#39;</td></tr>
+<tr><td>price_min</td><td>DECIMAL(10,2)</td><td>NULL</td><td>Min price (range/quote)</td></tr>
+<tr><td>price_max</td><td>DECIMAL(10,2)</td><td>NULL</td><td>Max price (range)</td></tr>
+<tr><td>price_fixed</td><td>DECIMAL(10,2)</td><td>NULL</td><td>Fixed price</td></tr>
+<tr><td>duration_minutes</td><td>INT</td><td>NOT NULL</td><td>Service duration</td></tr>
+<tr><td>is_active</td><td>BOOLEAN</td><td>DEFAULT true</td><td>Available for booking</td></tr>
+<tr><td>created_at</td><td>TIMESTAMP</td><td>DEFAULT now()</td><td>Created timestamp</td></tr>
+<tr><td>updated_at</td><td>TIMESTAMP</td><td>NULL</td><td>Last update timestamp</td></tr>
+</table>
+<h3>6.3 Relationships</h3>
+<pre><code>User (1) ──── (many) Vehicle (B2C)
+User (1) ──── (1) ServiceCenter (B2B owner)
+User (1) ──── (many) Booking (B2C customer)
+User (1) ──── (many) Booking (B2B mechanic)
+ServiceCenter (1) ──── (many) Service
+ServiceCenter (1) ──── (many) Booking
+ServiceCenter (1) ──── (many) Review
+Vehicle (1) ──── (many) Booking
+Vehicle (1) ──── (many) MaintenanceRecord
+Service (1) ──── (many) Booking
+Booking (1) ──── (1) Payment
+Booking (1) ──── (1) Invoice
+Booking (1) ──── (1) Review (after completion)</code></pre>
+<h3>6.4 Data Retention Policies</h3>
+<table>
+<tr><th>Data Type</th><th>Retention</th><th>Action after</th></tr>
+<tr><td>Active bookings</td><td>Indefinite</td><td>Keep</td></tr>
+<tr><td>Completed bookings</td><td>7 years</td><td>Anonymize customer data (tax/legal)</td></tr>
+<tr><td>Failed bookings</td><td>1 year</td><td>Delete</td></tr>
+<tr><td>User accounts (active)</td><td>Indefinite</td><td>Keep</td></tr>
+<tr><td>User accounts (deleted)</td><td>30 days</td><td>Hard delete (GDPR)</td></tr>
+<tr><td>Payment data</td><td>7 years</td><td>Anonymize (tax/legal)</td></tr>
+<tr><td>Logs</td><td>90 days</td><td>Archive, then delete</td></tr>
+<tr><td>Notifications</td><td>6 months</td><td>Delete</td></tr>
+</table>
+<hr />
+<h2>7. System Architecture and Design Constraints</h2>
+<h3>7.1 High-Level Architecture</h3>
+<p><strong>Pattern:</strong> Feature-first with Clean Architecture</p>
+<pre><code>┌─────────────────────────────────────────────────────────────┐
+│                    Flutter Apps (3 surfaces)                 │
+│  ┌──────────┐  ┌──────────┐  ┌──────────┐                 │
+│  │ B2C App  │  │ B2B App  │  │ Admin App│                 │
+│  └────┬─────┘  └────┬─────┘  └────┬─────┘                 │
+│       └──────────────┼──────────────┘                       │
+│                    Shared Packages                          │
+│         Design System │ API Client │ Domain Models          │
+└──────────────────────────┬──────────────────────────────────┘
+                           │ HTTPS/WSS
+┌──────────────────────────┴──────────────────────────────────┐
+│              Supabase Backend (Managed BaaS)                │
+│  ┌──────────┐ ┌──────────┐ ┌──────────┐ ┌──────────┐      │
+│  │ Postgres │ │  Auth    │ │ Realtime │ │ Storage  │      │
+│  │ +PostGIS │ │ (OTP/    │ │ (Live    │ │ (Images/ │      │
+│  │          │ │  Email)  │ │ Updates) │ │  Docs)   │      │
+│  └──────────┘ └──────────┘ └──────────┘ └──────────┘      │
+│  ┌──────────────────────────────────────────────┐          │
+│  │ Edge Functions (Deno/TypeScript)             │          │
+│  │ - Slot hold timer (10 min)                   │          │
+│  │ - Webhook handlers (payments, SMS)           │          │
+│  │ - Booking SLA timers                         │          │
+│  └──────────────────────────────────────────────┘          │
+└──────────────────────────┬──────────────────────────────────┘
+                           │ API Calls
+┌──────────────────────────┴──────────────────────────────────┐
+│              Third-Party Integrations                       │
+│  Google Maps/Mapbox │ Stripe │ FCM │ SMS Provider           │
+└─────────────────────────────────────────────────────────────┘</code></pre>
+<h3>7.2 Clean Architecture Layers (per feature)</h3>
+<pre><code>Presentation Layer (MVVM-style)
+├── Widgets (UI components)
+├── Notifiers/Blocs (State management)
+└── Routes (Navigation)
+
+Application Layer
+├── Use Cases (business logic per feature)
+└── DTOs (Data Transfer Objects)
+
+Domain Layer
+├── Entities (business objects)
+├── Repository Interfaces (contracts)
+└── Business Rules (validators, calculators)
+
+Data Layer
+├── Repository Implementations
+├── Supabase API Client
+├── Local Storage (SharedPreferences/SecureStorage)
+└── Data Models (DTOs ↔ Entities mapping)</code></pre>
+<h3>7.3 Design Constraints</h3>
+<p>1. <strong>Monorepo Structure:</strong></p>
+<ul>
+<li>Single repository with 3 app folders + shared packages</li>
+<li>Shared: design_system, api_client, domain_models, i18n, utils</li>
+<li>Each app: feature-first folders (auth, booking, dashboard, etc.)</li>
+</ul>
+<p>2. <strong>State Management:</strong></p>
+<ul>
+<li>Riverpod (recommended) or Bloc</li>
+<li>Team to pick one and standardize</li>
+<li>Avoid mixing state management approaches</li>
+</ul>
+<p>3. <strong>Navigation:</strong></p>
+<ul>
+<li>go_router for declarative routing</li>
+<li>Deep link support for notifications → screen</li>
+</ul>
+<p>4. <strong>Dependency Injection:</strong></p>
+<ul>
+<li>ProviderScope (Riverpod) or BlocProvider (Bloc)</li>
+<li>Feature-first DI (each feature provides its own dependencies)</li>
+</ul>
+<p>5. <strong>Database Access:</strong></p>
+<ul>
+<li>Supabase Flutter client (supabase_flutter package)</li>
+<li>Direct PostgREST queries or RPC for complex logic</li>
+<li>PostGIS functions via Supabase RPC</li>
+</ul>
+<p>6. <strong>Realtime:</strong></p>
+<ul>
+<li>Supabase Realtime channels for live booking updates</li>
+<li>Subscribe in B2B dashboard, unsubscribe on dispose</li>
+</ul>
+<p>7. <strong>File Uploads:</strong></p>
+<ul>
+<li>Supabase Storage buckets:</li>
+<li><code>center-photos</code> (public)</li>
+<li><code>verification-docs</code> (private, admin only)</li>
+<li><code>review-photos</code> (public)</li>
+<li><code>receipts</code> (private, user+admin)</li>
+</ul>
+<h3>7.4 Deployment Constraints</h3>
+<ul>
+<li><strong>Flutter Apps:</strong> iOS App Store, Google Play Store</li>
+<li><strong>Backend:</strong> Supabase cloud (managed), no self-hosting</li>
+<li><strong>CI/CD:</strong> GitHub Actions for app builds and deployments</li>
+<li><strong>Environments:</strong> dev, staging, production (Supabase projects per env)</li>
+<li><strong>Feature Flags:</strong> Remote config (Firebase Remote Config or Supabase edge config)</li>
+</ul>
+<hr />
+<h2>8. Use Cases / User Scenarios</h2>
+<h3>Use Case 1: Customer Books a Service (Primary Flow)</h3>
+<p><strong>Actors:</strong> Car Owner</p>
+<p><strong>Preconditions:</strong> User is registered and logged in, has at least one vehicle added</p>
+<p><strong>Flow:</strong></p>
+<p>1. User opens app → map loads with nearby service centers (PostGIS query &lt; 5km)</p>
+<p>2. User searches or filters by service (e.g., &quot;oil change&quot;)</p>
+<p>3. User taps a pin → views service center profile with ratings, price, available slots</p>
+<p>4. User taps &quot;Book Now&quot; → selects service from catalog</p>
+<p>5. User selects vehicle from garage</p>
+<p>6. User picks available time slot from calendar</p>
+<p>7. System places 10-minute hold on slot (Edge Function timer)</p>
+<p>8. User reviews booking details (service, slot, price, vehicle)</p>
+<p>9. User confirms booking</p>
+<p>10. User chooses payment: Card (Stripe) or Cash on Service</p>
+<p>11. If Card: Payment processed, booking status = confirmed</p>
+<p>12. System sends confirmation notification (push + in-app)</p>
+<p>13. System notifies service center via realtime dashboard update + push</p>
+<p><strong>Postconditions:</strong> Booking created with status &quot;confirmed&quot; or &quot;pending&quot; (if cash), payment recorded, slot reserved</p>
+<p><strong>Alternative Flows:</strong></p>
+<ul>
+<li><strong>A1:</strong> No nearby centers → Show &quot;No centers found&quot; with option to expand radius</li>
+<li><strong>A2:</strong> Slot hold expires → Prompt user to reselect slot</li>
+<li><strong>A3:</strong> Payment fails → Show error, allow retry or switch to cash</li>
+<li><strong>A4:</strong> Service center rejects booking → User notified, slot refunded, suggest alternatives</li>
+</ul>
+<hr />
+<h3>Use Case 2: Service Center Onboarding</h3>
+<p><strong>Actors:</strong> Service Center Owner, Admin</p>
+<p><strong>Preconditions:</strong> Owner has downloaded B2B app</p>
+<p><strong>Flow:</strong></p>
+<p>1. Owner opens B2B app → selects &quot;Register Business&quot;</p>
+<p>2. Owner enters business information (name, address, tax ID, phone, email)</p>
+<p>3. Owner uploads verification documents (commercial registration, tax ID, ID)</p>
+<p>4. Owner uploads facility photos (exterior, interior, workshop)</p>
+<p>5. Owner sets working hours (per day, with breaks)</p>
+<p>6. Owner adds service catalog (services with prices and durations)</p>
+<p>7. Owner sets capacity (number of concurrent bookings)</p>
+<p>8. Owner submits for verification</p>
+<p>9. System shows &quot;Verification Pending&quot; screen</p>
+<p>10. Admin receives notification in Admin App verification queue</p>
+<p>11. Admin reviews documents (24-48h SLA)</p>
+<p>12. Admin approves verification</p>
+<p>13. System sends approval email to owner</p>
+<p>14. Service center goes live on B2C map</p>
+<p>15. Owner receives welcome email with tips for first booking</p>
+<p><strong>Postconditions:</strong> Service center verified, visible on map, can receive bookings</p>
+<p><strong>Alternative Flows:</strong></p>
+<ul>
+<li><strong>A1:</strong> Admin rejects documents → Owner notified with reason, can re-upload and resubmit</li>
+<li><strong>A2:</strong> Admin requests more info → Owner notified, can upload additional documents</li>
+</ul>
+<hr />
+<h3>Use Case 3: B2B Receives and Completes Booking</h3>
+<p><strong>Actors:</strong> Service Center Owner/Mechanic</p>
+<p><strong>Preconditions:</strong> Service center is verified and live, has at least one upcoming booking</p>
+<p><strong>Flow:</strong></p>
+<p>1. Service center receives realtime notification of new booking (Supabase Realtime + FCM push)</p>
+<p>2. Owner/mechanic opens B2B app → dashboard shows new booking</p>
+<p>3. Owner views booking details (customer, vehicle, service, slot)</p>
+<p>4. Owner accepts booking (or rejects with reason)</p>
+<p>5. Owner assigns specific mechanic to job</p>
+<p>6. At appointment time, mechanic updates status to &quot;in progress&quot;</p>
+<p>7. Mechanic adds internal notes (parts used, issues found)</p>
+<p>8. On completion, mechanic updates status to &quot;completed&quot;</p>
+<p>9. System auto-generates invoice (services + parts + tax)</p>
+<p>10. Owner reviews and sends invoice to customer (in-app)</p>
+<p>11. Customer receives invoice notification</p>
+<p>12. Customer pays (if not paid upfront)</p>
+<p>13. System processes payment, deducts commission</p>
+<p>14. System prompts customer to rate and review</p>
+<p>15. Service center gets paid on next payout cycle</p>
+<p><strong>Postconditions:</strong> Booking completed, invoice generated, payment processed, review requested</p>
+<p><strong>Alternative Flows:</strong></p>
+<ul>
+<li><strong>A1:</strong> Owner rejects booking → Customer notified, slot refunded</li>
+<li><strong>A2:</strong> Mechanic proposes new slot → Customer can accept/reject</li>
+<li><strong>A3:</strong> Payment fails → Owner can retry or mark as cash collected</li>
+</ul>
+<hr />
+<h3>Use Case 4: Reminder → Book Flow (Retention)</h3>
+<p><strong>Actors:</strong> Car Owner</p>
+<p><strong>Preconditions:</strong> User has completed at least one booking, reminders enabled</p>
+<p><strong>Flow:</strong></p>
+<p>1. System calculates that user&#39;s car is due for service (e.g., oil change in 200 km)</p>
+<p>2. System sends push notification: &quot;Oil change due in 200 km&quot;</p>
+<p>3. User taps notification → app opens to reminder screen</p>
+<p>4. System shows 3 recommended nearby centers (sorted by rating + price)</p>
+<p>5. User taps a center → views profile and available slots</p>
+<p>6. User selects slot → quick booking (pre-filled with service and vehicle)</p>
+<p>7. User confirms in 2 taps (review → confirm)</p>
+<p>8. Booking created, confirmation sent</p>
+<p><strong>Postconditions:</strong> Booking created from reminder, user retention increased</p>
+<hr />
+<h3>Use Case 5: Admin Verifies Service Center</h3>
+<p><strong>Actors:</strong> Admin</p>
+<p><strong>Preconditions:</strong> Service center has submitted verification documents</p>
+<p><strong>Flow:</strong></p>
+<p>1. Admin opens Admin App → sees pending verifications count</p>
+<p>2. Admin taps &quot;Verification Queue&quot;</p>
+<p>3. Admin sees list of pending centers sorted by submission date</p>
+<p>4. Admin selects a center → views business information</p>
+<p>5. Admin reviews uploaded documents (zoom, download)</p>
+<p>6. Admin uses verification checklist:</p>
+<ul>
+<li>Commercial registration valid?</li>
+<li>Tax ID matches business name?</li>
+<li>Photos show legitimate facility?</li>
+<li>Contact info verified?</li>
+</ul>
+<p>7. Admin approves verification</p>
+<p>8. System auto-emails center owner with approval and welcome tips</p>
+<p>9. Service center status updated to &quot;verified&quot;</p>
+<p>10. Service center appears on B2C map</p>
+<p><strong>Postconditions:</strong> Service center verified and activated</p>
+<p><strong>Alternative Flows:</strong></p>
+<ul>
+<li><strong>A1:</strong> Admin rejects → Email sent with reason, center can reapply</li>
+<li><strong>A2:</strong> Admin requests more info → Email sent with specific instructions</li>
+</ul>
+<hr />
+<h3>Use Case 6: Customer Tracks Maintenance History</h3>
+<p><strong>Actors:</strong> Car Owner</p>
+<p><strong>Preconditions:</strong> User has at least one completed booking or manual entry</p>
+<p><strong>Flow:</strong></p>
+<p>1. User opens B2C app → taps &quot;Garage&quot;</p>
+<p>2. User selects a vehicle</p>
+<p>3. User taps &quot;Service History&quot;</p>
+<p>4. System displays timeline of all maintenance activities:</p>
+<ul>
+<li>Auto-logged from completed bookings (with link to booking/invoice)</li>
+<li>Manual entries (with notes and receipt photo)</li>
+</ul>
+<p>5. User can filter by service type or date range</p>
+<p>6. User taps an entry → views full details (service, date, mileage, cost, center)</p>
+<p>7. User can export history as PDF</p>
+<p>8. User can share with insurance or potential buyer (future)</p>
+<p><strong>Postconditions:</strong> User views complete service history, building trust and retention</p>
+<hr />
+<h3>Use Case 7: B2B Manages Pricing and Catalog</h3>
+<p><strong>Actors:</strong> Service Center Owner</p>
+<p><strong>Preconditions:</strong> Service center is verified, owner logged into B2B app</p>
+<p><strong>Flow:</strong></p>
+<p>1. Owner opens B2B app → taps &quot;Catalog &amp; Pricing&quot;</p>
+<p>2. Owner sees list of services (active and inactive)</p>
+<p>3. Owner taps &quot;Add Service&quot;</p>
+<p>4. Owner enters: name, description, category, price type (fixed/range/quote), price, duration</p>
+<p>5. Owner saves service → appears in B2C app immediately</p>
+<p>6. Owner can edit existing service (price update, description change)</p>
+<p>7. Owner can deactivate service (hides from B2C without deleting)</p>
+<p>8. Owner creates promotion: &quot;20% off oil change&quot;</p>
+<p>9. Owner sets promotion validity period</p>
+<p>10. Promotion appears on B2C app for that center</p>
+<p><strong>Postconditions:</strong> Catalog updated, B2C customers see new/updated services and promotions</p>
+<hr />
+<h3>Use Case 8: Emergency Service Booking (Phase 4)</h3>
+<p><strong>Actors:</strong> Car Owner</p>
+<p><strong>Preconditions:</strong> User has emergency (breakdown, battery dead, etc.)</p>
+<p><strong>Flow:</strong></p>
+<p>1. User opens B2C app → taps &quot;Emergency&quot; toggle on map</p>
+<p>2. Map shows only 24/7 service centers and mobile mechanics</p>
+<p>3. User sees estimated arrival time for mobile mechanics</p>
+<p>4. User taps &quot;Request Emergency Service&quot;</p>
+<p>5. User selects emergency type: tow, battery, mobile mechanic</p>
+<p>6. User confirms location (GPS or manual)</p>
+<p>7. System sends emergency request to nearby providers</p>
+<p>8. First provider to accept gets the job</p>
+<p>9. User sees live ETA tracking of mechanic/tow truck</p>
+<p>10. Service completed → payment processed → review requested</p>
+<p><strong>Postconditions:</strong> Emergency service fulfilled, user saved, high retention likelihood</p>
+<hr />
+<h2>9. Traceability Matrix</h2>
+<p>This section maps functional requirements to use cases, PRD sections, and acceptance criteria.</p>
+<table>
+<tr><th>Req ID</th><th>Source (PRD Section)</th><th>Description</th><th>Use Cases</th><th>Acceptance Criteria</th><th>Priority</th><th>Status</th></tr>
+<tr><td>FR-1.1</td><td>3.9 Auth &amp; Profile</td><td>User registration (email/phone)</td><td>UC1, UC2</td><td>Successful registration, OTP verification</td><td>MVP</td><td>Not Started</td></tr>
+<tr><td>FR-1.2</td><td>3.9 Auth &amp; Profile</td><td>Login/logout with JWT</td><td>UC1, UC2</td><td>Login works, session persists, logout clears</td><td>MVP</td><td>Not Started</td></tr>
+<tr><td>FR-1.3</td><td>3.9 Auth &amp; Profile</td><td>RBAC (Customer, Shop Owner, Mechanic, Admin)</td><td>All</td><td>Access control enforced per role</td><td>MVP</td><td>Not Started</td></tr>
+<tr><td>FR-1.4</td><td>3.9 Auth &amp; Profile</td><td>Password recovery</td><td>-</td><td>Password reset via email/OTP</td><td>MVP</td><td>Not Started</td></tr>
+<tr><td>FR-1.5</td><td>3.9 Auth &amp; Profile</td><td>Profile management</td><td>UC1, UC6</td><td>Update info, upload photo</td><td>MVP</td><td>Not Started</td></tr>
+<tr><td>FR-1.6</td><td>3.9 Auth &amp; Profile</td><td>Bilingual support (EN/AR + RTL)</td><td>All</td><td>UI switches language, RTL for Arabic</td><td>MVP</td><td>Not Started</td></tr>
+<tr><td>FR-2.1</td><td>3.1 Map-First Home</td><td>Display nearby centers on map</td><td>UC1</td><td>Map loads pins within 5km &lt; 2s</td><td>Core MVP</td><td>Not Started</td></tr>
+<tr><td>FR-2.2</td><td>3.1 Map-First Home</td><td>Search by service/center name</td><td>UC1</td><td>Search returns relevant results</td><td>Core MVP</td><td>Not Started</td></tr>
+<tr><td>FR-2.3</td><td>3.1 Map-First Home</td><td>Filter options (service, price, rating, etc.)</td><td>UC1</td><td>Filters apply correctly, update map</td><td>Core MVP</td><td>Not Started</td></tr>
+<tr><td>FR-2.4</td><td>3.1 Map-First Home</td><td>Service center quick preview</td><td>UC1</td><td>Tap pin → bottom sheet with info</td><td>Core MVP</td><td>Not Started</td></tr>
+<tr><td>FR-2.5</td><td>3.1 Map-First Home</td><td>List view alternative</td><td>UC1</td><td>Toggle map/list, sort works</td><td>MVP</td><td>Not Started</td></tr>
+<tr><td>FR-2.6</td><td>3.1 Map-First Home</td><td>Directions and contact</td><td>UC1</td><td>One-tap directions/call</td><td>MVP</td><td>Not Started</td></tr>
+<tr><td>FR-3.1</td><td>3.2 Service Center Profiles</td><td>Profile header with badge/rating</td><td>UC1</td><td>Complete profile display</td><td>Core MVP</td><td>Not Started</td></tr>
+<tr><td>FR-3.2</td><td>3.2 Service Center Profiles</td><td>Services and pricing list</td><td>UC1, UC7</td><td>Services displayed with prices</td><td>Core MVP</td><td>Not Started</td></tr>
+<tr><td>FR-3.3</td><td>3.2 Service Center Profiles</td><td>Ratings and reviews</td><td>UC1, UC3</td><td>Reviews list, category ratings</td><td>MVP</td><td>Not Started</td></tr>
+<tr><td>FR-3.4</td><td>3.2 Service Center Profiles</td><td>Live availability</td><td>UC1</td><td>Next slot displayed, realtime</td><td>MVP</td><td>Not Started</td></tr>
+<tr><td>FR-4.1</td><td>3.3 Booking System</td><td>Create booking (B2C)</td><td>UC1</td><td>Booking created, 10-min hold</td><td>Core MVP</td><td>Not Started</td></tr>
+<tr><td>FR-4.2</td><td>3.3 Booking System</td><td>Booking confirmation</td><td>UC1</td><td>Confirmation screen, notification</td><td>Core MVP</td><td>Not Started</td></tr>
+<tr><td>FR-4.3</td><td>3.3 Booking System</td><td>Payment integration</td><td>UC1, UC3</td><td>Card payment via Stripe, cash option</td><td>Core MVP</td><td>Not Started</td></tr>
+<tr><td>FR-4.4</td><td>3.3 Booking System</td><td>Modify/cancel booking</td><td>UC1</td><td>Reschedule/cancel with policy</td><td>MVP</td><td>Not Started</td></tr>
+<tr><td>FR-4.5</td><td>3.3 Booking System</td><td>Booking management (B2C)</td><td>UC1, UC6</td><td>View upcoming/past bookings</td><td>MVP</td><td>Not Started</td></tr>
+<tr><td>FR-4.6</td><td>3.3 Booking System</td><td>Receive booking (B2B)</td><td>UC3</td><td>Realtime notification, accept/reject</td><td>Core MVP</td><td>Not Started</td></tr>
+<tr><td>FR-4.7</td><td>3.3 Booking System</td><td>Job status updates (B2B)</td><td>UC3</td><td>Status flow, customer notified</td><td>Core MVP</td><td>Not Started</td></tr>
+<tr><td>FR-4.8</td><td>3.3 Booking System</td><td>In-app chat (Phase 2)</td><td>UC1, UC3</td><td>Message thread, push notifications</td><td>Phase 2</td><td>Not Started</td></tr>
+<tr><td>FR-4.9</td><td>3.3 Booking System</td><td>Post-service flow</td><td>UC3</td><td>Invoice, review prompt, auto-log</td><td>MVP</td><td>Not Started</td></tr>
+<tr><td>FR-5.1</td><td>3.4 Car Management</td><td>Add vehicle</td><td>UC1, UC6</td><td>Vehicle added with all fields</td><td>MVP</td><td>Not Started</td></tr>
+<tr><td>FR-5.2</td><td>3.4 Car Management</td><td>Edit/delete vehicle</td><td>UC6</td><td>Update/delete works</td><td>MVP</td><td>Not Started</td></tr>
+<tr><td>FR-5.3</td><td>3.4 Car Management</td><td>Multi-car support</td><td>UC1, UC6</td><td>Multiple vehicles, primary flag</td><td>MVP</td><td>Not Started</td></tr>
+<tr><td>FR-5.4</td><td>3.4 Car Management</td><td>Vehicle detail view</td><td>UC6</td><td>Timeline, reminders, expenses</td><td>MVP</td><td>Not Started</td></tr>
+<tr><td>FR-6.1</td><td>3.5 Maintenance Tracker</td><td>Auto-logged entries</td><td>UC3, UC6</td><td>Booking completion → auto-log</td><td>MVP</td><td>Not Started</td></tr>
+<tr><td>FR-6.2</td><td>3.5 Maintenance Tracker</td><td>Manual entries</td><td>UC6</td><td>Add service done elsewhere</td><td>MVP</td><td>Not Started</td></tr>
+<tr><td>FR-6.3</td><td>3.5 Maintenance Tracker</td><td>Timeline view</td><td>UC6</td><td>Chronological list, filters</td><td>MVP</td><td>Not Started</td></tr>
+<tr><td>FR-6.4</td><td>3.5 Maintenance Tracker</td><td>Service types</td><td>UC6</td><td>Predefined + custom types</td><td>MVP</td><td>Not Started</td></tr>
+<tr><td>FR-6.5</td><td>3.5 Maintenance Tracker</td><td>Export and sharing</td><td>UC6</td><td>PDF export, share option</td><td>Phase 2</td><td>Not Started</td></tr>
+<tr><td>FR-7.1</td><td>3.6 Smart Reminders</td><td>Mileage-based reminders</td><td>UC4</td><td>Reminder calculated correctly</td><td>Phase 2</td><td>Not Started</td></tr>
+<tr><td>FR-7.2</td><td>3.6 Smart Reminders</td><td>Time-based reminders</td><td>UC4</td><td>Reminder based on time</td><td>Phase 2</td><td>Not Started</td></tr>
+<tr><td>FR-7.3</td><td>3.6 Smart Reminders</td><td>Push notifications</td><td>UC4</td><td>FCM push delivered</td><td>Phase 2</td><td>Not Started</td></tr>
+<tr><td>FR-7.4</td><td>3.6 Smart Reminders</td><td>Reminder settings</td><td>UC4</td><td>Enable/disable, customize</td><td>Phase 2</td><td>Not Started</td></tr>
+<tr><td>FR-8.1</td><td>3.7 Expense Tracker</td><td>Expense categories</td><td>-</td><td>Categories displayed, custom add</td><td>Phase 2</td><td>Not Started</td></tr>
+<tr><td>FR-8.2</td><td>3.7 Expense Tracker</td><td>Manual expense entry</td><td>-</td><td>Expense added with details</td><td>Phase 2</td><td>Not Started</td></tr>
+<tr><td>FR-8.3</td><td>3.7 Expense Tracker</td><td>Auto-expense from bookings</td><td>UC3</td><td>Booking → expense auto-create</td><td>Phase 2</td><td>Not Started</td></tr>
+<tr><td>FR-8.4</td><td>3.7 Expense Tracker</td><td>Fuel tracking</td><td>-</td><td>Fuel entry, efficiency calc</td><td>Phase 2</td><td>Not Started</td></tr>
+<tr><td>FR-8.5</td><td>3.7 Expense Tracker</td><td>Analytics and reports</td><td>-</td><td>Monthly/yearly summaries</td><td>Phase 2</td><td>Not Started</td></tr>
+<tr><td>FR-9.1</td><td>4.1 B2B Onboarding</td><td>Business registration</td><td>UC2</td><td>Business info saved</td><td>Core MVP</td><td>Not Started</td></tr>
+<tr><td>FR-9.2</td><td>4.1 B2B Onboarding</td><td>Document upload</td><td>UC2</td><td>Docs uploaded to Storage</td><td>Core MVP</td><td>Not Started</td></tr>
+<tr><td>FR-9.3</td><td>4.1 B2B Onboarding</td><td>Service catalog setup</td><td>UC2, UC7</td><td>Services added</td><td>Core MVP</td><td>Not Started</td></tr>
+<tr><td>FR-9.4</td><td>4.1 B2B Onboarding</td><td>Capacity and slot config</td><td>UC2</td><td>Working hours, slots set</td><td>Core MVP</td><td>Not Started</td></tr>
+<tr><td>FR-9.5</td><td>4.1 B2B Onboarding</td><td>Verification process</td><td>UC2, UC5</td><td>Admin approves/rejects</td><td>Core MVP</td><td>Not Started</td></tr>
+<tr><td>FR-9.6</td><td>4.1 B2B Onboarding</td><td>Go live</td><td>UC2</td><td>Center appears on map</td><td>Core MVP</td><td>Not Started</td></tr>
+<tr><td>FR-10.1</td><td>4.2 Business Dashboard</td><td>Today&#39;s dashboard</td><td>UC3</td><td>Live bookings, revenue KPIs</td><td>Core MVP</td><td>Not Started</td></tr>
+<tr><td>FR-10.2</td><td>4.2 Business Dashboard</td><td>Booking calendar</td><td>UC3</td><td>Calendar view, color-coded</td><td>MVP</td><td>Not Started</td></tr>
+<tr><td>FR-10.3</td><td>4.2 Business Dashboard</td><td>KPI metrics</td><td>UC3</td><td>Rating, acceptance rate</td><td>MVP</td><td>Not Started</td></tr>
+<tr><td>FR-10.4</td><td>4.2 Business Dashboard</td><td>Revenue analytics</td><td>UC3</td><td>Charts, export reports</td><td>Phase 2</td><td>Not Started</td></tr>
+<tr><td>FR-10.5</td><td>4.2 Business Dashboard</td><td>Customer stats</td><td>UC3</td><td>New vs. returning, trends</td><td>Phase 2</td><td>Not Started</td></tr>
+<tr><td>FR-11.1</td><td>4.5 Catalog &amp; Pricing</td><td>Service CRUD</td><td>UC7</td><td>Create/read/update/delete</td><td>Core MVP</td><td>Not Started</td></tr>
+<tr><td>FR-11.2</td><td>4.5 Catalog &amp; Pricing</td><td>Pricing models</td><td>UC7</td><td>Fixed, range, quote types</td><td>Core MVP</td><td>Not Started</td></tr>
+<tr><td>FR-11.3</td><td>4.5 Catalog &amp; Pricing</td><td>Service categories</td><td>UC7</td><td>Categories displayed</td><td>MVP</td><td>Not Started</td></tr>
+<tr><td>FR-11.4</td><td>4.5 Catalog &amp; Pricing</td><td>Promotions and discounts</td><td>UC7</td><td>Create promo, validity</td><td>Phase 2</td><td>Not Started</td></tr>
+<tr><td>FR-12.1</td><td>4.4 Customer CRM</td><td>Customer history</td><td>-</td><td>All bookings per customer</td><td>Phase 2</td><td>Not Started</td></tr>
+<tr><td>FR-12.2</td><td>4.4 Customer CRM</td><td>Vehicle service history</td><td>-</td><td>Per-vehicle at this center</td><td>Phase 2</td><td>Not Started</td></tr>
+<tr><td>FR-12.3</td><td>4.4 Customer CRM</td><td>Follow-up reminders</td><td>-</td><td>Auto/manual reminders</td><td>Phase 2</td><td>Not Started</td></tr>
+<tr><td>FR-12.4</td><td>4.4 Customer CRM</td><td>Broadcast offers</td><td>-</td><td>Send promos to customers</td><td>Phase 2</td><td>Not Started</td></tr>
+<tr><td>FR-13.1</td><td>4.7 Reviews &amp; Reputation</td><td>Review inbox</td><td>UC3</td><td>List reviews, filter</td><td>MVP</td><td>Not Started</td></tr>
+<tr><td>FR-13.2</td><td>4.7 Reviews &amp; Reputation</td><td>Respond to reviews</td><td>UC3</td><td>Public response text</td><td>MVP</td><td>Not Started</td></tr>
+<tr><td>FR-13.3</td><td>4.7 Reviews &amp; Reputation</td><td>Dispute flagging</td><td>-</td><td>Flag review, admin review</td><td>MVP</td><td>Not Started</td></tr>
+<tr><td>FR-14.1</td><td>4.6 Payments &amp; Payouts</td><td>In-app payment collection</td><td>UC3</td><td>Card, cash recording</td><td>Phase 2</td><td>Not Started</td></tr>
+<tr><td>FR-14.2</td><td>4.6 Payments &amp; Payouts</td><td>Commission calculation</td><td>UC3</td><td>Transparent per booking</td><td>Phase 2</td><td>Not Started</td></tr>
+<tr><td>FR-14.3</td><td>4.6 Payments &amp; Payouts</td><td>Invoice generation</td><td>UC3</td><td>Auto-invoice, PDF</td><td>MVP</td><td>Not Started</td></tr>
+<tr><td>FR-14.4</td><td>4.6 Payments &amp; Payouts</td><td>Payout schedule</td><td>-</td><td>Weekly/monthly payout</td><td>Phase 2</td><td>Not Started</td></tr>
+<tr><td>FR-15.1</td><td>4.9 Business Tiers</td><td>Free tier</td><td>-</td><td>Basic listing, limits</td><td>Phase 2</td><td>Not Started</td></tr>
+<tr><td>FR-15.2</td><td>4.9 Business Tiers</td><td>Pro tier</td><td>-</td><td>Subscription, benefits</td><td>Phase 2</td><td>Not Started</td></tr>
+<tr><td>FR-15.3</td><td>4.9 Business Tiers</td><td>Partner tier</td><td>-</td><td>Annual, verified badge</td><td>Phase 2</td><td>Not Started</td></tr>
+<tr><td>FR-16.1</td><td>Admin Verification</td><td>Pending verifications list</td><td>UC5</td><td>List sorted by date</td><td>Core MVP</td><td>Not Started</td></tr>
+<tr><td>FR-16.2</td><td>Admin Verification</td><td>Document review</td><td>UC5</td><td>View, zoom, download</td><td>Core MVP</td><td>Not Started</td></tr>
+<tr><td>FR-16.3</td><td>Admin Verification</td><td>Verification decision</td><td>UC5</td><td>Approve/reject/request info</td><td>Core MVP</td><td>Not Started</td></tr>
+<tr><td>FR-16.4</td><td>Admin Verification</td><td>Verification checklist</td><td>UC5</td><td>Standardized checklist</td><td>Core MVP</td><td>Not Started</td></tr>
+<tr><td>FR-16.5</td><td>Admin Verification</td><td>Email notifications</td><td>UC2, UC5</td><td>Auto-email on decision</td><td>Core MVP</td><td>Not Started</td></tr>
+<tr><td>FR-17.1</td><td>Admin Disputes</td><td>Dispute submission (B2C)</td><td>-</td><td>Flag issue, attach evidence</td><td>MVP</td><td>Not Started</td></tr>
+<tr><td>FR-17.2</td><td>Admin Disputes</td><td>Dispute inbox (Admin)</td><td>-</td><td>List disputes, filter</td><td>MVP</td><td>Not Started</td></tr>
+<tr><td>FR-17.3</td><td>Admin Disputes</td><td>Dispute investigation</td><td>-</td><td>View details, contact parties</td><td>MVP</td><td>Not Started</td></tr>
+<tr><td>FR-17.4</td><td>Admin Disputes</td><td>Resolution actions</td><td>-</td><td>Refund, warn, suspend</td><td>MVP</td><td>Not Started</td></tr>
+<tr><td>FR-19.1</td><td>3.6 Notifications</td><td>Push notifications (FCM)</td><td>All</td><td>Notifications delivered</td><td>MVP</td><td>Not Started</td></tr>
+<tr><td>FR-19.2</td><td>3.6 Notifications</td><td>Email notifications</td><td>All</td><td>Emails sent via template</td><td>MVP</td><td>Not Started</td></tr>
+<tr><td>FR-19.3</td><td>3.6 Notifications</td><td>SMS notifications</td><td>UC2, UC3</td><td>SMS sent via provider</td><td>MVP</td><td>Not Started</td></tr>
+</table>
+<p><strong>Legend:</strong></p>
+<ul>
+<li><strong>Priority:</strong> Core MVP (must-have for launch), MVP (should-have), Phase 2/3/4/5/6 (future)</li>
+<li><strong>Status:</strong> Not Started, In Progress, Complete, Tested</li>
+</ul>
+<hr />
+<h2>10. Interface Prototypes</h2>
+<h3>10.1 Screen Catalog Summary</h3>
+<p>The CarCare project includes a comprehensive interactive prototype with <strong>42 screens</strong> implemented in React/TypeScript (for demonstration purposes only - production will be Flutter).</p>
+<p><strong>B2C App Screens (26):</strong></p>
+<ul>
+<li>Pre-auth (5): Splash, Language Selection, Onboarding, Auth Hub, Email Login/Register</li>
+<li>Discovery (7): Map Home (CORE), Parts Marketplace, Part Detail, Filters, Search Results, Service Center Profile, Tow Truck Profile (Phase 2)</li>
+<li>Booking (7): Pick Service, Pick Time Slot, Review &amp; Pay, Confirmation, My Bookings, Live Tracking, Rate &amp; Review</li>
+<li>Account (5): Garage, Car Detail, Dashboard, Smart Reminder (Phase 2), Expenses Tracker (Phase 2)</li>
+<li>Additional (2): Notifications Inbox, Settings</li>
+</ul>
+<p><strong>B2B App Screens (16):</strong></p>
+<ul>
+<li>Pre-auth (5): Business Splash, Language Selection, Onboarding, Auth Shell, Login/Signup</li>
+<li>Onboarding (3): Business Info, Catalog &amp; Pricing, Verification Pending</li>
+<li>Operations (8): Today Dashboard, Booking Calendar, Booking Detail, Catalog &amp; Pricing CRUD, Reviews Inbox, More Hub, Payouts (Phase 2), Analytics (Phase 2)</li>
+</ul>
+<p><strong>Prototype Location:</strong> <code>prototype/</code> directory (React app for demonstration only)</p>
+<h3>10.2 Design System</h3>
+<ul>
+<li><strong>Framework:</strong> Material Design 3 with custom CarCare branding</li>
+<li><strong>Primary Color:</strong> Blue (#2563EB) - trust and reliability</li>
+<li><strong>Secondary Color:</strong> Green (#10B981) - success and confirmation</li>
+<li><strong>Warning Color:</strong> Orange (#F59E0B) - reminders and alerts</li>
+<li><strong>Error Color:</strong> Red (#EF4444) - errors and cancellations</li>
+<li><strong>Typography:</strong> Roboto (English), Cairo (Arabic)</li>
+<li><strong>Border Radius:</strong> 12px (cards), 8px (buttons), 16px (bottom sheets)</li>
+<li><strong>Spacing:</strong> 4px grid system (4, 8, 12, 16, 24, 32, 48px)</li>
+</ul>
+<h3>10.3 Responsive Design</h3>
+<ul>
+<li><strong>B2C:</strong> Phone-optimized (375px-428px width)</li>
+<li><strong>B2B:</strong> Adaptive layouts for tablet (768px-1024px) and phone (375px-428px)</li>
+<li><strong>Admin:</strong> Phone/tablet adaptive (minimal app)</li>
+</ul>
+<hr />
+<h2>11. Phased Delivery Plan</h2>
+<h3>Phase 1 — MVP (0 → Launch) | 13 Weeks</h3>
+<p><strong>Goal:</strong> Launch a working two-sided marketplace in one city with a team of 5 Flutter engineers on Supabase backend.</p>
+<p><strong>B2C (Flutter mobile):</strong></p>
+<ul>
+<li>✅ Auth (phone OTP via Supabase Auth)</li>
+<li>✅ Car management (add/edit/delete, multi-car)</li>
+<li>✅ <strong>Map with service centers + filters + search</strong> (CORE)</li>
+<li>✅ Service center profiles (verified badge, ratings, services)</li>
+<li>✅ <strong>Booking happy path</strong> (CORE) - pick service → slot → confirm → pay</li>
+<li>✅ Basic maintenance tracker (auto-logged from bookings + manual)</li>
+<li>✅ Basic reminders (via FCM push)</li>
+<li>✅ Simple dashboard (health snapshot, upcoming)</li>
+</ul>
+<p><strong>B2B (Flutter, tablet-optimized):</strong></p>
+<ul>
+<li>✅ Onboarding + verification doc upload</li>
+<li>✅ Business dashboard (bookings view, realtime updates)</li>
+<li>✅ Service catalog + pricing + hours + capacity</li>
+<li>✅ Accept/reject bookings</li>
+<li>✅ Basic review management (respond to reviews)</li>
+</ul>
+<p><strong>Admin:</strong></p>
+<ul>
+<li>✅ Verification queue (minimal Flutter admin app + Supabase Studio)</li>
+<li>✅ Dispute handling (manual, via admin app + direct data access)</li>
+<li>✅ Payout workflow (semi-manual spreadsheet for MVP)</li>
+</ul>
+<p><strong>Team Load:</strong></p>
+<ul>
+<li>~2 Flutter engineers on B2C</li>
+<li>~2 on B2B</li>
+<li>1 tech-lead: shared packages, admin app, BaaS config (RLS, Edge Functions, schema)</li>
+</ul>
+<p><strong>Success Metric:</strong> 50+ verified service centers, 1,000+ active car owners, 500+ completed bookings/month in launch city.</p>
+<hr />
+<h3>Phase 2 — Retention &amp; Monetization | +4–6 Weeks</h3>
+<p><strong>Goal:</strong> Lock in habit and turn on revenue.</p>
+<p><strong>B2C:</strong></p>
+<ul>
+<li>Fuel tracker + expense tracker</li>
+<li>Advanced analytics (cost/km, trends)</li>
+<li>Smart reminders (predictive, based on booking history)</li>
+<li>Saved favorites, re-book flow</li>
+</ul>
+<p><strong>B2B:</strong></p>
+<ul>
+<li>Pro tier rollout (subscription)</li>
+<li>Customer CRM + follow-up tools</li>
+<li>Promotions engine</li>
+<li>Payment collection + automated payouts</li>
+<li>Business analytics dashboard</li>
+</ul>
+<hr />
+<h3>Phase 3 — Smart Layer | +6 Weeks</h3>
+<ul>
+<li>Car health score</li>
+<li>Predictive maintenance suggestions</li>
+<li>Insurance/license expiry tracking</li>
+<li>Service center performance benchmarks</li>
+<li>Push campaigns for B2B</li>
+</ul>
+<hr />
+<h3>Phase 4 — On-Demand &amp; Emergency | +4 Weeks</h3>
+<ul>
+<li>Roadside assistance (tow, battery, mobile mechanic)</li>
+<li>Live tracking of mechanic ETA</li>
+<li>One-tap emergency button</li>
+<li>Emergency-only B2B partner type</li>
+</ul>
+<hr />
+<h3>Phase 5 — AI &amp; Integrations | +6–8 Weeks</h3>
+<ul>
+<li>AI diagnostics from user description</li>
+<li>Car damage scanner (photo → estimate)</li>
+<li>Dashboard warning light scanner</li>
+<li>OBD-II integration for real-time car data</li>
+<li>AI-assisted quote generation for B2B</li>
+</ul>
+<hr />
+<h3>Phase 6 — Platform Expansion | Long-term</h3>
+<ul>
+<li>Spare parts marketplace (B2B → B2C and B2B → B2B)</li>
+<li>Car resale + valuation</li>
+<li>Insurance comparison &amp; renewal</li>
+<li>Community / forum</li>
+<li>Multi-city / multi-country expansion</li>
+</ul>
+<hr />
+<h3>Team &amp; Sprint Planning</h3>
+<p><strong>Total Duration:</strong> ~6-8 months (6 phases)</p>
+<p><strong>Sprint Structure:</strong></p>
+<ul>
+<li>Sprint length: 2 weeks</li>
+<li>Phase 1: 6-7 sprints (13 weeks)</li>
+<li>Phase 2: 2-3 sprints (4-6 weeks)</li>
+<li>Phase 3: 3 sprints (6 weeks)</li>
+<li>Phase 4: 2 sprints (4 weeks)</li>
+<li>Phase 5: 3-4 sprints (6-8 weeks)</li>
+</ul>
+<p><strong>Definition of Done:</strong></p>
+<ul>
+<li>Feature implemented in Flutter</li>
+<li>Unit tests written (80% coverage target)</li>
+<li>Integration tested on iOS + Android</li>
+<li>Code reviewed by tech lead</li>
+<li>Accepted by product owner</li>
+<li>Deployed to staging environment</li>
+</ul>
+<hr />
+<h2>12. Testing Requirements</h2>
+<h3>12.1 Testing Strategy</h3>
+<table>
+<tr><th>Test Type</th><th>Scope</th><th>Tools</th><th>Coverage Target</th></tr>
+<tr><td>Unit Tests</td><td>Domain logic, use cases, validators</td><td>flutter_test</td><td>80%</td></tr>
+<tr><td>Widget Tests</td><td>UI components, screens</td><td>flutter_test</td><td>70%</td></tr>
+<tr><td>Integration Tests</td><td>Feature flows (booking, onboarding)</td><td>integration_test</td><td>Key flows</td></tr>
+<tr><td>E2E Tests</td><td>Full app on device/simulator</td><td>Flutter Driver (future)</td><td>Critical paths</td></tr>
+<tr><td>Manual Testing</td><td>UX, edge cases, real devices</td><td>TestFlight, Internal Track</td><td>All releases</td></tr>
+</table>
+<h3>12.2 Test Cases (Sample)</h3>
+<p><strong>Booking Flow (UC1):</strong></p>
+<p>1. Test map loads with nearby centers</p>
+<p>2. Test search returns correct results</p>
+<p>3. Test filter applies correctly</p>
+<p>4. Test booking creation with valid data</p>
+<p>5. Test 10-min slot hold expires</p>
+<p>6. Test payment success flow</p>
+<p>7. Test payment failure retry</p>
+<p>8. Test booking confirmation notification</p>
+<p>9. Test B2B receives booking notification</p>
+<p>10. Test booking status updates</p>
+<p><strong>Authentication:</strong></p>
+<p>1. Test registration with email</p>
+<p>2. Test registration with phone OTP</p>
+<p>3. Test login with valid credentials</p>
+<p>4. Test login with invalid credentials</p>
+<p>5. Test password reset flow</p>
+<p>6. Test session persistence</p>
+<p>7. Test logout clears tokens</p>
+<p><strong>B2B Onboarding (UC2):</strong></p>
+<p>1. Test business registration with valid data</p>
+<p>2. Test document upload (PDF, JPG, PNG)</p>
+<p>3. Test catalog setup with services</p>
+<p>4. Test verification pending screen</p>
+<p>5. Test admin approval flow</p>
+<p>6. Test admin rejection with reason</p>
+<p>7. Test go-live on map after approval</p>
+<h3>12.3 Beta Testing</h3>
+<p><strong>Phase 1 Beta (Week 10-13):</strong></p>
+<ul>
+<li>50-100 beta users (car owners)</li>
+<li>10-15 service centers (real businesses)</li>
+<li>Feedback collection via in-app form</li>
+<li>Crash reporting via Sentry/Crashlytics</li>
+<li>Iterate based on feedback before launch</li>
+</ul>
+<p><strong>Beta Success Criteria:</strong></p>
+<ul>
+<li>&lt; 5% crash rate</li>
+<li>&gt; 70% task completion rate (book service)</li>
+<li>&gt; 4.0/5.0 app store rating (beta)</li>
+<li>50+ completed bookings in beta</li>
+</ul>
+<h3>12.4 Performance Testing</h3>
+<ul>
+<li>Load testing: 100+ concurrent users</li>
+<li>API response time: p95 &lt; 500ms</li>
+<li>App launch time: &lt; 2s (cold start)</li>
+<li>Memory usage: &lt; 200MB on mid-range devices</li>
+<li>Battery usage: &lt; 5% per hour (active use)</li>
+</ul>
+<hr />
+<h2>13. Deployment &amp; CI/CD</h2>
+<h3>13.1 CI/CD Pipeline (GitHub Actions)</h3>
+<p><strong>Workflows:</strong></p>
+<p>1. <strong>Flutter App Build &amp; Test:</strong></p>
+<ul>
+<li>Trigger: Push to <code>develop</code>, <code>main</code> branches</li>
+<li>Steps: Checkout → Setup Flutter → Get dependencies → Run tests → Build APK/IPA → Upload artifacts</li>
+</ul>
+<p>2. <strong>Prototype Deploy to GitHub Pages:</strong></p>
+<ul>
+<li>Trigger: Push to <code>main</code> in <code>prototype/</code> directory</li>
+<li>Steps: Checkout → Setup Node.js → Install deps → Build → Deploy to GitHub Pages</li>
+</ul>
+<p>3. <strong>SRS PDF Build:</strong></p>
+<ul>
+<li>Trigger: Manual or push to <code>docs/SRS_CarCare_Comprehensive.md</code></li>
+<li>Steps: Checkout → Render Mermaid diagrams → Convert Markdown to PDF → Upload artifact</li>
+</ul>
+<p><strong>Example GitHub Actions Workflow (<code>.github/workflows/build-app.yml</code>):</strong></p>
+<pre><code>name: Build Flutter Apps
+on:
+  push:
+    branches: [develop, main]
+  pull_request:
+    branches: [develop]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: subosito/flutter-action@v2
+        with:
+          flutter-version: &#39;3.16.x&#39;
+      - run: flutter pub get
+      - run: flutter test
+
+  build-android:
+    needs: test
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: subosito/flutter-action@v2
+      - run: flutter build apk --release
+      - uses: actions/upload-artifact@v3
+        with:
+          name: android-release
+          path: build/app/outputs/flutter-apk/app-release.apk
+
+  build-ios:
+    needs: test
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: subosito/flutter-action@v2
+      - run: flutter build ios --release --no-codesign</code></pre>
+<h3>13.2 Environment Configuration</h3>
+<table>
+<tr><th>Environment</th><th>Purpose</th><th>Backend</th><th>App Config</th></tr>
+<tr><td><strong>Development</strong></td><td>Daily development, feature testing</td><td>Supabase dev project</td><td>Debug mode, dev API URL</td></tr>
+<tr><td><strong>Staging</strong></td><td>QA, beta testing, UAT</td><td>Supabase staging project</td><td>Release mode, staging URL</td></tr>
+<tr><td><strong>Production</strong></td><td>Live users, real data</td><td>Supabase production project</td><td>Release mode, prod URL</td></tr>
+</table>
+<p><strong>Flutter Flavors:</strong></p>
+<ul>
+<li><code>dev</code>: Development environment</li>
+<li><code>staging</code>: Staging environment</li>
+<li><code>prod</code>: Production environment</li>
+</ul>
+<p><strong>Configuration via <code>--dart-define</code>:</strong></p>
+<pre><code>flutter run --flavor dev --dart-define=SUPABASE_URL=https://dev.supabase.co --dart-define=SUPABASE_ANON_KEY=xxx</code></pre>
+<h3>13.3 App Store Deployment</h3>
+<p><strong>iOS (App Store):</strong></p>
+<ul>
+<li>Apple Developer Program membership ($99/year)</li>
+<li>App Store Connect setup</li>
+<li>Privacy policy URL</li>
+<li>App screenshots (6.5&quot;, 5.5&quot;, 12.9&quot; for iPad B2B)</li>
+<li>App review guidelines compliance</li>
+<li>TestFlight for beta distribution</li>
+</ul>
+<p><strong>Android (Google Play):</strong></p>
+<ul>
+<li>Google Play Developer account ($25 one-time)</li>
+<li>Play Console setup</li>
+<li>Privacy policy URL</li>
+<li>App screenshots (phone, tablet for B2B)</li>
+<li>Internal/Closed/Open testing tracks</li>
+<li>Production release</li>
+</ul>
+<p><strong>Release Process:</strong></p>
+<p>1. Tag version in Git (e.g., <code>v1.0.0</code>)</p>
+<p>2. CI/CD builds release artifacts</p>
+<p>3. QA testing on staging</p>
+<p>4. Upload to TestFlight/Internal Track</p>
+<p>5. Beta testing (1-2 weeks)</p>
+<p>6. Production release (gradual rollout 10% → 50% → 100%)</p>
+<hr />
+<h2>14. Appendices</h2>
+<h3>14.1 Glossary</h3>
+<table>
+<tr><th>Term</th><th>Definition</th></tr>
+<tr><td><strong>Booking</strong></td><td>A scheduled appointment between a car owner and a service center for a specific service</td></tr>
+<tr><td><strong>B2C</strong></td><td>Business-to-Consumer - the car owner app</td></tr>
+<tr><td><strong>B2B</strong></td><td>Business-to-Business - the service center app</td></tr>
+<tr><td><strong>GMV</strong></td><td>Gross Merchandise Value - total value of all bookings in a period</td></tr>
+<tr><td><strong>Geospatial Query</strong></td><td>Database query that uses geographic coordinates to find nearby locations (PostGIS)</td></tr>
+<tr><td><strong>Hold Timer</strong></td><td>10-minute reservation on a booking slot to prevent double-booking</td></tr>
+<tr><td><strong>Monetization</strong></td><td>Revenue generation methods (commissions, subscriptions, ads)</td></tr>
+<tr><td><strong>MVP</strong></td><td>Minimum Viable Product - the smallest set of features to launch and validate</td></tr>
+<tr><td><strong>OBD-II</strong></td><td>On-Board Diagnostics II - standard for accessing vehicle diagnostic data</td></tr>
+<tr><td><strong>PostGIS</strong></td><td>PostgreSQL extension for geographic objects and spatial queries</td></tr>
+<tr><td><strong>RLS</strong></td><td>Row-Level Security - Supabase feature to restrict database row access per user</td></tr>
+<tr><td><strong>SLA</strong></td><td>Service Level Agreement - commitment to perform actions within specified time (e.g., 24-48h verification)</td></tr>
+<tr><td><strong>Slot</strong></td><td>A specific time window available for booking (e.g., 10:00-10:30 AM)</td></tr>
+<tr><td><strong>Tow Truck</strong></td><td>Emergency roadside assistance vehicle (Phase 4)</td></tr>
+<tr><td><strong>Verification</strong></td><td>Process of validating service center documents and legitimacy before going live</td></tr>
+<tr><td><strong>VIN</strong></td><td>Vehicle Identification Number - unique 17-character identifier for vehicles</td></tr>
+</table>
+<h3>14.2 References</h3>
+<p>1. <strong>Internal Documents:</strong></p>
+<ul>
+<li>CarCare PRD v2 (docs/CarCare_PRD_v2.md)</li>
+<li>CarCare MVP Plan (docs/MVP_PLAN.md)</li>
+<li>Requirements Traceability Matrix (docs/RTM.md)</li>
+<li>CarCare App Flow PDF (docs/CarCare App Flow.pdf)</li>
+<li>CarCare App Plan PDF (docs/CarCare App Plan.pdf)</li>
+<li>CarCare Extra Features Ideas PDF (docs/CarCare Extra Features ideas.pdf)</li>
+<li>CarCare Map Feature Focus PDF (docs/CarCare Map Feature Focus.pdf)</li>
+<li>CarCare MVP PRD PDF (docs/CarCare_MVP_PRD_Map_Booking.pdf)</li>
+</ul>
+<p>2. <strong>Technical Documentation:</strong></p>
+<ul>
+<li>Supabase Documentation: https://supabase.com/docs</li>
+<li>Flutter Documentation: https://docs.flutter.dev</li>
+<li>Dart Language Tour: https://dart.dev/guides/language/language-tour</li>
+<li>Riverpod Documentation: https://riverpod.dev</li>
+<li>Go Router Documentation: https://pub.dev/packages/go_router</li>
+<li>Google Maps Flutter: https://pub.dev/packages/google_maps_flutter</li>
+<li>Stripe API Reference: https://stripe.com/docs/api</li>
+</ul>
+<p>3. <strong>Standards:</strong></p>
+<ul>
+<li>WCAG 2.1 Guidelines: https://www.w3.org/WAI/WCAG21/quickref/</li>
+<li>GDPR Text: https://gdpr-info.eu/</li>
+<li>PCI-DSS Standards: https://www.pcisecuritystandards.org/</li>
+<li>RESTful API Design: https://restfulapi.net/</li>
+<li>Semantic Versioning: https://semver.org/</li>
+</ul>
+<p>4. <strong>Industry Research:</strong></p>
+<ul>
+<li>Automotive aftermarket size and trends</li>
+<li>Competitor analysis (local and international)</li>
+<li>User research surveys and interviews</li>
+</ul>
+<h3>14.3 Assumptions</h3>
+<p>1. <strong>Market Assumptions:</strong></p>
+<ul>
+<li>Target city has sufficient car density (&gt; 100,000 cars)</li>
+<li>Service centers willing to adopt digital booking platform</li>
+<li>Car owners comfortable with mobile app bookings</li>
+<li>Market size supports 3-tier monetization model</li>
+</ul>
+<p>2. <strong>Technical Assumptions:</strong></p>
+<ul>
+<li>Supabase platform remains stable and feature-rich</li>
+<li>Flutter framework continues to be well-supported</li>
+<li>Third-party APIs (Maps, Payments, Notifications) have high availability</li>
+<li>5 Flutter engineers can deliver MVP in 13 weeks with managed backend</li>
+</ul>
+<p>3. <strong>Business Assumptions:</strong></p>
+<ul>
+<li>15% commission rate is acceptable to service centers (Free tier)</li>
+<li>Pro tier subscription will have sufficient value proposition</li>
+<li>Users will complete bookings after finding service centers</li>
+<li>Auto-logged maintenance is a key differentiator and retention driver</li>
+</ul>
+<p>4. <strong>User Assumptions:</strong></p>
+<ul>
+<li>Car owners want quick discovery (&lt; 60 seconds to find center)</li>
+<li>Service centers will keep catalog and pricing up-to-date</li>
+<li>Users will rate and review services honestly</li>
+<li>Bilingual support (EN/AR) covers target market needs</li>
+</ul>
+<h3>14.4 Constraints Summary</h3>
+<table>
+<tr><th>Constraint Type</th><th>Details</th></tr>
+<tr><td><strong>Team</strong></td><td>5 Flutter engineers, no dedicated backend/web/native</td></tr>
+<tr><td><strong>Platform</strong></td><td>Flutter mobile only (iOS + Android), no web</td></tr>
+<tr><td><strong>Backend</strong></td><td>Managed BaaS (Supabase recommended, Firebase alternative)</td></tr>
+<tr><td><strong>Timeline</strong></td><td>Phase 1 MVP: 13 weeks, full product: ~6-8 months</td></tr>
+<tr><td><strong>Budget</strong></td><td>Managed backend costs (Supabase/Firebase free tier → pay-as-you-grow)</td></tr>
+<tr><td><strong>Market</strong></td><td>Launch in one city first (Cairo, Alexandria, or Riyadh)</td></tr>
+<tr><td><strong>Compliance</strong></td><td>GDPR, PCI-DSS (via Stripe), local regulations</td></tr>
+<tr><td><strong>Language</strong></td><td>English + Egyptian Arabic (RTL)</td></tr>
+</table>
+<h3>14.5 Open Questions &amp; Decisions</h3>
+<p><strong>Resolved:</strong></p>
+<p>1. ✅ <strong>B2B mobile app or web-first?</strong> → Flutter mobile/tablet app only (no web capacity)</p>
+<p>2. ✅ <strong>Tech stack?</strong> → Flutter clients on Supabase (recommended) or Firebase</p>
+<p>3. ✅ <strong>Map as core or Phase 3?</strong> → Core MVP (Phase 1)</p>
+<p>4. ✅ <strong>Single city or multi-city launch?</strong> → Single city first for density</p>
+<p><strong>Open:</strong></p>
+<p>1. <strong>Payments:</strong> Start with cash-on-service only, or launch with in-app payment? (Trade-off: faster MVP vs. slower monetization)</p>
+<p>2. <strong>Verification depth:</strong> Self-serve with docs + spot checks, or mandatory in-person visit?</p>
+<p>3. <strong>Pricing transparency:</strong> Require fixed prices, or allow &quot;quote on request&quot;? (Fixed = better UX, but may deter some centers)</p>
+<p>4. <strong>Backend final decision:</strong> Supabase or Firebase? (Default Supabase for PostGIS; decide in Week 0)</p>
+<p>5. <strong>Language priority:</strong> Arabic-first, English-first, or dual from day one? (Recommendation: dual with device locale detection)</p>
+<p>6. <strong>Launch city:</strong> Which city to launch in? (Cairo, Alexandria, Riyadh - evaluate car density, competition, willingness to pay)</p>
+<hr />
+<h2>15. Revision History</h2>
+<table>
+<tr><th>Version</th><th>Date</th><th>Author</th><th>Changes</th></tr>
+<tr><td>1.0</td><td>2026-05-04</td><td>CarCare Dev Team</td><td>Initial draft (basic 301-line SRS)</td></tr>
+<tr><td>2.0</td><td>2026-05-05</td><td>CarCare Dev Team</td><td>Comprehensive SRS covering all features, use cases, 6-phase plan, detailed data model, traceability matrix. Replaces v1.0.</td></tr>
+</table>
+<hr />
+<p><strong>Document End</strong></p>
+<p><em>This SRS document is a living document and will be updated as requirements evolve during development. All changes must be approved by the product owner and tech lead.</em></p>
+</body>
+</html>

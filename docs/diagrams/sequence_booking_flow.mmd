@@ -1,0 +1,37 @@
+sequenceDiagram
+    participant C as Car Owner
+    participant A as B2C App
+    participant B as Backend (Supabase)
+    participant D as Database
+    participant S as Service Center
+    participant N as Push Notification
+    
+    C->>A: Open App (Map View)
+    A->>B: GET /service-centers?lat=x&lng=y&radius=5
+    B->>D: PostGIS query (centers within 5km)
+    D-->>B: Service center list
+    B-->>A: Centers with pins
+    A->>C: Display map with pins
+    
+    C->>A: Tap pin → View Profile
+    A->>B: GET /center/{id}/services
+    B-->>A: Services + available slots
+    A->>C: Show profile + booking options
+    
+    C->>A: Select Service + Slot
+    A->>B: POST /bookings (with 10-min hold)
+    B->>D: Insert booking (status: pending)
+    B->>B: Edge Function: Set hold timer
+    D-->>B: BookingID
+    B-->>A: Booking Confirmed (hold active)
+    
+    A->>C: Show confirmation + payment
+    C->>A: Confirm & Pay
+    A->>B: POST /payments
+    B->>PaymentGateway: Process payment
+    PaymentGateway-->>B: Payment success
+    B->>D: Update booking (status: confirmed)
+    B->>N: Trigger notification
+    N->>S: New booking alert
+    B-->>A: Payment confirmed
+    A->>C: Booking complete

@@ -1,0 +1,678 @@
+%PDF-1.4
+1 0 obj
+<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica >>
+endobj
+2 0 obj
+<< /Length 2788 >>
+stream
+BT
+/F1 18 Tf
+54 760 Td (Software Requirements Specification for CarCare) Tj
+-54 -760 Td
+/F1 10 Tf
+54 723 Td (Version: 1.0) Tj
+-54 -723 Td
+54 709 Td (Date: 2026-05-04) Tj
+-54 -709 Td
+54 695 Td (Author: CarCare Development Team) Tj
+-54 -695 Td
+54 681 Td (Status: Draft) Tj
+-54 -681 Td
+54 657 Td (This document defines the MVP-focused software requirements for CarCare, a field service and) Tj
+-54 -657 Td
+54 643 Td ( automotive maintenance platform. It targets Flutter-based mobile clients \(iOS/Android\) with) Tj
+-54 -643 Td
+54 629 Td ( a back-end service and ancillary integrations \(payments, notifications\).) Tj
+-54 -629 Td
+/F1 14 Tf
+54 585 Td (1. Introduction) Tj
+-54 -585 Td
+/F1 12 Tf
+54 552 Td (1.1 Purpose) Tj
+-54 -552 Td
+/F1 10 Tf
+54 531 Td (- This SRS describes the MVP scope, functional and non-functional requirements, interfaces, ) Tj
+-54 -531 Td
+54 517 Td (data definitions, and acceptance criteria for the CarCare system.) Tj
+-54 -517 Td
+54 503 Td (- It is intended for the software development team \(frontend/mobile, backend, QA, product ) Tj
+-54 -503 Td
+54 489 Td (management\) and project stakeholders.) Tj
+-54 -489 Td
+/F1 12 Tf
+54 465 Td (1.2 Scope) Tj
+-54 -465 Td
+/F1 10 Tf
+54 444 Td (- MVP focus: core scheduling, service catalog, job tracking, invoicing, payments, ) Tj
+-54 -444 Td
+54 430 Td (notifications, and admin reporting.) Tj
+-54 -430 Td
+54 416 Td (- Platforms: Flutter-based mobile application \(iOS/Android\) with a back-end API and ) Tj
+-54 -416 Td
+54 402 Td (PostgreSQL database.) Tj
+-54 -402 Td
+54 388 Td (- In-scope: user management, service catalog, booking, job dispatch/tracking, invoicing, ) Tj
+-54 -388 Td
+54 374 Td (payments, notifications, basic admin dashboards.) Tj
+-54 -374 Td
+54 360 Td (- Out-of-scope: enterprise integrations beyond MVP scope, advanced analytics, multi-tenant ) Tj
+-54 -360 Td
+54 346 Td (support, advanced AI-driven recommendations.) Tj
+-54 -346 Td
+/F1 12 Tf
+54 322 Td (1.3 Definitions, acronyms, abbreviations) Tj
+-54 -322 Td
+/F1 10 Tf
+54 301 Td (- SRS: Software Requirements Specification) Tj
+-54 -301 Td
+54 287 Td (- MVP: Minimum Viable Product) Tj
+-54 -287 Td
+54 273 Td (- UI: User Interface) Tj
+-54 -273 Td
+54 259 Td (- API: Application Programming Interface) Tj
+-54 -259 Td
+54 245 Td (- SMS: Short Message Service) Tj
+-54 -245 Td
+54 231 Td (- PCI-DSS: Payment Card Industry Data Security Standard) Tj
+-54 -231 Td
+54 217 Td (- GDPR: General Data Protection Regulation) Tj
+-54 -217 Td
+/F1 12 Tf
+54 193 Td (1.4 References) Tj
+-54 -193 Td
+/F1 10 Tf
+54 172 Td (- Link or reference to any external documents, standards, or compliance guidelines.) Tj
+-54 -172 Td
+/F1 12 Tf
+54 148 Td (1.5 Overview) Tj
+-54 -148 Td
+54 117 Td (1.6 Diagrams) Tj
+-54 -117 Td
+/F1 10 Tf
+54 86 Td (Use Case Diagram \(Mermaid code\)) Tj
+-54 -86 Td
+ET
+endstream
+endobj
+3 0 obj
+<< /Type /Page /Parent 16 0 R /MediaBox [0 0 612 792] /Resources << /Font << /F1 1 0 R >> >> /Contents 2 0 R >>
+endobj
+4 0 obj
+<< /Length 2704 >>
+stream
+BT
+/F1 8 Tf
+54 760 Td (usecaseDiagram) Tj
+-54 -760 Td
+54 748 Td (actor Customer) Tj
+-54 -748 Td
+54 736 Td (actor Technician) Tj
+-54 -736 Td
+54 724 Td (actor Admin) Tj
+-54 -724 Td
+54 712 Td (Customer --> \(Book Service\)) Tj
+-54 -712 Td
+54 700 Td (Customer --> \(View Invoices\)) Tj
+-54 -700 Td
+54 688 Td (Technician --> \(Update Job Status\)) Tj
+-54 -688 Td
+54 676 Td (Admin --> \(Manage Services\)) Tj
+-54 -676 Td
+54 664 Td (Admin --> \(View Reports\)) Tj
+-54 -664 Td
+/F1 10 Tf
+54 632 Td (Booking Sequence Diagram \(Mermaid code\)) Tj
+-54 -632 Td
+/F1 8 Tf
+54 608 Td (sequenceDiagram) Tj
+-54 -608 Td
+54 596 Td (Customer->>FlutterApp: Open App) Tj
+-54 -596 Td
+54 584 Td (FlutterApp->>Backend: GET /availability) Tj
+-54 -584 Td
+54 572 Td (Backend-->>FlutterApp: Availability) Tj
+-54 -572 Td
+54 560 Td (FlutterApp->>Customer: Show availability) Tj
+-54 -560 Td
+54 548 Td (Customer->>FlutterApp: Create Booking) Tj
+-54 -548 Td
+54 536 Td (FlutterApp->>Backend: POST /bookings) Tj
+-54 -536 Td
+54 524 Td (Backend->>Database: Insert Booking) Tj
+-54 -524 Td
+54 512 Td (Database-->>Backend: BookingID) Tj
+-54 -512 Td
+54 500 Td (Backend->>FlutterApp: Booking Confirmed) Tj
+-54 -500 Td
+54 488 Td (FlutterApp->>Customer: Confirmation) Tj
+-54 -488 Td
+/F1 10 Tf
+54 456 Td (Architecture Diagram \(Mermaid code\)) Tj
+-54 -456 Td
+/F1 8 Tf
+54 432 Td (graph TD) Tj
+-54 -432 Td
+54 420 Td (subgraph System) Tj
+-54 -420 Td
+54 408 Td (FApp[Flutter Mobile App]) Tj
+-54 -408 Td
+54 396 Td (Bknd[Backend API]) Tj
+-54 -396 Td
+54 384 Td (Db[\(PostgreSQL\)]) Tj
+-54 -384 Td
+54 372 Td (PGate[Payment Gateway]) Tj
+-54 -372 Td
+54 360 Td (Email[Email/SMS Provider]) Tj
+-54 -360 Td
+54 348 Td (Push[Push Notification Service]) Tj
+-54 -348 Td
+54 336 Td (end) Tj
+-54 -336 Td
+54 324 Td (FApp --> Bknd) Tj
+-54 -324 Td
+54 312 Td (Bknd --> Db) Tj
+-54 -312 Td
+54 300 Td (Bknd --> PGate) Tj
+-54 -300 Td
+54 288 Td (Bknd --> Email) Tj
+-54 -288 Td
+54 276 Td (Bknd --> Push) Tj
+-54 -276 Td
+/F1 10 Tf
+54 244 Td (The document is organized into functional requirements \(system features\), external ) Tj
+-54 -244 Td
+54 230 Td (interfaces, non-functional requirements, data requirements, and architecture considerations.) Tj
+-54 -230 Td
+54 216 Td ( It also includes diagrams \(embedded Mermaid code blocks\) and separate Mermaid files for ) Tj
+-54 -216 Td
+54 202 Td (reference.) Tj
+-54 -202 Td
+/F1 14 Tf
+54 158 Td (2. Overall Description) Tj
+-54 -158 Td
+/F1 12 Tf
+54 125 Td (2.1 Product perspective) Tj
+-54 -125 Td
+/F1 10 Tf
+54 104 Td (- CarCare is a stand-alone mobile-first application with a back-end API and a PostgreSQL ) Tj
+-54 -104 Td
+54 90 Td (database. It may integrate with third-party payment gateways and notification providers.) Tj
+-54 -90 Td
+ET
+endstream
+endobj
+5 0 obj
+<< /Type /Page /Parent 16 0 R /MediaBox [0 0 612 792] /Resources << /Font << /F1 1 0 R >> >> /Contents 4 0 R >>
+endobj
+6 0 obj
+<< /Length 3410 >>
+stream
+BT
+/F1 12 Tf
+54 760 Td (2.2 Product functions \(MVP\)) Tj
+-54 -760 Td
+/F1 10 Tf
+54 739 Td (- User management: registration, login, roles, password recovery.) Tj
+-54 -739 Td
+54 725 Td (- Service catalog: create/read/update/delete basic services with price and duration.) Tj
+-54 -725 Td
+54 711 Td (- Booking and scheduling: create/modify/cancel bookings; view availability; confirmations.) Tj
+-54 -711 Td
+54 697 Td (- Job tracking and dispatch: assign technicians; update statuses; basic offline ) Tj
+-54 -697 Td
+54 683 Td (considerations.) Tj
+-54 -683 Td
+54 669 Td (- Invoicing and payments: generate invoices; process card/mobile payments; basic ) Tj
+-54 -669 Td
+54 655 Td (tax/discount support.) Tj
+-54 -655 Td
+54 641 Td (- Notifications: email/SMS/push for key events.) Tj
+-54 -641 Td
+54 627 Td (- Admin reporting: revenue, bookings, utilization \(basic dashboards\).) Tj
+-54 -627 Td
+/F1 12 Tf
+54 603 Td (2.3 User characteristics) Tj
+-54 -603 Td
+/F1 10 Tf
+54 582 Td (- Customers: register, browse services, book, view invoices, pay.) Tj
+-54 -582 Td
+54 568 Td (- Technicians: view assigned jobs, update status.) Tj
+-54 -568 Td
+54 554 Td (- Admin/Owners: manage services, users, pricing, and reports.) Tj
+-54 -554 Td
+/F1 12 Tf
+54 530 Td (2.4 Constraints) Tj
+-54 -530 Td
+/F1 10 Tf
+54 509 Td (- Data privacy and security compliance \(GDPR, PCI-DSS where applicable\).) Tj
+-54 -509 Td
+54 495 Td (- Platform: Flutter mobile app; back-end accessible via REST/GraphQL.) Tj
+-54 -495 Td
+54 481 Td (- External services: payment gateway, email/SMS providers, push notifications.) Tj
+-54 -481 Td
+/F1 12 Tf
+54 457 Td (2.5 Assumptions and dependencies) Tj
+-54 -457 Td
+/F1 10 Tf
+54 436 Td (- Stable network connectivity for mobile clients.) Tj
+-54 -436 Td
+54 422 Td (- Availability of third-party services \(payment gateway, SMS/email, push\).) Tj
+-54 -422 Td
+/F1 14 Tf
+54 378 Td (3. System Features \(Functional Requirements\)) Tj
+-54 -378 Td
+/F1 12 Tf
+54 345 Td (3.1 Feature: User Management \(MVP\)) Tj
+-54 -345 Td
+/F1 10 Tf
+54 324 Td (- Description: Manage user accounts, roles, and authentication.) Tj
+-54 -324 Td
+54 310 Td (- Actors: Customer, Technician, Admin) Tj
+-54 -310 Td
+54 296 Td (- Functional requirements:) Tj
+-54 -296 Td
+54 282 Td (  - FR-1: Users can register with email or phone; identity verification optional for MVP.) Tj
+-54 -282 Td
+54 268 Td (  - FR-2: Users can log in/out with email/password; support for OAuth providers \(optional ) Tj
+-54 -268 Td
+54 254 Td (MVP\).) Tj
+-54 -254 Td
+54 240 Td (  - FR-3: Role-based access controls: Customer, Technician, Admin.) Tj
+-54 -240 Td
+54 226 Td (  - FR-4: Password recovery and basic multi-factor options \(optional MVP\).) Tj
+-54 -226 Td
+/F1 12 Tf
+54 202 Td (3.2 Feature: Service Catalog \(MVP\)) Tj
+-54 -202 Td
+/F1 10 Tf
+54 181 Td (- Description: Maintain a catalog of services with pricing and duration.) Tj
+-54 -181 Td
+54 167 Td (- FR-1: Create/read/update/delete service items \(admin\).) Tj
+-54 -167 Td
+54 153 Td (- FR-2: Each service has name, description, category, price, duration.) Tj
+-54 -153 Td
+54 139 Td (- FR-3: Admin can apply bulk pricing rules \(optional MVP\).) Tj
+-54 -139 Td
+/F1 12 Tf
+54 115 Td (3.3 Feature: Booking and Scheduling \(MVP\)) Tj
+-54 -115 Td
+/F1 10 Tf
+54 94 Td (- Description: Customers schedule appointments; system enforces availability.) Tj
+-54 -94 Td
+54 80 Td (- FR-1: Create, modify, cancel bookings.) Tj
+-54 -80 Td
+ET
+endstream
+endobj
+7 0 obj
+<< /Type /Page /Parent 16 0 R /MediaBox [0 0 612 792] /Resources << /Font << /F1 1 0 R >> >> /Contents 6 0 R >>
+endobj
+8 0 obj
+<< /Length 2965 >>
+stream
+BT
+/F1 10 Tf
+54 760 Td (- FR-2: Real-time availability checks for service durations \(approximate for MVP\).) Tj
+-54 -760 Td
+54 746 Td (- FR-3: Confirmations via UI and email/SMS \(where configured\).) Tj
+-54 -746 Td
+54 732 Td (- FR-4: Conflict prevention and basic retry logic for booking.) Tj
+-54 -732 Td
+/F1 12 Tf
+54 708 Td (3.4 Feature: Job Tracking and Dispatch \(MVP\)) Tj
+-54 -708 Td
+/F1 10 Tf
+54 687 Td (- Description: Track job status and assign technicians.) Tj
+-54 -687 Td
+54 673 Td (- FR-1: Update status: Scheduled, In Progress, On Hold, Completed, Cancelled.) Tj
+-54 -673 Td
+54 659 Td (- FR-2: Notify customers/technicians of status changes.) Tj
+-54 -659 Td
+54 645 Td (- FR-3: Mobile/desktop views; offline-friendly considerations for core flows.) Tj
+-54 -645 Td
+/F1 12 Tf
+54 621 Td (3.5 Feature: Invoicing and Payments \(MVP\)) Tj
+-54 -621 Td
+/F1 10 Tf
+54 600 Td (- Description: Generate invoices and process payments.) Tj
+-54 -600 Td
+54 586 Td (- FR-1: Create invoice on job completion or booking.) Tj
+-54 -586 Td
+54 572 Td (- FR-2: Payment gateway integration \(cards/mobile wallets\).) Tj
+-54 -572 Td
+54 558 Td (- FR-3: Taxes, discounts, and refunds \(basic support\).) Tj
+-54 -558 Td
+/F1 12 Tf
+54 534 Td (3.6 Feature: Notifications \(MVP\)) Tj
+-54 -534 Td
+/F1 10 Tf
+54 513 Td (- Description: Communicate events via email, SMS, or push.) Tj
+-54 -513 Td
+54 499 Td (- FR-1: Trigger notifications for key events \(booking confirmed, status change, invoice ) Tj
+-54 -499 Td
+54 485 Td (issued\).) Tj
+-54 -485 Td
+54 471 Td (- FR-2: Templates and basic localization support.) Tj
+-54 -471 Td
+/F1 12 Tf
+54 447 Td (3.7 Feature: Admin Reporting \(MVP\)) Tj
+-54 -447 Td
+/F1 10 Tf
+54 426 Td (- Description: Basic reporting and analytics for leadership.) Tj
+-54 -426 Td
+54 412 Td (- FR-1: Revenue, bookings, and technician utilization reports \(date range filters\).) Tj
+-54 -412 Td
+54 398 Td (- FR-2: Export options \(CSV, PDF\) for selected reports.) Tj
+-54 -398 Td
+/F1 14 Tf
+54 354 Td (4. External Interfaces) Tj
+-54 -354 Td
+/F1 12 Tf
+54 321 Td (4.1 User interfaces) Tj
+-54 -321 Td
+/F1 10 Tf
+54 300 Td (- Web UI: not required for MVP; primary is Flutter mobile app; responsive web may be added ) Tj
+-54 -300 Td
+54 286 Td (later.) Tj
+-54 -286 Td
+54 272 Td (- Mobile: Flutter-based iOS/Android app.) Tj
+-54 -272 Td
+/F1 12 Tf
+54 248 Td (4.2 Hardware interfaces) Tj
+-54 -248 Td
+/F1 10 Tf
+54 227 Td (- No dedicated hardware interfaces required for MVP.) Tj
+-54 -227 Td
+/F1 12 Tf
+54 203 Td (4.3 Software interfaces) Tj
+-54 -203 Td
+/F1 10 Tf
+54 182 Td (- Backend API \(REST/GraphQL\) and database \(PostgreSQL\).) Tj
+-54 -182 Td
+54 168 Td (- Payment gateway API; Email/SMS provider APIs; push notification service.) Tj
+-54 -168 Td
+/F1 12 Tf
+54 144 Td (4.4 Communications interfaces) Tj
+-54 -144 Td
+/F1 10 Tf
+54 123 Td (- HTTPS for client-server communication.) Tj
+-54 -123 Td
+54 109 Td (- Webhooks for real-time notifications \(where supported\).) Tj
+-54 -109 Td
+ET
+endstream
+endobj
+9 0 obj
+<< /Type /Page /Parent 16 0 R /MediaBox [0 0 612 792] /Resources << /Font << /F1 1 0 R >> >> /Contents 8 0 R >>
+endobj
+10 0 obj
+<< /Length 2759 >>
+stream
+BT
+/F1 14 Tf
+54 760 Td (5. Other Non-Functional Requirements) Tj
+-54 -760 Td
+/F1 12 Tf
+54 727 Td (5.1 Performance) Tj
+-54 -727 Td
+/F1 10 Tf
+54 706 Td (- App and API should respond within 2 seconds on primary screens under typical load.) Tj
+-54 -706 Td
+54 692 Td (- API responses under 500 ms for core flows under normal load.) Tj
+-54 -692 Td
+/F1 12 Tf
+54 668 Td (5.2 Security) Tj
+-54 -668 Td
+/F1 10 Tf
+54 647 Td (- SOC 2-aligned controls; JWT-based auth; short-lived tokens.) Tj
+-54 -647 Td
+54 633 Td (- Data encryption at rest and in transit; RBAC; input validation; logging.) Tj
+-54 -633 Td
+/F1 12 Tf
+54 609 Td (5.3 Reliability & Availability) Tj
+-54 -609 Td
+/F1 10 Tf
+54 588 Td (- 99.9% uptime target in production; graceful degradation and retry logic.) Tj
+-54 -588 Td
+/F1 12 Tf
+54 564 Td (5.4 Maintainability & Supportability) Tj
+-54 -564 Td
+/F1 10 Tf
+54 543 Td (- Clear API contracts, versioning, and documentation; observability with logging, metrics, ) Tj
+-54 -543 Td
+54 529 Td (tracing.) Tj
+-54 -529 Td
+/F1 12 Tf
+54 505 Td (5.5 Portability) Tj
+-54 -505 Td
+/F1 10 Tf
+54 484 Td (- Cloud deployment capability; containerized \(Docker\) where feasible; multi-cloud friendly.) Tj
+-54 -484 Td
+/F1 12 Tf
+54 460 Td (5.6 Accessibility) Tj
+-54 -460 Td
+/F1 10 Tf
+54 439 Td (- WCAG 2.1 AA where applicable to app UI.) Tj
+-54 -439 Td
+/F1 12 Tf
+54 415 Td (5.7 Localization/Internationalization) Tj
+-54 -415 Td
+/F1 10 Tf
+54 394 Td (- Support for multiple languages and currencies.) Tj
+-54 -394 Td
+/F1 14 Tf
+54 350 Td (6. Data Requirements) Tj
+-54 -350 Td
+/F1 12 Tf
+54 317 Td (6.1 Data model overview) Tj
+-54 -317 Td
+/F1 10 Tf
+54 296 Td (- Core entities: User, Service, Booking, Job, Invoice, Part, Payment, Notification, ) Tj
+-54 -296 Td
+54 282 Td (Location, Inventory.) Tj
+-54 -282 Td
+/F1 12 Tf
+54 258 Td (6.2 Data dictionary \(sample\)) Tj
+-54 -258 Td
+/F1 10 Tf
+54 237 Td (- User\(UserID, Email, Phone, PasswordHash, Role, CreatedAt, Status\)) Tj
+-54 -237 Td
+54 223 Td (- Service\(ServiceID, Name, Description, Category, Price, Duration\)) Tj
+-54 -223 Td
+54 209 Td (- Booking\(BookingID, UserID, ServiceID, LocationID, StartTime, EndTime, Status\)) Tj
+-54 -209 Td
+54 195 Td (- Job\(JobID, BookingID, TechnicianID, Status, Notes\)) Tj
+-54 -195 Td
+54 181 Td (- Invoice\(InvoiceID, JobID, Amount, Tax, Total, Status, IssuedAt\)) Tj
+-54 -181 Td
+54 167 Td (- Part\(PartID, SKU, Name, Quantity, Location\)) Tj
+-54 -167 Td
+54 153 Td (- Payment\(PaymentID, InvoiceID, Amount, Method, Status, Timestamp\)) Tj
+-54 -153 Td
+54 139 Td (- Notification\(NotificationID, UserID, Type, Message, SentAt\)) Tj
+-54 -139 Td
+54 125 Td (- Location\(LocationID, Name, Address, Timezone\)) Tj
+-54 -125 Td
+/F1 14 Tf
+54 81 Td (7. System Architecture and Design Constraints) Tj
+-54 -81 Td
+ET
+endstream
+endobj
+11 0 obj
+<< /Type /Page /Parent 16 0 R /MediaBox [0 0 612 792] /Resources << /Font << /F1 1 0 R >> >> /Contents 10 0 R >>
+endobj
+12 0 obj
+<< /Length 2538 >>
+stream
+BT
+/F1 10 Tf
+54 760 Td (- High-level architecture: Flutter mobile app + REST/GraphQL backend + database; external ) Tj
+-54 -760 Td
+54 746 Td (service integrations for payments and notifications.) Tj
+-54 -746 Td
+54 732 Td (- Data privacy and regulatory constraints \(GDPR, PCI-DSS where applicable\).) Tj
+-54 -732 Td
+54 718 Td (- Deployment considerations \(CI/CD pipelines, containerization, and monitoring\).) Tj
+-54 -718 Td
+/F1 14 Tf
+54 674 Td (8. Use Cases / User Scenarios) Tj
+-54 -674 Td
+/F1 10 Tf
+54 651 Td (- Use Case 1: Customer books a service) Tj
+-54 -651 Td
+54 637 Td (- Use Case 2: Admin updates pricing) Tj
+-54 -637 Td
+54 623 Td (- Use Case 3: Technician updates job status) Tj
+-54 -623 Td
+54 609 Td (- Use Case 4: Customer pays an invoice) Tj
+-54 -609 Td
+54 595 Td (- Use Case 5: Admin generates revenue report) Tj
+-54 -595 Td
+/F1 14 Tf
+54 551 Td (9. Traceability) Tj
+-54 -551 Td
+/F1 10 Tf
+54 528 Td (- A simple traceability matrix will map each functional requirement to the corresponding ) Tj
+-54 -528 Td
+54 514 Td (feature and use case.) Tj
+-54 -514 Td
+54 500 Td (- RTM will be maintained in a separate table or spreadsheet in the project repo.) Tj
+-54 -500 Td
+/F1 14 Tf
+54 456 Td (10. Appendices) Tj
+-54 -456 Td
+/F1 12 Tf
+54 423 Td (10.1 Glossary) Tj
+-54 -423 Td
+/F1 10 Tf
+54 402 Td (- TBD) Tj
+-54 -402 Td
+/F1 12 Tf
+54 378 Td (10.2 References) Tj
+-54 -378 Td
+/F1 10 Tf
+54 357 Td (- TBD) Tj
+-54 -357 Td
+/F1 12 Tf
+54 333 Td (10.3 Assumptions) Tj
+-54 -333 Td
+/F1 10 Tf
+54 312 Td (- TBD) Tj
+-54 -312 Td
+/F1 14 Tf
+54 268 Td (11. Revision History) Tj
+-54 -268 Td
+/F1 10 Tf
+54 235 Td (- Version 1.0, 2026-05-04, Author: CarCare Dev Team, Initial draft.) Tj
+-54 -235 Td
+/F1 14 Tf
+54 191 Td (Elicitation questions for finalizing the SRS) Tj
+-54 -191 Td
+/F1 10 Tf
+54 168 Td (- Scope and boundaries for MVP release: confirm features in MVP vs future releases.) Tj
+-54 -168 Td
+54 154 Td (- Stakeholders: product owners, technicians, and lead developers.) Tj
+-54 -154 Td
+54 140 Td (- Platforms: confirm iOS/Android targets; any web-only requirements.) Tj
+-54 -140 Td
+54 126 Td (- MVP acceptance criteria: what must be complete and sign-off-ready for MVP.) Tj
+-54 -126 Td
+54 112 Td (- Integrations: which payment gateway\(s\) and notification providers to integrate with in ) Tj
+-54 -112 Td
+54 98 Td (MVP.) Tj
+-54 -98 Td
+54 84 Td (- Data retention and privacy: define retention periods and deletion policies.) Tj
+-54 -84 Td
+54 70 Td (- Security: roles and permissions for each user type; authentication requirements.) Tj
+-54 -70 Td
+ET
+endstream
+endobj
+13 0 obj
+<< /Type /Page /Parent 16 0 R /MediaBox [0 0 612 792] /Resources << /Font << /F1 1 0 R >> >> /Contents 12 0 R >>
+endobj
+14 0 obj
+<< /Length 1694 >>
+stream
+BT
+/F1 10 Tf
+54 760 Td (- Localization: target languages and currencies for MVP.) Tj
+-54 -760 Td
+54 746 Td (- Performance targets: p95 latency, peak user counts for MVP.) Tj
+-54 -746 Td
+54 732 Td (- Data model migration: any existing data to migrate.) Tj
+-54 -732 Td
+54 718 Td (- Diagrams: confirm preferred diagrams and stakeholders for review.) Tj
+-54 -718 Td
+54 694 Td (- Next steps: fill sections with stakeholder input; finalize RTM; generate PDF.) Tj
+-54 -694 Td
+/F1 12 Tf
+54 670 Td (Next steps for PDF generation) Tj
+-54 -670 Td
+/F1 10 Tf
+54 649 Td (- Render Mermaid diagrams to PNGs \(use mermaid CLI\) and embed images in the Markdown before ) Tj
+-54 -649 Td
+54 635 Td (PDF conversion.) Tj
+-54 -635 Td
+54 621 Td (- Generate PDF from Markdown using Pandoc: pandoc SRS_CarCare.md -s -o SRS_CarCare.pdf ) Tj
+-54 -621 Td
+54 607 Td (--pdf-engine=xelatex) Tj
+-54 -607 Td
+54 593 Td (- On Windows, use a helper script \(see scripts/convert_srs_to_pdf.ps1\) after diagram ) Tj
+-54 -593 Td
+54 579 Td (rendering.) Tj
+-54 -579 Td
+/F1 14 Tf
+54 535 Td (How you can proceed \(summary\)) Tj
+-54 -535 Td
+/F1 10 Tf
+54 512 Td (- Provide scope and platform preferences; verify MVP features.) Tj
+-54 -512 Td
+54 498 Td (- Populate the SRS with stakeholder input; run an elicitation session.) Tj
+-54 -498 Td
+54 484 Td (- Render diagrams to images and embed them in the Markdown for PDF accuracy.) Tj
+-54 -484 Td
+54 470 Td (- Use the provided scripts to generate a PDF and distribute to stakeholders.) Tj
+-54 -470 Td
+54 446 Td (If you'd like, I can tailor this starter to your exact scope and platform preferences or ) Tj
+-54 -446 Td
+54 432 Td (generate a Word/PDF-ready version on request.) Tj
+-54 -432 Td
+ET
+endstream
+endobj
+15 0 obj
+<< /Type /Page /Parent 16 0 R /MediaBox [0 0 612 792] /Resources << /Font << /F1 1 0 R >> >> /Contents 14 0 R >>
+endobj
+16 0 obj
+<< /Type /Pages /Kids [3 0 R 5 0 R 7 0 R 9 0 R 11 0 R 13 0 R 15 0 R] /Count 7 >>
+endobj
+17 0 obj
+<< /Type /Catalog /Pages 16 0 R >>
+endobj
+xref
+0 18
+0000000000 65535 f 
+0000000009 00000 n 
+0000000079 00000 n 
+0000002919 00000 n 
+0000003046 00000 n 
+0000005802 00000 n 
+0000005929 00000 n 
+0000009391 00000 n 
+0000009518 00000 n 
+0000012535 00000 n 
+0000012662 00000 n 
+0000015474 00000 n 
+0000015603 00000 n 
+0000018194 00000 n 
+0000018323 00000 n 
+0000020070 00000 n 
+0000020199 00000 n 
+0000020296 00000 n 
+trailer
+<< /Size 18 /Root 17 0 R >>
+startxref
+20347
+%%EOF

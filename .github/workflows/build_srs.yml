@@ -1,0 +1,44 @@
+name: Build CarCare Comprehensive SRS
+
+on:
+  push:
+    branches: [ main, master ]
+  pull_request:
+    branches: [ main, master ]
+  workflow_dispatch:
+
+jobs:
+  build-srs-documents:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Install Pandoc and LaTeX PDF engine
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y pandoc texlive-xetex texlive-latex-recommended texlive-latex-extra
+
+      - name: Install Mermaid CLI
+        run: npm i -g @mermaid-js/mermaid-cli
+
+      - name: Build SRS PDF and DOCX
+        shell: pwsh
+        run: |
+          ./scripts/build_srs_documents.ps1 `
+            -MarkdownPath docs/SRS_CarCare_Comprehensive.md `
+            -PdfPath docs/SRS_CarCare_Comprehensive.pdf `
+            -DocxPath docs/SRS_CarCare_Comprehensive.docx
+
+      - name: Upload SRS artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: carcare-comprehensive-srs
+          path: |
+            docs/SRS_CarCare_Comprehensive.pdf
+            docs/SRS_CarCare_Comprehensive.docx
+            docs/diagrams/generated/build_report.txt

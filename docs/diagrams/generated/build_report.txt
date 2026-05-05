@@ -1,0 +1,14 @@
+﻿Build timestamp: 2026-05-05T03:04:23.2979668+03:00
+Source markdown: D:\claude\grad_project\carcare\docs\SRS_CarCare_Comprehensive.md
+PDF output: D:\claude\grad_project\carcare\docs\SRS_CarCare_Comprehensive.pdf
+DOCX output: D:\claude\grad_project\carcare\docs\SRS_CarCare_Comprehensive.docx
+Mermaid blocks found: 4
+Mermaid diagrams rendered to PNG: 0
+WARNING: Mermaid CLI (mmdc) not found; diagrams remain as Mermaid code blocks in generated outputs.
+Generated markdown: D:\claude\grad_project\carcare\docs\diagrams\generated\SRS_CarCare_Comprehensive.generated.md
+WARNING: Pandoc found, but no xelatex/pdflatex engine found; trying browser fallback for PDF.
+WARNING: Skipping Pandoc DOCX because Mermaid diagrams were not rendered; using OOXML fallback for readable diagram code blocks.
+PDF generated with Chromium browser print fallback.
+DOCX generated with simple OOXML fallback.
+Verified output: D:\claude\grad_project\carcare\docs\SRS_CarCare_Comprehensive.pdf (1400538 bytes)
+Verified output: D:\claude\grad_project\carcare\docs\SRS_CarCare_Comprehensive.docx (40562 bytes)

@@ -1,0 +1,33 @@
+﻿graph TD
+    subgraph "Presentation Layer"
+        UI[UI Widgets]
+        NM[Notifiers/Blocs<br/>State Management]
+        RV[Route Views]
+    end
+    
+    subgraph "Application Layer"
+        UC[Use Cases]
+        DTO[DTOs]
+    end
+    
+    subgraph "Domain Layer"
+        ENT[Entities]
+        REP[Repository Interfaces]
+        RUL[Business Rules]
+    end
+    
+    subgraph "Data Layer"
+        RI[Repository Implementations]
+        API[API Clients<br/>Supabase]
+        LOC[Local Storage]
+        MOD[Data Models]
+    end
+    
+    UI --> NM
+    NM --> UC
+    UC --> REP
+    REP --> RI
+    RI --> API
+    RI --> LOC
+    UC --> ENT
+    API --> MOD
